@@ -1,0 +1,46 @@
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100%;
+  background-color: #3a3a3a33;
+  background-image: url(/img/bg.jpg);
+  background-size: cover;
+  background-position: center;
+}
+
+.login-form {
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 380px;
+  max-height: 450px;
+  padding: 3rem;
+  border-radius: 20px;
+  border: .5px solid #ffffffa3;
+  box-shadow: 0 0 1em #00000033;
+  color: white;
+}
+
+.register-form {
+  backdrop-filter: blur(5px);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  max-width: 380px;
+  max-height: 500px;
+  padding: 3rem;
+  border-radius: 20px;
+  border: .5px solid #ffffffa3;
+  box-shadow: 0 0 1em #00000033;
+  background-color: transparent;
+  color: white;
+}
+
+.text-field {
+  height: 50px;
+}

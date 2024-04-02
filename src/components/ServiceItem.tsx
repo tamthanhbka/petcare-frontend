@@ -1,4 +1,5 @@
 import {
+  Box,
   Card,
   CardContent,
   CardHeader,
@@ -7,18 +8,43 @@ import {
 } from "@mui/material";
 import type { FC } from "react";
 
-interface ServiceItemProps {}
+interface ServiceItemProps {
+  id: number;
+  name: string;
+  description: string;
+  image: string;
+}
 
-const ServiceItem: FC<ServiceItemProps> = () => {
+const ServiceItem: FC<ServiceItemProps> = (props) => {
+  const { id, name, description, image } = props;
+  console.table(props);
+
   return (
-    <Card variant="elevation" sx={{ bgcolor: "#F2F2F4", borderRadius: 4 }}>
-      <CardMedia
-        sx={{ height: 200 }}
-        image="https://tropicpet.vn/wp-content/uploads/2021/05/dich-vu-kham-chua-benh-425x313.jpg"
-        title="dich vu"
-      />
+    <Card
+      variant="elevation"
+      elevation={5}
+      sx={{ bgcolor: "#F2F2F4", borderRadius: 2 }}
+    >
+      <Box overflow={"hidden"}>
+        <CardMedia
+          image={
+            image ??
+            "https://thuythithi.com/wp-content/uploads/2020/05/3-tieu-chi-danh-gia-chat-luong-dich-vu-cham-soc-thu-cung-tai-nha.jpg"
+          }
+          title={name}
+          sx={{
+            height: "100px",
+            transition: "all .3s",
+            "&:hover": {
+              transform: "scale(1.2)",
+              transition: "all .5s",
+            },
+          }}
+        />
+      </Box>
+
       <CardHeader
-        title="Khám chữa bệnh"
+        title={name}
         sx={{
           textAlign: "center",
           ".MuiCardHeader-title": { fontWeight: 700 },
@@ -30,8 +56,7 @@ const ServiceItem: FC<ServiceItemProps> = () => {
             textAlign: "center",
           }}
         >
-          Thực hiện tiếp nhận sàng lọc,khám chuyên khoa, xét nghiệm, chẩn đoán
-          và điều trị bệnh cho thú cưng của bạn.
+          {description}
         </Typography>
       </CardContent>
       {/* <CardActions sx={{ display: "flex", justifyContent: "center" }}>

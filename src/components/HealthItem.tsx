@@ -44,7 +44,7 @@ const Health: FC<HealthProps> = () => {
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
         <Button
           sx={{ textTransform: "initial", fontSize: 16, color: "#ED6436" }}
-          onClick={() => navigation("/detail")}
+          onClick={() => navigation("shop/1")}
         >
           Xem chi tiết
         </Button>

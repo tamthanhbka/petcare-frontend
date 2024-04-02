@@ -1,12 +1,105 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
-import type { FC } from "react";
-import { CommentItem, ServiceItem } from "../components";
+import {
+  ArrowBackIosNewOutlined,
+  ArrowForwardIos,
+  Pets,
+  PetsOutlined,
+} from "@mui/icons-material";
+import {
+  Backdrop,
+  Box,
+  Button,
+  Fade,
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Modal,
+  Rating,
+  Select,
+  SelectChangeEvent,
+  TextField,
+  Typography,
+  styled,
+} from "@mui/material";
+import {
+  DateTimePicker,
+  LocalizationProvider,
+  renderTimeViewClock,
+} from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { useQuery } from "@tanstack/react-query";
+import { Carousel } from "@trendyol-js/react-carousel";
+import { useState, type FC, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { getServicesOfShop, getShopInfo, sendRequestBooking } from "../api";
+import "../assets/css/shopDetail.css";
+import chat from "../assets/img/chat.svg";
+import { BoxChat, CommentItem, ServiceItem } from "../components";
+import { ServiceType, ShopType } from "../type";
+import { listenSocket } from "../socket";
+import { toast } from "react-toastify";
+import { Dayjs } from "dayjs";
 
 interface ShopDetailProps {}
+export const StyledRating = styled(Rating)({
+  "& .MuiRating-iconFilled": {
+    color: "#82C55B",
+  },
+  "& .MuiRating-iconHover": {
+    color: "#7bbe54",
+  },
+});
 
 const ShopDetail: FC<ShopDetailProps> = () => {
+  const { id } = useParams() as { id: string };
+  const [service, setService] = useState<string>();
+  const [dayBooking, setDayBooking] = useState<Dayjs | null>(null);
+  const [open, setOpen] = useState(false);
+  const [openChat, setOpenChat] = useState(false);
+  useEffect(() => listenSocket(), []);
+
+  const { data: shop } = useQuery<ShopType>({
+    queryKey: [`shop${id}`],
+    queryFn: () => getShopInfo(id),
+    refetchOnWindowFocus: false,
+  });
+
+  console.log(shop);
+
+  const handleOpenChat = () => setOpenChat(true);
+  const handleCloseChat = () => setOpenChat(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const handleChange = (event: SelectChangeEvent) => {
+    setService(event.target.value);
+  };
+  const handleSubmitBooking = () => {
+    if (service && dayBooking) {
+      //gọi API booking
+      if (status === "success") {
+        toast.success("Gửi yêu cầu đặt lịch thành công!");
+        setOpen(false);
+        return;
+      }
+      toast.error("Gửi yêu cầu đặt lịch thất bại!");
+      return;
+    }
+
+    toast.error("Hãy chọn dịch vụ và ngày hẹn!");
+  };
   return (
     <Box paddingTop="80px">
+      <Box
+        sx={{
+          position: "fixed",
+          right: 15,
+          bottom: 40,
+          zIndex: 100,
+          cursor: "pointer",
+        }}
+      >
+        <img onClick={handleOpenChat} src={chat}></img>
+      </Box>
       <Box display="flex">
         <Box flex={6} display="flex" justifyContent="center">
           <Box
@@ -24,7 +117,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 textAlign: "center",
               }}
             >
-              Hệ thống thú y Tropicpet
+              {shop?.name}
             </Typography>
             <Typography
               sx={{
@@ -34,10 +127,10 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 lineHeight: "2.5rem",
               }}
             >
-              Chúng tôi cung cấp các giải pháp và dịch vụ chăm sóc thú cưng toàn
-              diện, chuyên nghiệp TOP đầu tại Hà Nội.
+              {shop?.slogan}
             </Typography>
             <Button
+              onClick={handleOpenChat}
               sx={{
                 marginTop: 4,
                 width: "40%",
@@ -120,6 +213,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 bạn.
               </Typography>
               <Button
+                onClick={handleOpen}
                 sx={{
                   marginTop: 4,
                   width: "40%",
@@ -141,26 +235,263 @@ const ShopDetail: FC<ShopDetailProps> = () => {
           justifyContent="center"
           alignItems="center"
           gap={8}
-          padding="2rem 12rem"
+          padding="2rem 8rem"
         >
-          <ServiceItem />
-          <ServiceItem />
-          <ServiceItem />
+          {shop && (
+            <Carousel
+              useArrowKeys={true}
+              dynamic={true}
+              className="slider"
+              show={2.3}
+              slide={1}
+              transition={0.3}
+              swiping={true}
+              leftArrow={
+                <IconButton sx={{ bgcolor: "red" }}>
+                  <ArrowBackIosNewOutlined />
+                </IconButton>
+              }
+              rightArrow={
+                <IconButton sx={{ bgcolor: "red" }}>
+                  <ArrowForwardIos />
+                </IconButton>
+              }
+              children={shop.services.map((s: any) => {
+                return (
+                  <ServiceItem
+                    key={s.id}
+                    id={s.id}
+                    name={s.service.name}
+                    description={s.description}
+                    image={s.image}
+                  />
+                );
+              })}
+            ></Carousel>
+          )}
         </Box>
       </Box>
+
       {/* Nhan xet cua khach hang */}
-      <Box display="flex" justifyContent="center" flexDirection="column">
-        <Box width="70%" paddingLeft={20}>
-          <Typography fontSize={30} fontWeight={600} color="#ED6436">
+      <Box height={500} alignItems="center" display="flex">
+        <Box width={800}>
+          <Carousel
+            className="slider"
+            show={1}
+            slide={1}
+            transition={0.5}
+            swiping={true}
+            leftArrow={
+              <IconButton>
+                <ArrowBackIosNewOutlined />
+              </IconButton>
+            }
+            rightArrow={
+              <IconButton>
+                <ArrowForwardIos />
+              </IconButton>
+            }
+          >
+            <CommentItem />
+            <CommentItem />
+            <CommentItem />
+          </Carousel>
+        </Box>
+        <Box
+          sx={{
+            backgroundImage:
+              "url(https://pawsitive.bold-themes.com/buddy/wp-content/uploads/sites/2/2019/08/dog_services.png)",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right",
+            display: "grid",
+            placeItems: "center",
+            alignSelf: "stretch",
+            flex: 1,
+          }}
+        >
+          <Typography
+            width={400}
+            fontSize={45}
+            fontWeight={600}
+            color="#fcfcfc"
+          >
             Khách hàng nói gì về chúng tôi
           </Typography>
-          <Divider />
-        </Box>
-        <Box display="flex" gap={6} justifyContent="center" padding="0 12rem">
-          <CommentItem />
-          <CommentItem />
         </Box>
       </Box>
+      {/* Them nhan xet */}
+      <Box height={500} alignItems="center" display="flex">
+        <Box
+          sx={{
+            position: "relative",
+            backgroundImage:
+              "url(https://pawsitive.bold-themes.com/buddy/wp-content/uploads/sites/2/2019/08/inner_services_cat.png)",
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "right",
+            display: "grid",
+            placeItems: "center",
+            alignSelf: "stretch",
+            flex: 1,
+          }}
+        >
+          <Typography
+            width={200}
+            fontSize={45}
+            fontWeight={600}
+            color="#ffffff"
+            position="absolute"
+            left="5%"
+            top="35%"
+          >
+            Đánh giá dịch vụ
+          </Typography>
+        </Box>
+        <Box
+          width="60%"
+          display="flex"
+          justifyContent="center"
+          flexDirection="column"
+          alignItems="center"
+          gap={2}
+          padding={20}
+        >
+          <Typography fontSize={20}>
+            "Mọi ý kiến của khách hàng luôn được chúng tôi ghi nhận và trân
+            trọng để từ đó ngày càng hoàn thiện hơn."
+          </Typography>
+          <Typography sx={{ alignSelf: "start" }} fontSize={18}>
+            Hãy để lại đánh giá của bạn
+          </Typography>
+          <StyledRating
+            sx={{ alignSelf: "start" }}
+            name="customized-color"
+            defaultValue={5}
+            precision={1}
+            icon={<Pets fontSize="inherit" />}
+            emptyIcon={<PetsOutlined fontSize="inherit" />}
+          />
+          <TextField
+            rows={3}
+            multiline
+            label="Đánh giá của bạn"
+            id="Đánh giá của bạn"
+            placeholder="Nhập đánh giá"
+            sx={{
+              width: "100%",
+              ".MuiInputBase-root": { borderRadius: 6 },
+            }}
+          />
+          <Button
+            sx={{
+              marginTop: 1,
+              width: "20%",
+              bgcolor: "#ED6436",
+              color: "white",
+              borderRadius: 16,
+              "&:hover": { bgcolor: "#ED6436" },
+              fontSize: 20,
+              textTransform: "initial",
+              alignSelf: "end",
+            }}
+          >
+            Đánh giá
+          </Button>
+        </Box>
+      </Box>
+      {/* Form order */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        slots={{ backdrop: Backdrop }}
+        slotProps={{
+          backdrop: {
+            timeout: 500,
+          },
+        }}
+      >
+        <Fade in={open}>
+          <Box
+            bgcolor="white"
+            width="30%"
+            position="absolute"
+            top="30%"
+            left="50%"
+            sx={{ translate: "-50%" }}
+            borderRadius={2}
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            justifyContent="center"
+            gap={1}
+            padding={3}
+          >
+            <Typography id="transition-modal-title" variant="h5" component="h2">
+              Đặt trước dịch vụ của chúng tôi
+            </Typography>
+            <FormControl sx={{ m: 1, minWidth: 258 }}>
+              <InputLabel id="dichvu">Dịch vụ</InputLabel>
+              <Select
+                labelId="dichvu"
+                id="dichvu"
+                value={service}
+                onChange={handleChange}
+                autoWidth
+                label="Dịch vụ"
+              >
+                {shop?.services.map((s: any) => {
+                  return (
+                    <MenuItem key={s.id} value={s.id}>
+                      {s.service.name}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DateTimePicker
+                label="Chọn thời gian"
+                viewRenderers={{
+                  hours: renderTimeViewClock,
+                  minutes: renderTimeViewClock,
+                  seconds: renderTimeViewClock,
+                }}
+                onChange={(v: Dayjs | null) => {
+                  setDayBooking(v);
+                }}
+              />
+            </LocalizationProvider>
+            <Button
+              onClick={handleSubmitBooking}
+              sx={{
+                marginTop: 1,
+                width: "40%",
+                bgcolor: "#ed6436",
+                color: "white",
+                borderRadius: 16,
+                "&:hover": { bgcolor: "#ed6436" },
+                fontSize: 20,
+                textTransform: "initial",
+              }}
+            >
+              Đặt lịch
+            </Button>
+          </Box>
+        </Fade>
+      </Modal>
+      {openChat && shop && (
+        <BoxChat
+          shopId={shop.id}
+          shopName={shop.name}
+          open={openChat}
+          onClose={handleCloseChat}
+        />
+      )}
     </Box>
   );
 };

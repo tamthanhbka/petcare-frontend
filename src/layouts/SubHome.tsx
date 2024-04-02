@@ -1,16 +1,27 @@
-import { Box, Button, IconButton, InputBase, Typography } from "@mui/material";
-import type { FC } from "react";
-import img1 from "../assets/img/home1.svg";
-import spa from "../assets/img/spa.svg";
-import health from "../assets/img/health.svg";
-import hotel from "../assets/img/hotel.svg";
-import { HealthItem, HotelItem, SpaItem } from "../components";
 import { Search } from "@mui/icons-material";
+import {
+  Box,
+  Button,
+  FormControl,
+  IconButton,
+  InputBase,
+  Typography,
+} from "@mui/material";
+import { type FC } from "react";
+import { Form, useNavigate } from "react-router-dom";
+import health from "../assets/img/health.svg";
+import img1 from "../assets/img/home1.svg";
+import hotel from "../assets/img/hotel.svg";
 import iconPet from "../assets/img/iconpet.svg";
+import spa from "../assets/img/spa.svg";
+import { HealthItem, HotelItem, SpaItem } from "../components";
+import useShopSearch from "../hook/useShopSearch";
 
 interface SubHomeProps {}
 
 const SubHome: FC<SubHomeProps> = () => {
+  const navigate = useNavigate();
+  const { setSearch, shops, search } = useShopSearch();
   return (
     <Box paddingTop="80px">
       {/* general introduction */}
@@ -53,6 +64,9 @@ const SubHome: FC<SubHomeProps> = () => {
             alignItems="center"
           >
             <InputBase
+              onChange={(v) => {
+                setSearch(v.currentTarget.value);
+              }}
               sx={{ marginLeft: 2 }}
               placeholder="Nhập để tìm kiếm..."
             />
@@ -60,6 +74,7 @@ const SubHome: FC<SubHomeProps> = () => {
               type="button"
               sx={{ p: "10px", color: "#ED6436" }}
               aria-label="search"
+              onClick={() => navigate(`search?q=${search}`)}
             >
               <Search
                 sx={{ color: "#9f9f9f", "&:hover": { color: "#ED6436" } }}
