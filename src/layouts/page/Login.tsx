@@ -39,11 +39,14 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const { action, login } = useAuth();
+  const { action, login, user } = useAuth();
   useEffect(() => {
-    if (login) {
-      navigate("/");
-    }
+    // if (login && !user) {
+    //   // navigate("/");
+    // }
+    if (!login || !user) return;
+    if (user.role === "USER") return navigate("/");
+    if (user.role === "STAFF") return navigate("/staff/dashboard");
   }, [login]);
   const handleLogin = async () => {
     try {

@@ -21,6 +21,8 @@ export type AddressType = {
 export type ServiceType = {
   id: number;
   name: string;
+  parentId: number;
+  parent: ServiceType;
 };
 
 export type ServiceShopType = {
@@ -29,6 +31,27 @@ export type ServiceShopType = {
   description: string;
   lowestPrice: number;
   highestPrice: number;
+  serviceId: number;
   shop: ShopType;
   service: ServiceType;
 };
+
+export type ProvinceType = {
+  code: string;
+  name: string;
+};
+
+export type DistrictType = {
+  code: string;
+  name: string;
+  province: string;
+};
+
+export type CommuneType = {
+  code: string;
+  name: string;
+  district: string;
+  province: string;
+};
+
+export type CommentType = {};

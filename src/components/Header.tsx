@@ -1,18 +1,23 @@
 import { Phone, AccountCircle } from "@mui/icons-material";
 import {
   Avatar,
+  Badge,
   Box,
   Button,
+  ClickAwayListener,
   Fade,
+  Grow,
   IconButton,
   Menu,
   MenuItem,
+  MenuList,
+  Paper,
   Popover,
   Popper,
   Typography,
   styled,
 } from "@mui/material";
-import { useState, type FC } from "react";
+import React, { useState, type FC } from "react";
 import logo from "../assets/img/logo.svg";
 import "../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -38,13 +43,20 @@ interface Header {}
 
 const Header: FC<Header> = () => {
   const navigate = useNavigate();
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
+  const [openPoper, setOpenPoper] = useState(false);
+  const [openLogin, setOpenLogin] = useState(false);
+  const anchorRef = React.useRef<HTMLElement>(null);
+  const handleOpenPoper = () => {
+    setOpenPoper(true);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
+  const handleClosePoper = () => {
+    setOpenPoper(false);
+  };
+  const handleOpenLogin = () => {
+    setOpenLogin(true);
+  };
+  const handleCloseLogin = () => {
+    setOpenLogin(false);
   };
   return (
     <Box
@@ -206,8 +218,14 @@ const Header: FC<Header> = () => {
         </Box>
       </Box>
       {/* avatar */}
-      <Box paddingRight={5} sx={{ cursor: "pointer" }}>
-        <Avatar onClick={() => navigate("/history")} />
+      <Box ref={anchorRef} paddingRight={5} sx={{ cursor: "pointer" }}>
+        <StyledBadge
+          overlap="circular"
+          anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+          variant="dot"
+        >
+          <Avatar onClick={handleOpenPoper} />
+        </StyledBadge>
       </Box>
       {/* login button */}
       {/* <Box paddingRight={5} sx={{ cursor: "pointer" }}>
@@ -233,8 +251,77 @@ const Header: FC<Header> = () => {
         <MenuItem onClick={handleClose}>Đăng nhập</MenuItem>
         <MenuItem onClick={handleClose}>Đăng ký</MenuItem>
       </Menu> */}
+
+      {/* Poper */}
+      <Popper
+        open={openPoper}
+        anchorEl={anchorRef.current}
+        role={undefined}
+        placement="bottom-start"
+        transition
+        disablePortal
+      >
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            style={{
+              transformOrigin:
+                placement === "bottom-start" ? "left top" : "left bottom",
+            }}
+          >
+            <Paper elevation={8}>
+              <ClickAwayListener onClickAway={handleClosePoper}>
+                <MenuList
+                  // autoFocusItem={open}
+                  id="composition-menu"
+                  aria-labelledby="composition-button"
+                >
+                  <MenuItem onClick={handleClosePoper}>
+                    Lịch sử đặt dịch vụ
+                  </MenuItem>
+                  <MenuItem onClick={() => navigate("message")}>
+                    Tin nhắn
+                  </MenuItem>
+                  <MenuItem onClick={handleClosePoper}>
+                    Thông tin cá nhân
+                  </MenuItem>
+                  <MenuItem onClick={handleClosePoper}>Đăng xuất</MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
     </Box>
   );
 };
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+  "& .MuiBadge-badge": {
+    backgroundColor: "#44b700",
+    color: "#44b700",
+    boxShadow: `0 0 0 2px ${theme.palette.background.paper}`,
+    "&::after": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      width: "100%",
+      height: "100%",
+      borderRadius: "50%",
+      animation: "ripple 1.2s infinite ease-in-out",
+      border: "1px solid currentColor",
+      content: '""',
+    },
+  },
+  "@keyframes ripple": {
+    "0%": {
+      transform: "scale(.8)",
+      opacity: 1,
+    },
+    "100%": {
+      transform: "scale(2.4)",
+      opacity: 0,
+    },
+  },
+}));
 export default Header;

@@ -8,12 +8,15 @@ import {
   useState,
 } from "react";
 import { getMe } from "../api";
+type Role = "STAFF" | "USER" | "ADMIN";
 export type User = {
   id: number;
   username: string;
   phone: string;
   isActivated: boolean;
+  role: Role;
   email: string;
+  fullName: string;
   followers: User[];
   createdAt: string;
   updatedAt: string;

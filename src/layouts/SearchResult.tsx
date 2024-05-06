@@ -38,91 +38,86 @@ const SearchResult: FC<SearchResultProps> = () => {
     },
   });
   return (
-    <Box
-      paddingTop={16}
-      display={"flex"}
-      flexDirection={"column"}
-      alignItems="center"
-    >
-      <Box paddingRight={6} paddingLeft={6} display={"flex"} width={"100%"}>
-        {/* Link */}
-        <Breadcrumbs
-          separator={<NavigateNext fontSize="small" />}
-          aria-label="breadcrumb"
-          sx={{ flex: 6, paddingTop: "10px" }}
-        >
-          <Link
-            underline="hover"
-            key="1"
-            color="inherit"
-            href="/"
-            //   onClick={handleClick}
+    <Box mt="15px">
+      <Box display={"flex"} flexDirection={"column"} alignItems="center">
+        <Box paddingRight={6} paddingLeft={6} display={"flex"} width={"100%"}>
+          {/* Link */}
+          <Breadcrumbs
+            separator={<NavigateNext fontSize="small" />}
+            aria-label="breadcrumb"
+            sx={{ flex: 6, paddingTop: "10px" }}
           >
-            Trang chủ
-          </Link>
-          <Typography key="3" color="text.primary">
-            Kết quả tìm kiếm cho từ khóa "{searchParam.get("q")}"
-          </Typography>
-        </Breadcrumbs>
-        <Box flex={6} display={"flex"} justifyContent={"flex-end"}>
-          <Box
-            width={"50%"}
-            display="flex"
-            sx={{ border: "3px solid #ED6436", borderRadius: 12 }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <InputBase
-              onChange={(v) => setSearch(v.currentTarget.value)}
-              sx={{ marginLeft: 2 }}
-              placeholder="Nhập để tìm kiếm..."
-            />
-            <IconButton
-              type="button"
-              sx={{ p: "10px", color: "#ED6436" }}
-              aria-label="search"
-              onClick={() => navigate(`?q=${search}`)}
+            <Link
+              underline="hover"
+              key="1"
+              color="inherit"
+              href="/"
+              //   onClick={handleClick}
             >
-              <Search
-                sx={{ color: "#9f9f9f", "&:hover": { color: "#ED6436" } }}
+              Trang chủ
+            </Link>
+            <Typography key="3" color="text.primary">
+              Kết quả tìm kiếm cho từ khóa "{searchParam.get("q")}"
+            </Typography>
+          </Breadcrumbs>
+          <Box flex={6} display={"flex"} justifyContent={"flex-end"}>
+            <Box
+              width={"50%"}
+              display="flex"
+              sx={{ border: "3px solid #ED6436", borderRadius: 12 }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <InputBase
+                onChange={(v) => setSearch(v.currentTarget.value)}
+                sx={{ marginLeft: 2 }}
+                placeholder="Nhập để tìm kiếm..."
               />
-            </IconButton>
+              <IconButton
+                type="button"
+                sx={{ p: "10px", color: "#ED6436" }}
+                aria-label="search"
+                onClick={() => navigate(`?q=${search}`)}
+              >
+                <Search
+                  sx={{ color: "#9f9f9f", "&:hover": { color: "#ED6436" } }}
+                />
+              </IconButton>
+            </Box>
           </Box>
         </Box>
+        {/* Danh sach shop */}
+        <Box width={"80%"} paddingTop={5}>
+          <Grid
+            container
+            spacing={{ xs: 2, md: 6 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {searchResult.shops.map((shop, index) => (
+              <Grid item xs={2} sm={4} md={3} key={index}>
+                <SearchItem
+                  id={shop.id}
+                  name={shop.name}
+                  avatar={shop.avatar}
+                  slogan={shop.slogan}
+                  hotline={shop.hotline}
+                  staffId={shop.staffId}
+                ></SearchItem>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+        {/* Phan trang */}
+        <Pagination
+          sx={{ paddingTop: "20px" }}
+          count={Math.ceil(searchResult.count / 8)}
+          onChange={(_, page) => {
+            const s = new URLSearchParams(searchParam);
+            s.set("page", page.toString());
+            setSearchParam(s);
+          }}
+        />
       </Box>
-
-      {/* Danh sach shop */}
-      <Box width={"80%"} paddingTop={5}>
-        <Grid
-          container
-          spacing={{ xs: 2, md: 6 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {searchResult.shops.map((shop, index) => (
-            <Grid item xs={2} sm={4} md={3} key={index}>
-              <SearchItem
-                id={shop.id}
-                name={shop.name}
-                avatar={shop.avatar}
-                slogan={shop.slogan}
-                hotline={shop.hotline}
-                staffId={shop.staffId}
-              ></SearchItem>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-
-      {/* Phan trang */}
-      <Pagination
-        sx={{ paddingTop: "20px" }}
-        count={Math.ceil(searchResult.count / 8)}
-        onChange={(_, page) => {
-          const s = new URLSearchParams(searchParam);
-          s.set("page", page.toString());
-          setSearchParam(s);
-        }}
-      />
     </Box>
   );
 };

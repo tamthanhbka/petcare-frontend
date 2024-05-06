@@ -1,7 +1,67 @@
 import { Dayjs } from "dayjs";
-import { ShopType } from "../type";
+import { ServiceShopType, ServiceType, ShopType } from "../type";
 import { axiosInstance, AxiosError } from "./axios";
+import axios from "axios";
 
+const getShopByStaff = async () => {
+  const response = await axiosInstance.get<ShopType>(`/shops/staff`);
+  return response.data;
+};
+
+const updateShopByStaff = async (shop?: ShopType) => {
+  const response = await axiosInstance.patch<ShopType>(`/shops`, { ...shop });
+  return response.data;
+};
+
+const getAllServiceByStaff = async () => {
+  const response = await axiosInstance.get<ServiceShopType[]>(
+    `/shops/staff/services`
+  );
+  return response.data;
+};
+
+const addShopServiceByStaff = async (
+  description?: string,
+  lowestPrice?: number,
+  highestPrice?: number,
+  serviceId?: number
+) => {
+  const response = await axiosInstance.post(`shop-service`, {
+    description: description,
+    lowestPrice: lowestPrice,
+    highestPrice: highestPrice,
+    serviceId: serviceId,
+  });
+  return response.data;
+};
+
+const getShopServiceByStaff = async (id: string) => {
+  const response = await axiosInstance.get<ServiceShopType>(
+    `shop-service/${id}`
+  );
+  return response.data;
+};
+
+const updateShopServiceByStaff = async (
+  id: string,
+  shopService?: ServiceShopType
+) => {
+  const response = await axiosInstance.patch<ServiceShopType>(
+    `shop-service/${id}`,
+    { ...shopService }
+  );
+  return response.data;
+};
+
+const removeShopServiceByStaff = async (id: string) => {
+  const response = await axiosInstance.delete(`shop-service/${id}`);
+  return response.data;
+};
+
+const getListServiceByStaff = async () => {
+  const response = await axiosInstance.get<ServiceType[]>(`services`);
+  return response.data;
+};
 const getShopInfo = async (id: string) => {
   console.log(id);
   const response = await axiosInstance.get(`/shops/${id}`);
@@ -77,4 +137,12 @@ export {
   searchShop,
   getListBooking,
   sendRequestBooking,
+  getShopByStaff,
+  updateShopByStaff,
+  getAllServiceByStaff,
+  getShopServiceByStaff,
+  updateShopServiceByStaff,
+  removeShopServiceByStaff,
+  getListServiceByStaff,
+  addShopServiceByStaff,
 };

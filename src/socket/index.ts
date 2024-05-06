@@ -6,18 +6,35 @@ export type Chat = {
   senderId: number;
   shopId: number;
 };
-const token = () => localStorage.getItem("token");
+const token = () => localStorage.getItem("token") || "";
 let socket: Socket;
 const listenSocket = (): (() => void) => {
   socket = io("http://localhost:3000", {
-    auth: { token: token() },
+    extraHeaders: {
+      authorization: token(),
+    },
   });
-  auth();
   return () => socket.disconnect();
 };
+export interface RecentChat {
+  id: number;
+  content: string;
+  createdAt: string;
+  receiverId: number;
+  senderId: number;
+  shop: Shop;
+}
 
-const auth = async () => {
-  socket.emit("auth");
+export interface Shop {
+  name: string;
+  avatar: string;
+  staffId: number;
+}
+
+const getRecentChats = () => {
+  return new Promise<RecentChat[]>((resolve) => {
+    socket.emit("user-finAll", (data: RecentChat[]) => resolve(data));
+  });
 };
 const sendChat = (shopId: number, content: string) => {
   return new Promise<Chat>((resolve) => {
@@ -45,4 +62,4 @@ const listenChat = (
   return () => socket.off("chat");
 };
 
-export { auth, sendChat, getAllChat, listenChat, listenSocket };
+export { sendChat, getAllChat, listenChat, listenSocket, getRecentChats };

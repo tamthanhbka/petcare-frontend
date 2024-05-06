@@ -23,7 +23,7 @@ const SubHome: FC<SubHomeProps> = () => {
   const navigate = useNavigate();
   const { setSearch, shops, search } = useShopSearch();
   return (
-    <Box paddingTop="80px">
+    <Box>
       {/* general introduction */}
       <Box display="flex">
         <Box flex={6} display="flex" alignItems="center" flexDirection="column">

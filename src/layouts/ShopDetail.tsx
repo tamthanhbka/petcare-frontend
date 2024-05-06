@@ -29,16 +29,15 @@ import {
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useQuery } from "@tanstack/react-query";
 import { Carousel } from "@trendyol-js/react-carousel";
-import { useState, type FC, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getServicesOfShop, getShopInfo, sendRequestBooking } from "../api";
-import "../assets/css/shopDetail.css";
-import chat from "../assets/img/chat.svg";
-import { BoxChat, CommentItem, ServiceItem } from "../components";
-import { ServiceType, ShopType } from "../type";
-import { listenSocket } from "../socket";
-import { toast } from "react-toastify";
 import { Dayjs } from "dayjs";
+import { useEffect, useState, type FC } from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import { getShopInfo } from "../api";
+import "../assets/css/shopDetail.css";
+import { BoxChat, CommentItem, ServiceItem } from "../components";
+import { listenSocket } from "../socket";
+import { ShopType } from "../type";
 
 interface ShopDetailProps {}
 export const StyledRating = styled(Rating)({
@@ -88,18 +87,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
     toast.error("Hãy chọn dịch vụ và ngày hẹn!");
   };
   return (
-    <Box paddingTop="80px">
-      <Box
-        sx={{
-          position: "fixed",
-          right: 15,
-          bottom: 40,
-          zIndex: 100,
-          cursor: "pointer",
-        }}
-      >
-        <img onClick={handleOpenChat} src={chat}></img>
-      </Box>
+    <Box>
       <Box display="flex">
         <Box flex={6} display="flex" justifyContent="center">
           <Box
