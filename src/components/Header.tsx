@@ -67,7 +67,7 @@ const Header: FC<Header> = () => {
       position="fixed"
       bgcolor="#ffffff"
       boxShadow="0px 2px 2px 0 #eaeaea"
-      zIndex={99}
+      zIndex={90}
     >
       {/* Logo  */}
       <Box

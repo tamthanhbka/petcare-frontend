@@ -8,3 +8,4 @@ export { default as CommentItem } from "./Comment";
 export { default as BoxChat } from "./BoxChat";
 export { default as Message } from "./Message";
 export { default as ChatList } from "./chat/ChatList";
+export { default as ChatBot } from "./chat/ChatBot";

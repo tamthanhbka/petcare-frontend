@@ -1,31 +1,22 @@
-import {
-  CloseOutlined,
-  QuestionAnswer,
-  Search,
-  Send,
-} from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Fab,
-  Input,
-  OutlinedInput,
-  Paper,
-  Typography,
-} from "@mui/material";
+import { CloseOutlined, QuestionAnswer, Search } from "@mui/icons-material";
+import { Box, Fab, OutlinedInput, Paper, Typography } from "@mui/material";
 import { useState, type FC } from "react";
+import useChat from "../../hook/useChat";
 import ChatItem from "./ChatItem";
-import useRecentChats from "../../hook/useRecentChats";
+import MessageBox from "./MessageBox";
 
 interface ListChatProps {}
 
 const ChatList: FC<ListChatProps> = () => {
   const [show, setShow] = useState(false);
-  const [selectedStaffId, setSelectedStaffId] = useState<number>();
-  const { chats, loading } = useRecentChats();
-  const handleSelectChat = (staffId: number) => setSelectedStaffId(staffId);
-  console.log(selectedStaffId + " selected");
-
+  const {
+    chats,
+    chatLoading,
+    recentChats,
+    selectedChat,
+    selectChatShop,
+    createChat,
+  } = useChat({ onNewChat: () => setShow(true) });
   return (
     <>
       <Fab
@@ -49,11 +40,12 @@ const ChatList: FC<ListChatProps> = () => {
         elevation={2}
         sx={{
           width: "50%",
+          border: "1px solid #cdcdcd",
           position: "fixed",
           top: 150,
           right: 10,
           bottom: 10,
-          zIndex: 999,
+          zIndex: 9999,
           display: show ? "flex" : "none",
           flexDirection: "column",
         }}
@@ -66,7 +58,7 @@ const ChatList: FC<ListChatProps> = () => {
             <CloseOutlined fontSize="small" sx={{ cursor: "pointer" }} />
           </Box>
         </Box>
-        <Box flex={1} display="flex" borderTop="1px solid #dbdbdb">
+        <Box flex={1} height="90%" display="flex" borderTop="1px solid #dbdbdb">
           <Box
             flex={4}
             display="flex"
@@ -85,76 +77,28 @@ const ChatList: FC<ListChatProps> = () => {
               }
             ></OutlinedInput>
             <Box display="flex" flexDirection="column" gap={0.1}>
-              {chats.map((chat) => (
+              {recentChats.map((chat) => (
                 <ChatItem
                   key={chat.id}
                   name={chat.shop.name}
                   createdAt={chat.createdAt}
                   lastMessage={chat.content}
                   avatar={chat.shop.avatar}
-                  onClick={() => handleSelectChat(chat.shop.staffId)}
+                  active={selectedChat?.shopId === chat.shopId}
+                  onClick={() => selectChatShop(chat.shopId)}
                 />
               ))}
             </Box>
           </Box>
-          <Box
-            flex={10}
-            bgcolor={"#F3F3F3"}
-            display={"flex"}
-            flexDirection={"column"}
-          >
-            <Box
-              display={"flex"}
-              bgcolor={"white"}
-              padding={"0.5rem"}
-              borderBottom="1px solid #dbdbdb"
-              alignItems={"center"}
-              gap={1}
-            >
-              <Avatar sx={{ width: 35, height: 35 }}></Avatar>
-              <Typography>Ten khach hang</Typography>
-            </Box>
-            <Box
-              padding={"1rem"}
-              display={"flex"}
-              gap={1}
-              flexDirection={"column"}
-              flex={1}
-              justifyContent={"end"}
-            >
-              <Box
-                bgcolor={"white"}
-                width={"60%"}
-                padding={"0.5rem"}
-                borderRadius={"1rem"}
-                boxShadow={"4px 4px 8px #e1e1e1"}
-              >
-                <Typography>Noi dung tin nhan gui di</Typography>
-              </Box>
-              <Box
-                bgcolor={"#f89c5a"}
-                width={"60%"}
-                padding={"0.5rem"}
-                borderRadius={"1rem"}
-                boxShadow={"4px 4px 8px #e1e1e1"}
-                alignSelf={"flex-end"}
-              >
-                <Typography>Noi dung tin nhan gui den</Typography>
-              </Box>
-            </Box>
-            <Box
-              bgcolor={"white"}
-              padding={"0.5rem 1rem"}
-              borderTop="1px solid #dbdbdb"
-            >
-              <Input
-                fullWidth
-                disableUnderline
-                placeholder="Nhập nội dung tin nhắn"
-                endAdornment={<Send sx={{ color: "#5cc407" }}></Send>}
-              ></Input>
-            </Box>
-          </Box>
+          {selectedChat && (
+            <MessageBox
+              isUser={true}
+              info={selectedChat.shop}
+              loading={chatLoading}
+              messages={chats}
+              onSend={createChat}
+            />
+          )}
         </Box>
       </Paper>
     </>

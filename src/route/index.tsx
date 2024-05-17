@@ -20,6 +20,13 @@ import {
   StaffHomeLayout,
 } from "../layouts/staff";
 import ProtectedRoute from "./ProtectedRoute";
+import {
+  AdminDashBoard,
+  AdminHome,
+  AdminListCustomer,
+  AdminListService,
+  AdminListShop,
+} from "../layouts/admin";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -88,6 +95,16 @@ const router = createBrowserRouter([
         path: "chats",
         element: <ListMessage />,
       },
+    ],
+  },
+  {
+    path: "/admin",
+    element: <AdminHome />,
+    children: [
+      { path: "dashboard", element: <AdminDashBoard /> },
+      { path: "shops", element: <AdminListShop /> },
+      { path: "customers", element: <AdminListCustomer /> },
+      { path: "services", element: <AdminListService /> },
     ],
   },
 ]);

@@ -36,7 +36,7 @@ import { toast } from "react-toastify";
 import { getShopInfo } from "../api";
 import "../assets/css/shopDetail.css";
 import { BoxChat, CommentItem, ServiceItem } from "../components";
-import { listenSocket } from "../socket";
+import { listenSocket, startChatByUSer } from "../socket";
 import { ShopType } from "../type";
 
 interface ShopDetailProps {}
@@ -54,8 +54,6 @@ const ShopDetail: FC<ShopDetailProps> = () => {
   const [service, setService] = useState<string>();
   const [dayBooking, setDayBooking] = useState<Dayjs | null>(null);
   const [open, setOpen] = useState(false);
-  const [openChat, setOpenChat] = useState(false);
-  useEffect(() => listenSocket(), []);
 
   const { data: shop } = useQuery<ShopType>({
     queryKey: [`shop${id}`],
@@ -65,8 +63,9 @@ const ShopDetail: FC<ShopDetailProps> = () => {
 
   console.log(shop);
 
-  const handleOpenChat = () => setOpenChat(true);
-  const handleCloseChat = () => setOpenChat(false);
+  const handleOpenChat = () => {
+    if (shop) startChatByUSer(shop.id);
+  };
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleChange = (event: SelectChangeEvent) => {
@@ -472,14 +471,6 @@ const ShopDetail: FC<ShopDetailProps> = () => {
           </Box>
         </Fade>
       </Modal>
-      {openChat && shop && (
-        <BoxChat
-          shopId={shop.id}
-          shopName={shop.name}
-          open={openChat}
-          onClose={handleCloseChat}
-        />
-      )}
     </Box>
   );
 };

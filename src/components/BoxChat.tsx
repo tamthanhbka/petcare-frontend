@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { FC } from "react";
 import { Message } from "../components";
-import { useChat } from "../hook/useChat";
 import { useAuth } from "./Auth";
 
 interface ChatProps extends Omit<ModalProps, "children"> {
@@ -20,14 +19,11 @@ interface ChatProps extends Omit<ModalProps, "children"> {
 
 const Chat: FC<ChatProps> = (props) => {
   const { onClose, shopName, shopId } = props;
-  const [chats, loading, handleChat] = useChat(shopId);
-  const { user } = useAuth();
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);
     const chat = form.get("chat");
     if (!chat || typeof chat !== "string") return;
-    handleChat(chat);
     e.currentTarget.reset();
   };
 
@@ -84,17 +80,7 @@ const Chat: FC<ChatProps> = (props) => {
             borderRadius: 5,
           },
         }}
-      >
-        {loading
-          ? "Loading..."
-          : chats.map((chat) => (
-              <Message
-                isMe={user?.id == chat.senderId}
-                key={chat.id}
-                message={chat}
-              />
-            ))}
-      </Box>
+      ></Box>
       <Box sx={{ width: "100%", padding: 2 }}>
         <form onSubmit={handleSubmit}>
           <TextField

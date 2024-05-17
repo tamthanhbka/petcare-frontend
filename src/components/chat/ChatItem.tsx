@@ -1,25 +1,30 @@
 import { Avatar, Box, Tooltip, Typography } from "@mui/material";
 import type { FC } from "react";
-import * as dayjs from "dayjs";
 
 interface ChatItemProps {
   name: string;
   createdAt: string;
   lastMessage: string;
   avatar?: string;
+  active?: boolean;
   onClick?: () => void;
 }
 
 const ChatItem: FC<ChatItemProps> = (props) => {
-  const { name, avatar, lastMessage, createdAt, onClick } = props;
+  const { name, avatar, lastMessage, active, createdAt, onClick } = props;
   return (
     <Box
       display="flex"
       alignItems="center"
       p="0.5rem"
       borderRadius=".4rem"
-      bgcolor="#f9f9f9"
-      sx={{ "&:hover": { bgcolor: "#efefef", cursor: "pointer" } }}
+      bgcolor={active ? "#e6e4e4" : "#f9f9f9"}
+      sx={{
+        "&:hover": {
+          bgcolor: active ? undefined : "#efefef",
+          cursor: "pointer",
+        },
+      }}
       onClick={onClick}
     >
       <Tooltip title={name}>
@@ -71,7 +76,7 @@ const getDiff = (createdAt: string) => {
   const diff = now.getTime() - date.getTime();
   let html: JSX.Element;
   if (diff < 1000 * 60) {
-    html = <>Just now</>;
+    html = <>Vừa xong</>;
   } else if (diff < 1000 * 60 * 60) {
     html = <>{Math.floor(diff / (1000 * 60))} phút trước</>;
   } else if (diff < 1000 * 60 * 60 * 24) {
