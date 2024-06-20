@@ -1,3 +1,5 @@
+import { Address } from "cluster";
+
 export type ShopType = {
   id: number;
   name: string;
@@ -6,6 +8,7 @@ export type ShopType = {
   avatar: string;
   staffId: number;
   addressId: number;
+  rating: number;
   address: AddressType;
   services: ServiceShopType[];
 };
@@ -34,6 +37,7 @@ export type ServiceShopType = {
   serviceId: number;
   shop: ShopType;
   service: ServiceType;
+  rating: number;
 };
 
 export type ProvinceType = {
@@ -55,3 +59,27 @@ export type CommuneType = {
 };
 
 export type CommentType = {};
+
+export type RequestCooperationType = {
+  id: number;
+  email: string;
+  shopName: string;
+  slogan: string;
+  phone: string;
+  status: string;
+  province: string;
+  district: string;
+  ward: string;
+  detail: string;
+};
+
+export type UserType = {
+  id: number;
+  email: string;
+  fullName: string;
+  phone: string;
+  dateOfBirth: Date;
+  avatar: string;
+  role: string;
+  isActive: boolean;
+};

@@ -3,7 +3,6 @@ import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
-  VisibilityOutlined,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -14,7 +13,6 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
-  OutlinedInput,
   Paper,
   Select,
   SelectChangeEvent,
@@ -26,11 +24,12 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
+import { getListBookingByStaff, updateStatus } from "../../api";
 
 interface BookingRequestProps {}
 interface TablePaginationActionsProps {
@@ -118,7 +117,17 @@ const BookingRequest: FC<BookingRequestProps> = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 2) : 0;
+  const { data: bookings, refetch } = useQuery({
+    queryKey: ["bookings"],
+    queryFn: () => getListBookingByStaff(),
+  });
+  const { mutateAsync } = useMutation({
+    mutationFn: updateStatus,
+  });
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - (bookings?.length || 0))
+      : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -136,6 +145,17 @@ const BookingRequest: FC<BookingRequestProps> = () => {
 
   const handleChange = (event: SelectChangeEvent) => {
     setService(event.target.value);
+  };
+
+  const handleChangeStatus = (
+    bookingId: number,
+    status: "completed" | "accepted" | "rejected"
+  ) => {
+    mutateAsync({ bookingId, status })
+      .then(refetch)
+      .catch((e) => {
+        console.error(e);
+      });
   };
   return (
     <Box padding="2rem">
@@ -158,56 +178,57 @@ const BookingRequest: FC<BookingRequestProps> = () => {
             </Select>
           </FormControl>
         </Box>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                  align="center"
-                >
-                  Khách hàng
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Dịch vụ
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Thời gian
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Trạng thái
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Thao tác
-                </TableCell>
-                {/* <TableCell
+        {bookings && (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                    align="center"
+                  >
+                    Khách hàng
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Dịch vụ
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Thời gian
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Trạng thái
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Thao tác
+                  </TableCell>
+                  {/* <TableCell
                   align="center"
                   sx={{
                     textTransform: "uppercase",
@@ -216,172 +237,178 @@ const BookingRequest: FC<BookingRequestProps> = () => {
                 >
                   Chi tiết
                 </TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell align="center">
-                  <Box display="flex" gap={2}>
-                    <Avatar
-                      sx={{
-                        border: "1px solid #757575",
-                        width: 45,
-                        height: 45,
-                      }}
-                      src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-1/431866861_2055235028186071_413106678799918364_n.jpg?stp=dst-jpg_s320x320&_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEAsHnxgbvoDnWpEGqaXy47UvKCrad9oi9S8oKtp32iL0D7zGQpV-Trk2UZ_T-tZTXlGH4FkZtsJaCC_7KiKHdj&_nc_ohc=gdSJt_LBcPIAb5TVN_P&_nc_ht=scontent.fhan14-1.fna&oh=00_AfDPdqAIn5VlB9D3nR49QssJqDuIedAUo2NzGkxNm65OnQ&oe=66189C51"
-                    ></Avatar>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="flex-start"
-                    >
-                      <Typography>Lương Thị Tâm</Typography>
-                      <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
-                        tamthanh@gmail.com
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? bookings.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : bookings
+                ).map((booking, key) => (
+                  <TableRow>
+                    <TableCell align="center">
+                      <Box display="flex" gap={2}>
+                        <Avatar
+                          sx={{
+                            border: "1px solid #757575",
+                            width: 45,
+                            height: 45,
+                          }}
+                          src={booking.fullName}
+                        >
+                          {booking.fullName.at(0)?.toUpperCase()}
+                        </Avatar>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="flex-start"
+                        >
+                          <Typography>{booking.fullName}</Typography>
+                          <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
+                            {booking.email}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">{booking.serviceName}</TableCell>
+                    <TableCell align="center">
+                      <Typography fontSize={14}>
+                        {new Date(booking.time).toLocaleDateString("vi-VN", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
                       </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell align="center">Lưu chuồng theo ngày</TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Thoi gian: 7:30 - 17:30">
-                    <Typography fontSize={14}>30/12/2001</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label="Đang chờ xác nhận"
-                    sx={{
-                      color: "#FFB503",
-                      bgcolor: "#FFF3D6",
-                      fontWeight: 600,
-                    }}
-                  ></Chip>
-                </TableCell>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        label={booking.status}
+                        sx={{
+                          color: "#FFB503",
+                          bgcolor: "#FFF3D6",
+                          fontWeight: 600,
+                        }}
+                      ></Chip>
+                    </TableCell>
 
-                <TableCell align="center">
-                  <Box
-                    sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                  >
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#5BCC08",
-                        "&:hover": { bgcolor: "#56c606" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Xác nhận
-                    </Button>
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#f9903f",
-                        "&:hover": { bgcolor: "#F7822A" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Từ chối
-                    </Button>
-                  </Box>
-                </TableCell>
-                {/* <TableCell align="center">
+                    <TableCell align="center">
+                      {booking.status == "pending" ? (
+                        <Box
+                          sx={{
+                            display: "flex",
+                            gap: 1,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Button
+                            sx={{
+                              textTransform: "initial",
+                              bgcolor: "#5BCC08",
+                              "&:hover": { bgcolor: "#56c606" },
+                            }}
+                            size="small"
+                            variant="contained"
+                            onClick={() =>
+                              handleChangeStatus(booking.id, "accepted")
+                            }
+                          >
+                            Xác nhận
+                          </Button>
+                          <Button
+                            sx={{
+                              textTransform: "initial",
+                              bgcolor: "#f9903f",
+                              "&:hover": { bgcolor: "#F7822A" },
+                            }}
+                            size="small"
+                            variant="contained"
+                            onClick={() =>
+                              handleChangeStatus(booking.id, "rejected")
+                            }
+                          >
+                            Từ chối
+                          </Button>
+                        </Box>
+                      ) : booking.status == "accepted" ? (
+                        <Button
+                          sx={{
+                            textTransform: "initial",
+                            bgcolor: "#09aedb",
+                            "&:hover": { bgcolor: "#08a8d4" },
+                          }}
+                          size="small"
+                          variant="contained"
+                          onClick={() =>
+                            handleChangeStatus(booking.id, "completed")
+                          }
+                        >
+                          Hoàn thành
+                        </Button>
+                      ) : (
+                        <Button
+                          sx={{
+                            textTransform: "initial",
+                            bgcolor: "#09aedb",
+                            "&:hover": { bgcolor: "#08a8d4" },
+                          }}
+                          size="small"
+                          variant="contained"
+                          disabled
+                        >
+                          {booking.status === "completed"
+                            ? "Hoàn thành"
+                            : booking.status === "cancel"
+                            ? "Đã hủy"
+                            : "Đã từ chối"}
+                        </Button>
+                      )}
+                    </TableCell>
+                    {/* <TableCell align="center">
                   <IconButton>
                     <VisibilityOutlined></VisibilityOutlined>
                   </IconButton>
                 </TableCell> */}
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">
-                  <Box display="flex" gap={2}>
-                    <Avatar
-                      sx={{
-                        border: "1px solid #757575",
-                        width: 45,
-                        height: 45,
-                      }}
-                      src="https://scontent.fhan14-4.fna.fbcdn.net/v/t39.30808-1/427438215_1724834511334725_871417535767916676_n.jpg?stp=dst-jpg_s320x320&_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHTAUy5QiqGt2kr1PYF5f9J9wnaMMl6HKz3CdowyXocrMn2tJ10QdCy0Ufd63vmCBE4yOenh1wyV-zjbh_ZWaOE&_nc_ohc=k5PY-8RRZbcAb4-W3WO&_nc_oc=AdhtBLjq8g-X919MIifPg3CRviA9XhwaCzLC_m2x67APN-T2ldHTa1w9-zsRYtpReutqOwzblwgns4F_cwVi6CPH&_nc_ht=scontent.fhan14-4.fna&oh=00_AfDz9XIFNqvyY5Tz-EOijPaOFrJGMnS1-Jy6ZvF9w-GNqg&oe=66198503"
-                    ></Avatar>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="flex-start"
-                    >
-                      <Typography>Đinh Thị Thu Hà</Typography>
-                      <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
-                        thuha@gmail.com
-                      </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell align="center">Tiêm vắc-xin phòng nấm</TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Thoi gian: 10:30">
-                    <Typography fontSize={14}>30/12/2001</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label="Đã duyệt"
-                    sx={{
-                      color: "#62CE12",
-                      bgcolor: "#E4F6D6",
-                      fontWeight: 600,
-                    }}
-                  ></Chip>
-                </TableCell>
-
-                <TableCell align="center">
-                  <Box
-                    sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                  >
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#28B7FF",
-                        "&:hover": { bgcolor: "#18a6ed" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Liên hệ với khách hàng
-                    </Button>
-                  </Box>
-                </TableCell>
-                {/* <TableCell align="center">
-                  <IconButton>
-                    <VisibilityOutlined></VisibilityOutlined>
-                  </IconButton>
-                </TableCell> */}
-              </TableRow>
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={5}
-                  count={2}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  slotProps={{
-                    select: {
-                      inputProps: {
-                        "aria-label": "",
+                  </TableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 78 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "Tất cả", value: -1 },
+                    ]}
+                    colSpan={5}
+                    count={bookings.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        inputProps: {
+                          "aria-label": "",
+                        },
+                        native: true,
                       },
-                      native: true,
-                    },
-                  }}
-                  labelRowsPerPage="Số hàng mỗi trang"
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                ></TablePagination>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+                    }}
+                    labelRowsPerPage="Số hàng mỗi trang"
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  ></TablePagination>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        )}
+
         {/* <TablePagination
   rowsPerPageOptions={[5, 10, 25]}
   component="div"

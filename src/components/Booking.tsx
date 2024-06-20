@@ -3,20 +3,39 @@ import { Box, Button, Chip, Paper, Typography, styled } from "@mui/material";
 import type { FC } from "react";
 import { ServiceShopType } from "../type";
 import { useNavigate } from "react-router-dom";
+import { AxiosError, cancelBooking } from "../api";
+import { toast } from "react-toastify";
 
 const Image = styled("img")({});
 
+const PendingChip = styled(Chip)({
+  color: "#06BB8A",
+});
+
 interface BookingProps {
+  id: number;
   status: string;
   time: string;
   createdAt: string;
   serviceShop: ServiceShopType;
+  refetch: () => {};
 }
 
 const Booking: FC<BookingProps> = (props) => {
   const navigate = useNavigate();
-  const { status, time, createdAt, serviceShop } = props;
+  const { id, status, time, createdAt, serviceShop, refetch } = props;
   const { province, district, ward, detail } = serviceShop.shop.address;
+
+  const handleCancelButton = (bookingId: number, refetch: () => {}) => {
+    try {
+      cancelBooking(bookingId).then(() => refetch());
+      toast.success("Hủy lịch hẹn thành công!");
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data.message);
+      console.log(err.response);
+    }
+  };
 
   return (
     <Paper
@@ -61,7 +80,7 @@ const Booking: FC<BookingProps> = (props) => {
           </Typography>
         </Box>
         <Box display={"flex"} justifyContent={"space-between"}>
-          <Chip label="Đang chờ duyệt" sx={{ color: "#06BB8A" }}></Chip>
+          <Chip label={status} sx={{ color: "#616362" }}></Chip>
           <Typography>
             {serviceShop.lowestPrice} - {serviceShop.highestPrice} VND
           </Typography>
@@ -93,11 +112,13 @@ const Booking: FC<BookingProps> = (props) => {
         </Typography>
         <Box display={"flex"} justifyContent={"flex-end"}>
           <Button
+            disabled={status == "pending" ? false : true}
             variant="contained"
             color="warning"
             sx={{
               textTransform: "inherit",
             }}
+            onClick={() => handleCancelButton(id, refetch)}
           >
             Hủy dịch vụ
           </Button>

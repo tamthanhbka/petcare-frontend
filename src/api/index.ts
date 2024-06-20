@@ -96,12 +96,61 @@ const searchShop = async (meta: {
 };
 
 const getListBooking = async () => {
-  const response = await axiosInstance.get<any[]>("/bookings/user");
+  const response = await axiosInstance.get<any[]>("/bookings/findAllByUser");
   return response.data;
 };
 
-const sendRequestBooking = async (serviceId: string, time: Dayjs) => {
-  const response = await axiosInstance.post("/bookings", { serviceId, time });
+const getListBookingByStaff = async () => {
+  const response = await axiosInstance.get<any[]>("/bookings/findAllByStaff");
+  return response.data;
+};
+
+const sendRequestBooking = async (shopServiceId: number, time: Dayjs) => {
+  const response = await axiosInstance.post("/bookings", {
+    shopServiceId,
+    time,
+  });
+  return response.data;
+};
+
+const cancelBooking = async (bookingId: number) => {
+  const response = await axiosInstance.patch(`/bookings/${bookingId}/cancel`);
+  return response.data;
+};
+
+const updateStatus = async ({
+  bookingId,
+  status,
+}: {
+  bookingId: number;
+  status: string;
+}) => {
+  const response = await axiosInstance.patch(`/bookings/${bookingId}`, {
+    status,
+  });
+  return response.data;
+};
+
+const sendRequestCooperation = async (
+  email: string,
+  shopName: string,
+  slogan: string,
+  phone: string,
+  province: string,
+  district: string,
+  ward: string,
+  detail: string
+) => {
+  const response = await axiosInstance.post("request-cooperation", {
+    email,
+    shopName,
+    slogan,
+    phone,
+    province,
+    district,
+    ward,
+    detail,
+  });
   return response.data;
 };
 
@@ -145,4 +194,8 @@ export {
   removeShopServiceByStaff,
   getListServiceByStaff,
   addShopServiceByStaff,
+  cancelBooking,
+  getListBookingByStaff,
+  updateStatus,
+  sendRequestCooperation,
 };

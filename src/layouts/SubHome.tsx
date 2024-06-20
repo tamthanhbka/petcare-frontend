@@ -1,10 +1,13 @@
 import { Search } from "@mui/icons-material";
 import {
+  Autocomplete,
   Box,
   Button,
   FormControl,
   IconButton,
+  InputAdornment,
   InputBase,
+  TextField,
   Typography,
 } from "@mui/material";
 import { type FC } from "react";
@@ -16,12 +19,20 @@ import iconPet from "../assets/img/iconpet.svg";
 import spa from "../assets/img/spa.svg";
 import { HealthItem, HotelItem, SpaItem } from "../components";
 import useShopSearch from "../hook/useShopSearch";
+import { useQuery } from "@tanstack/react-query";
+import { ServiceType } from "../type";
+import { getListServiceByStaff } from "../api";
 
 interface SubHomeProps {}
 
 const SubHome: FC<SubHomeProps> = () => {
   const navigate = useNavigate();
   const { setSearch, shops, search } = useShopSearch();
+  const { data: services } = useQuery<ServiceType[]>({
+    queryKey: [`service`],
+    queryFn: () => getListServiceByStaff(),
+    refetchOnWindowFocus: false,
+  });
   return (
     <Box>
       {/* general introduction */}
@@ -55,32 +66,69 @@ const SubHome: FC<SubHomeProps> = () => {
               Chúng tôi cung cấp các dịch vụ tốt nhất dành cho thú cưng của bạn.
             </Typography>
           </Box>
-          <Box
-            marginTop={4}
-            width="40%"
-            display="flex"
-            sx={{ border: "3px solid #ED6436", borderRadius: 12 }}
-            justifyContent="space-between"
-            alignItems="center"
-          >
-            <InputBase
+          {services && (
+            <Box
+              marginTop={4}
+              width="40%"
+              display="flex"
+              sx={{ border: "3px solid #ED6436", borderRadius: 12 }}
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              {/* <InputBase
               onChange={(v) => {
                 setSearch(v.currentTarget.value);
               }}
               sx={{ marginLeft: 2 }}
               placeholder="Nhập để tìm kiếm..."
-            />
-            <IconButton
-              type="button"
-              sx={{ p: "10px", color: "#ED6436" }}
-              aria-label="search"
-              onClick={() => navigate(`search?q=${search}`)}
-            >
-              <Search
-                sx={{ color: "#9f9f9f", "&:hover": { color: "#ED6436" } }}
-              />
-            </IconButton>
-          </Box>
+            /> */}
+              <Autocomplete
+                id="free-solo-demo"
+                sx={{
+                  width: "100%",
+                  marginLeft: 2,
+                  borderStyle: "unset",
+                }}
+                onChange={(event, newInputValue) => {
+                  if (newInputValue) setSearch(newInputValue);
+                }}
+                freeSolo
+                disableClearable
+                options={services?.map((s) => s.name)}
+                handleHomeEndKeys
+                selectOnFocus
+                renderInput={(params) => (
+                  <form onSubmit={() => navigate(`search?q=${search}`)}>
+                    <TextField
+                      {...params}
+                      onChange={(v) => {
+                        setSearch(v.currentTarget.value);
+                      }}
+                      // onChange={(event, newInputValue) => {
+                      //   if (newInputValue) setSearch(newInputValue);
+                      // }}
+                      sx={{
+                        ".MuiOutlinedInput-notchedOutline": { border: "none" },
+                        ".MuiOutlinedInput-root": { p: 0 },
+                      }}
+                      placeholder="Nhập để tìm kiếm..."
+                    />
+                  </form>
+                )}
+              ></Autocomplete>
+
+              <IconButton
+                type="button"
+                sx={{ p: "10px", color: "#ED6436" }}
+                aria-label="search"
+                onClick={() => navigate(`search?q=${search}`)}
+              >
+                <Search
+                  sx={{ color: "#9f9f9f", "&:hover": { color: "#ED6436" } }}
+                />
+              </IconButton>
+            </Box>
+          )}
           <Box position="absolute" left={8} bottom={60}>
             <img src={iconPet} />
           </Box>

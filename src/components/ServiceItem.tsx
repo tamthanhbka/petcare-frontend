@@ -17,13 +17,18 @@ interface ServiceItemProps {
 
 const ServiceItem: FC<ServiceItemProps> = (props) => {
   const { id, name, description, image } = props;
-  console.table(props);
+  // console.table(props);
 
   return (
     <Card
       variant="elevation"
-      elevation={5}
-      sx={{ bgcolor: "#F2F2F4", borderRadius: 2 }}
+      elevation={0}
+      sx={{
+        bgcolor: "#F2F2F4",
+        borderRadius: 2,
+        height: "290px",
+        border: "1px solid #e1e1e1",
+      }}
     >
       <Box overflow={"hidden"}>
         <CardMedia

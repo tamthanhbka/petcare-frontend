@@ -2,10 +2,10 @@ import { FC, PropsWithChildren } from "react";
 import { useAuth } from "../components/Auth";
 import { Navigate } from "react-router-dom";
 export interface ProtectedRouteProps extends PropsWithChildren {
-  roles: ("STAFF" | "USER" | "ADMIN" | "GUEST")[];
+  roles: ("staff" | "user" | "admin" | "guest")[];
 }
 const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
-  const { children, roles = ["GUEST"] } = props;
+  const { children, roles = ["guest"] } = props;
   const { user, loading } = useAuth();
   if (loading) return null;
   if (!user) return <Navigate to="/login" />;

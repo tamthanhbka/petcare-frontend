@@ -8,7 +8,7 @@ import {
   useState,
 } from "react";
 import { getMe } from "../api";
-type Role = "STAFF" | "USER" | "ADMIN";
+type Role = "staff" | "user" | "admin";
 export type User = {
   id: number;
   username: string;

@@ -21,6 +21,8 @@ import React, { useState, type FC } from "react";
 import logo from "../assets/img/logo.svg";
 import "../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "./Auth";
+import RequestFrom from "./RequestForm";
 const StyledNavLink = styled(NavLink)({
   textDecoration: "none",
   textTransform: "initial",
@@ -43,9 +45,14 @@ interface Header {}
 
 const Header: FC<Header> = () => {
   const navigate = useNavigate();
+  const { action, user } = useAuth();
   const [openPoper, setOpenPoper] = useState(false);
   const [openLogin, setOpenLogin] = useState(false);
+  const [openRequestForm, setOpenRequestForm] = useState(false);
   const anchorRef = React.useRef<HTMLElement>(null);
+  const handleLogout = () => {
+    action.logout();
+  };
   const handleOpenPoper = () => {
     setOpenPoper(true);
   };
@@ -58,6 +65,9 @@ const Header: FC<Header> = () => {
   const handleCloseLogin = () => {
     setOpenLogin(false);
   };
+
+  const handleOpenRequestForm = () => setOpenRequestForm(true);
+  const handleCloseRequestForm = () => setOpenRequestForm(false);
   return (
     <Box
       height={80}
@@ -81,123 +91,27 @@ const Header: FC<Header> = () => {
         <img height="80px" alt="Petcare" src={logo}></img>
       </Box>
       {/* Navigation */}
-      <Box flex={7} display="flex" gap={4}>
+      <Box
+        flex={10}
+        display="flex"
+        alignItems={"center"}
+        justifyContent="center"
+        gap={8}
+      >
         <StyledNavLink to={"/"}>Trang chủ</StyledNavLink>
         <StyledNavLink to={"/spa"}>Spa - Làm đẹp</StyledNavLink>
         <StyledNavLink to={"/health"}>Khám sức khỏe</StyledNavLink>
         <StyledNavLink to={"/hotel"}>Khách sạn thú cưng</StyledNavLink>
-        <StyledNavLink to={"/tips"}>Cẩm nang chăm sóc</StyledNavLink>
-        {/* <Button
-          disableRipple={true}
-          sx={{
-            textTransform: "initial",
-            fontWeight: 550,
-            fontSize: 16,
-            height: "80px",
-            borderRadius: "0",
-            padding: 0,
-            color: "black",
-            borderBottom: "solid 4px #ED6436",
-            "&:hover": {
-              color: "#ED6436",
-              borderBottom: "solid 4px #ED6436",
-              bgcolor: "#fff",
-            },
-            disableRipple: "true",
-            disableFocusRipple: "true",
-          }}
-        >
-          Trang chủ
-        </Button> */}
-        {/* <Button
-          disableRipple={true}
-          sx={{
-            textTransform: "initial",
-            fontWeight: 550,
-            fontSize: 16,
-            height: "80px",
-            borderRadius: "0",
-            padding: 0,
-            color: "black",
-            borderBottom: "solid 4px #ffffff",
-            "&:hover": {
-              color: "#ED6436",
-              borderBottom: "solid 4px #ED6436",
-              bgcolor: "#fff",
-            },
-          }}
-        >
-          Spa - Làm đẹp
-        </Button>
-        <Button
-          disableRipple={true}
-          sx={{
-            textTransform: "initial",
-            fontWeight: 550,
-            fontSize: 16,
-            height: "80px",
-            borderRadius: "0",
-            padding: 0,
-            color: "black",
-            borderBottom: "solid 4px #ffffff",
-            "&:hover": {
-              color: "#ED6436",
-              borderBottom: "solid 4px #ED6436",
-              bgcolor: "#fff",
-            },
-          }}
-        >
-          Khám sức khỏe
-        </Button>
-        <Button
-          disableRipple={true}
-          sx={{
-            textTransform: "initial",
-            fontWeight: 550,
-            fontSize: 16,
-            height: "80px",
-            borderRadius: "0",
-            padding: 0,
-            color: "black",
-            borderBottom: "solid 4px #ffffff",
-            "&:hover": {
-              color: "#ED6436",
-              borderBottom: "solid 4px #ED6436",
-              bgcolor: "#fff",
-            },
-          }}
-        >
-          Khách sạn thú cưng
-        </Button>
-        <Button
-          disableRipple={true}
-          sx={{
-            textTransform: "initial",
-            fontWeight: 550,
-            fontSize: 16,
-            height: "80px",
-            borderRadius: "0",
-            padding: 0,
-            color: "black",
-            borderBottom: "solid 4px #ffffff",
-            "&:hover": {
-              color: "#ED6436",
-              borderBottom: "solid 4px #ED6436",
-              bgcolor: "#fff",
-            },
-          }}
-        >
-          Cẩm nang chăm sóc
-        </Button> */}
       </Box>
       {/* Phone button */}
-      <Box flex={2} sx={{ cursor: "pointer" }}>
+      <Box flex={3} sx={{ cursor: "pointer" }} maxWidth={"250px"}>
         <Box
           sx={{ border: "solid 2px #ED6436", borderRadius: "0 20px 20px 20px" }}
           display="flex"
           width="90%"
           justifyContent="space-between"
           alignItems="center"
+          onClick={handleOpenRequestForm}
         >
           <Box
             display="flex"
@@ -219,38 +133,30 @@ const Header: FC<Header> = () => {
       </Box>
       {/* avatar */}
       <Box ref={anchorRef} paddingRight={5} sx={{ cursor: "pointer" }}>
-        <StyledBadge
+        {user ? (
+          <StyledBadge
+            overlap="circular"
+            anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+            variant="dot"
+          >
+            <Avatar src={user.avatar} onClick={handleOpenPoper}>
+              {user.avatar ? null : user.fullName.at(0)?.toUpperCase()}
+            </Avatar>
+          </StyledBadge>
+        ) : (
+          <Box>
+            <Button onClick={() => navigate("login")}>Đăng nhập</Button>
+            <Button onClick={() => navigate("register")}>Đăng ký</Button>
+          </Box>
+        )}
+        {/* <StyledBadge
           overlap="circular"
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
           variant="dot"
         >
-          <Avatar onClick={handleOpenPoper} />
-        </StyledBadge>
+          <Avatar />
+        </StyledBadge> */}
       </Box>
-      {/* login button */}
-      {/* <Box paddingRight={5} sx={{ cursor: "pointer" }}>
-        <IconButton
-          id="basic-button"
-          aria-controls={open ? "basic-menu" : undefined}
-          aria-haspopup="true"
-          aria-expanded={open ? "true" : undefined}
-          onClick={handleClick}
-        >
-          <AccountCircle />
-        </IconButton>
-      </Box>
-      <Menu
-        id="basic-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          "aria-labelledby": "basic-button",
-        }}
-      >
-        <MenuItem onClick={handleClose}>Đăng nhập</MenuItem>
-        <MenuItem onClick={handleClose}>Đăng ký</MenuItem>
-      </Menu> */}
 
       {/* Poper */}
       <Popper
@@ -276,22 +182,23 @@ const Header: FC<Header> = () => {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                 >
-                  <MenuItem onClick={handleClosePoper}>
+                  <MenuItem onClick={() => navigate("history")}>
                     Lịch sử đặt dịch vụ
-                  </MenuItem>
-                  <MenuItem onClick={() => navigate("message")}>
-                    Tin nhắn
                   </MenuItem>
                   <MenuItem onClick={handleClosePoper}>
                     Thông tin cá nhân
                   </MenuItem>
-                  <MenuItem onClick={handleClosePoper}>Đăng xuất</MenuItem>
+                  <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>
           </Grow>
         )}
       </Popper>
+      <RequestFrom
+        open={openRequestForm}
+        handleClose={handleCloseRequestForm}
+      />
     </Box>
   );
 };

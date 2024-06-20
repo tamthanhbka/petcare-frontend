@@ -2,6 +2,7 @@ import {
   ContactEmergency,
   Dashboard,
   HomeRepairService,
+  Logout,
   MedicalInformation,
   RecentActors,
 } from "@mui/icons-material";
@@ -20,10 +21,15 @@ import {
 import logo from "../../assets/img/logo.png";
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
+import { useAuth } from "../../components/Auth";
 
 interface NavBarProps {}
 
 const NavBar: FC<NavBarProps> = () => {
+  const { action, user } = useAuth();
+  const handleLogout = () => {
+    action.logout();
+  };
   return (
     <Box
       sx={{
@@ -148,11 +154,11 @@ const NavBar: FC<NavBarProps> = () => {
           flexDirection="column"
           justifyContent="space-between"
         >
-          <Typography>Do Ba Lam</Typography>
-          <Typography>lamdb@gmail.com</Typography>
+          <Typography>{user?.fullName}</Typography>
+          <Typography>{user?.email}</Typography>
         </Box>
-        {/* <Box display="grid" sx={{ placeItems: "center" }}>
-          <LogoutIcon
+        <Box display="grid" sx={{ placeItems: "center" }}>
+          <Logout
             sx={{
               cursor: "pointer",
               transition: "all .2s ease-out",
@@ -163,7 +169,7 @@ const NavBar: FC<NavBarProps> = () => {
             }}
             onClick={handleLogout}
           />
-        </Box> */}
+        </Box>
       </Box>
     </Box>
   );

@@ -16,22 +16,42 @@ import { url } from "inspector";
 import type { FC } from "react";
 import { ChartContainer, BarPlot, BarChart } from "@mui/x-charts";
 import { MoreVert, Star } from "@mui/icons-material";
+import { useQuery } from "@tanstack/react-query";
+import {
+  findAllCustomer,
+  findAllShops,
+  findCommentWithValueOf5,
+  getTopShop,
+} from "../../api/admin";
+import { ShopType } from "../../type";
 
 const Image = styled("img")({});
 
 interface AdminDashBoardProps {}
-const uData = [4000, 3000, 2000, 2780, 1890, 2390, 3490];
-const xLabels = [
-  "Page A",
-  "Page B",
-  "Page C",
-  "Page D",
-  "Page E",
-  "Page F",
-  "Page G",
-];
 
 const AdminDashBoard: FC<AdminDashBoardProps> = () => {
+  const { data: result } = useQuery({
+    queryKey: ["shops"],
+    queryFn: () => findAllShops(),
+  });
+
+  const { data: topShops } = useQuery<ShopType[]>({
+    queryKey: ["top-shops"],
+    queryFn: () => getTopShop(),
+  });
+
+  const { data: resultGetCustomer } = useQuery({
+    queryKey: ["customers"],
+    queryFn: () => findAllCustomer(),
+  });
+
+  const { data: comments } = useQuery({
+    queryKey: ["comments"],
+    queryFn: () => findCommentWithValueOf5(),
+  });
+  // const shops = result[0];
+  // console.log(resultGetCustomer);
+
   return (
     <Box p="4rem 3rem">
       <Box display="flex" gap={4}>
@@ -52,7 +72,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
               fontWeight={550}
               sx={{ color: "#5a5a5a" }}
             >
-              200
+              {result && result[1]}
             </Typography>
             <Typography sx={{ color: "#747474" }}>
               Trung tâm thú y đang hợp tác
@@ -80,7 +100,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
               fontWeight={550}
               sx={{ color: "#5a5a5a" }}
             >
-              500
+              {resultGetCustomer && resultGetCustomer[1]}
             </Typography>
             <Typography sx={{ color: "#747474" }}>
               Khách hàng đang sử dụng
@@ -108,7 +128,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
               fontWeight={550}
               sx={{ color: "#5a5a5a" }}
             >
-              450
+              {comments && comments[1]}
             </Typography>
             <Typography sx={{ color: "#747474" }}>
               Lượt đánh giá 5 sao
@@ -129,7 +149,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
             mb="0.5rem"
           >
             <Typography color="#463F53" fontSize={20} variant="subtitle1">
-              Top dịch vụ được sử dụng nhiều nhất
+              Dịch vụ được sử dụng nhiều nhất
             </Typography>
             <IconButton>
               <MoreVert></MoreVert>
@@ -160,7 +180,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                 >
                   <Typography fontWeight={550}>200</Typography>
                   <Typography color="#ADAAB3" fontSize={14}>
-                    Lượt đặt lịch
+                    Lượt sử dụng
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -194,69 +214,74 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
             </TableBody>
           </Table>
         </Paper>
-        <Paper elevation={3} sx={{ flex: 9, p: "1rem", borderRadius: 3 }}>
-          {/* <Box
+        {topShops && (
+          <Paper elevation={3} sx={{ flex: 9, p: "1rem", borderRadius: 3 }}>
+            {/* <Box
             display="flex"
             justifyContent="space-between"
             alignItems="center"
             mb="0.5rem"
           >
             <Typography color="#463F53" fontSize={20} variant="subtitle1">
-              Top trung tâm thú y có đánh giá tốt nhất
+              Trung tâm thú y có đánh giá tốt nhất
             </Typography>
             <IconButton>
               <MoreVert></MoreVert>
             </IconButton>
           </Box> */}
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={{ padding: "8px" }}>
-                  <Typography>Trung tâm thú y</Typography>
-                </TableCell>
-                <TableCell sx={{ padding: "8px" }}>
-                  <Typography>Hotline</Typography>
-                </TableCell>
-                <TableCell sx={{ padding: "8px" }}>
-                  <Typography>Đánh giá</Typography>
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell sx={{ display: "flex", gap: 2, p: "10px" }}>
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
-                  <Box>
-                    <Typography fontWeight={550}>
-                      Hệ thống thú y tropicpet
-                    </Typography>
-                    <Typography fontSize={14} color="#7E7988">
-                      Bách Khoa, Hai Bà Trưng, Hà Nội
-                    </Typography>
-                  </Box>
-                </TableCell>
-                <TableCell sx={{ p: "10px" }}>
-                  <Typography>0366833283</Typography>
-                </TableCell>
-                <TableCell align="center" sx={{ p: "10px" }}>
-                  <Box
-                    display="flex"
-                    borderRadius={10}
-                    bgcolor="#E4F6D6"
-                    alignItems="center"
-                    justifyContent="center"
-                    p="4px"
-                    width="70%"
-                    gap={0.5}
-                  >
-                    <Typography>5</Typography>
-                    <Star fontSize="small" sx={{ color: "#FFB400" }}></Star>
-                  </Box>
-                </TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </Paper>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ padding: "8px" }}>
+                    <Typography>Trung tâm thú y</Typography>
+                  </TableCell>
+                  <TableCell sx={{ padding: "8px" }} align="center">
+                    <Typography>Hotline</Typography>
+                  </TableCell>
+                  <TableCell sx={{ padding: "8px" }} align="center">
+                    <Typography>Đánh giá</Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {topShops.map((topShop, key) => (
+                  <TableRow key={key}>
+                    <TableCell sx={{ display: "flex", gap: 2, p: "10px" }}>
+                      <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
+                      <Box>
+                        <Typography fontWeight={550}>{topShop.name}</Typography>
+                        <Typography fontSize={14} color="#7E7988">
+                          {topShop.address.detail}, {topShop.address.district}
+                        </Typography>
+                      </Box>
+                    </TableCell>
+                    <TableCell sx={{ p: "10px" }} align="center">
+                      <Typography>{topShop.hotline}</Typography>
+                    </TableCell>
+                    <TableCell sx={{ p: "10px", width: "20%" }}>
+                      <Box
+                        display="flex"
+                        borderRadius={10}
+                        bgcolor="#E4F6D6"
+                        alignItems="center"
+                        justifyContent="end"
+                        p="4px"
+                        width="70%"
+                        gap={0.5}
+                        m="auto"
+                      >
+                        <Typography>
+                          {Number(topShop.rating.toFixed(2))}
+                        </Typography>
+                        <Star fontSize="small" sx={{ color: "#FFB400" }}></Star>
+                      </Box>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
       </Box>
     </Box>
   );

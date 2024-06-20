@@ -33,7 +33,7 @@ import { Dayjs } from "dayjs";
 import { useEffect, useState, type FC } from "react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getShopInfo } from "../api";
+import { AxiosError, getShopInfo, sendRequestBooking } from "../api";
 import "../assets/css/shopDetail.css";
 import { BoxChat, CommentItem, ServiceItem } from "../components";
 import { listenSocket, startChatByUSer } from "../socket";
@@ -61,7 +61,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
     refetchOnWindowFocus: false,
   });
 
-  console.log(shop);
+  // console.log(shop);
 
   const handleOpenChat = () => {
     if (shop) startChatByUSer(shop.id);
@@ -71,19 +71,30 @@ const ShopDetail: FC<ShopDetailProps> = () => {
   const handleChange = (event: SelectChangeEvent) => {
     setService(event.target.value);
   };
-  const handleSubmitBooking = () => {
+
+  const handleSubmitBooking = async () => {
     if (service && dayBooking) {
-      //gọi API booking
-      if (status === "success") {
-        toast.success("Gửi yêu cầu đặt lịch thành công!");
-        setOpen(false);
+      if (dayBooking.hour() < 7 || dayBooking.hour() > 18) {
+        toast.error(
+          "Vui lòng chọn thời gian đặt lịch nằm trong khung giờ làm việc của chúng tôi!(7:00 - 18:00)"
+        );
+        // setOpen(false);
         return;
       }
-      toast.error("Gửi yêu cầu đặt lịch thất bại!");
+      try {
+        const request = await sendRequestBooking(+service, dayBooking);
+        toast.success("Gửi yêu cầu đặt lịch thành công!", {});
+        setOpen(false);
+      } catch (error) {
+        const err = error as AxiosError<{ message: string }>;
+        toast.error(err.response?.data.message);
+        console.log(err.response);
+        setOpen(false);
+      }
       return;
     }
-
     toast.error("Hãy chọn dịch vụ và ngày hẹn!");
+    // setOpen(false);
   };
   return (
     <Box>
@@ -229,17 +240,28 @@ const ShopDetail: FC<ShopDetailProps> = () => {
               useArrowKeys={true}
               dynamic={true}
               className="slider"
-              show={2.3}
+              show={3.5}
               slide={1}
               transition={0.3}
               swiping={true}
               leftArrow={
-                <IconButton sx={{ bgcolor: "red" }}>
+                <IconButton
+                  sx={{
+                    color: "#7AC143",
+                    "&:hover": { bgcolor: "#7AC143", color: "white" },
+                  }}
+                >
                   <ArrowBackIosNewOutlined />
                 </IconButton>
               }
               rightArrow={
-                <IconButton sx={{ bgcolor: "red" }}>
+                <IconButton
+                  sx={{
+                    color: "#7AC143",
+                    "&:hover": { bgcolor: "#7AC143", color: "white" },
+                    ml: "0.7rem",
+                  }}
+                >
                   <ArrowForwardIos />
                 </IconButton>
               }

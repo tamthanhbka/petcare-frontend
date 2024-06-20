@@ -31,7 +31,7 @@ const BookingList: FC<BookingListProps> = () => {
 
   const handleChange = () => {};
 
-  const { data: bookingList } = useQuery({
+  const { data: bookingList, refetch } = useQuery({
     queryKey: [],
     queryFn: () => getListBooking(),
     initialData: [],
@@ -39,7 +39,7 @@ const BookingList: FC<BookingListProps> = () => {
 
   return (
     <Box
-      paddingTop={12}
+      paddingTop={2}
       display={"flex"}
       flexDirection={"column"}
       alignItems="center"
@@ -139,10 +139,12 @@ const BookingList: FC<BookingListProps> = () => {
             bookingList.map((booking, index) => {
               return (
                 <Booking
+                  id={booking.id}
                   status={booking.status}
                   time={booking.time}
                   createdAt={booking.createdAt}
                   serviceShop={booking.shopService}
+                  refetch={refetch}
                 ></Booking>
               );
             })}

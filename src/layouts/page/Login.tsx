@@ -45,8 +45,9 @@ export default function Login() {
     //   // navigate("/");
     // }
     if (!login || !user) return;
-    if (user.role === "USER") return navigate("/");
-    if (user.role === "STAFF") return navigate("/staff/dashboard");
+    if (user.role === "user") return navigate("/");
+    if (user.role === "staff") return navigate("/staff/dashboard");
+    if (user.role === "admin") return navigate("/admin/dashboard");
   }, [login]);
   const handleLogin = async () => {
     try {

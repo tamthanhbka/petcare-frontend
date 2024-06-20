@@ -1,4 +1,9 @@
-import { CloseOutlined, QuestionAnswer, Search } from "@mui/icons-material";
+import {
+  CloseOutlined,
+  MarkUnreadChatAlt,
+  QuestionAnswer,
+  Search,
+} from "@mui/icons-material";
 import { Box, Fab, OutlinedInput, Paper, Typography } from "@mui/material";
 import { useState, type FC } from "react";
 import useChat from "../../hook/useChat";
@@ -22,19 +27,20 @@ const ChatList: FC<ListChatProps> = () => {
       <Fab
         sx={{
           position: "fixed",
-          bottom: 80,
-          right: 30,
+          bottom: 100,
+          right: 20,
           cursor: "pointer",
           zIndex: 0,
+          width: 65,
+          height: 65,
         }}
-        variant="extended"
-        color="info"
+        variant="circular"
+        color="secondary"
         aria-label="add"
         size="medium"
         onClick={() => setShow(true)}
       >
-        <QuestionAnswer sx={{ mr: "0.5rem" }} />
-        Tin nhắn
+        <MarkUnreadChatAlt />
       </Fab>
       <Paper
         elevation={2}

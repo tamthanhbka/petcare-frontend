@@ -1,8 +1,15 @@
 import {
+  Add,
+  DeleteOutlineOutlined,
+  Edit,
   FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
+  LockOutlined,
+  LockPerson,
+  LockPersonOutlined,
+  RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -13,6 +20,7 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Paper,
   Select,
   SelectChangeEvent,
@@ -26,11 +34,36 @@ import {
   TableRow,
   Tooltip,
   Typography,
+  styled,
   useTheme,
 } from "@mui/material";
-import { useState, type FC } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState, type FC } from "react";
+import { findAllCustomer, getAllUser } from "../../api/admin";
+import { UserType } from "../../type";
+const ActiveChip = styled(Chip)({
+  backgroundColor: "#E4F6D6",
+  color: "#61CD10",
+  fontWeight: 600,
+});
+const InactiveChip = styled(Chip)({
+  backgroundColor: "#ECEDEE",
+  color: "#93969B",
+  fontWeight: 600,
+});
 
+const UserRoleChip = styled(Chip)({
+  backgroundColor: "#EDE4FF",
+  color: "#925FFF",
+  fontWeight: 600,
+});
+const AdminRoleChip = styled(Chip)({
+  backgroundColor: "#FFF3D6",
+  color: "#FFB400",
+  fontWeight: 600,
+});
 interface ListShopProps {}
+
 interface TablePaginationActionsProps {
   count: number;
   page: number;
@@ -113,8 +146,13 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 const ListShop: FC<ListShopProps> = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const { data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getAllUser(),
+  });
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 2) : 0;
+  const emptyRows =
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.length || 0)) : 0;
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -137,73 +175,96 @@ const ListShop: FC<ListShopProps> = () => {
     <Box padding="2rem">
       <Paper elevation={5} sx={{ padding: "2rem" }}>
         <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
-          <FormControl sx={{ width: "15%" }} size="small">
-            <InputLabel id="demo-simple-select-label">Dịch vụ</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              //   value={}
-              label="Dịch vụ"
-              //   onChange={}
-              defaultValue="0"
-            >
-              <MenuItem value={0}>Tất cả</MenuItem>
-              <MenuItem value={10}>Tắm gội</MenuItem>
-              <MenuItem value={20}>Phẫu thuật</MenuItem>
-              <MenuItem value={30}>Cắt tạo kiểu</MenuItem>
-            </Select>
-          </FormControl>
+          {/* <Button
+            startIcon={<Add></Add>}
+            variant="contained"
+            sx={{
+              bgcolor: "#F9993A",
+              "&:hover": { bgcolor: "#ec8319" },
+              textTransform: "initial",
+            }}
+            // onClick={() => navigation(`/admin/shop/add`)}
+          >
+            Tạo trung tâm thú y mới
+          </Button> */}
+
+          <OutlinedInput
+            placeholder="Tìm kiếm người dùng"
+            size="small"
+            sx={{
+              "&.MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#c7c7c7",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#adadad",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#e49749",
+                },
+              },
+            }}
+          ></OutlinedInput>
         </Box>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                  align="center"
-                >
-                  Khách hàng
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Dịch vụ
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Thời gian
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Trạng thái
-                </TableCell>
-                <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Thao tác
-                </TableCell>
-                {/* <TableCell
+        {users && (
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    <Typography sx={{ ml: 8 }}>Khách hàng</Typography>
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Số điện thoại
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Ngày sinh
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Trạng thái
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Vai trò
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Thao tác
+                  </TableCell>
+                  {/* <TableCell
                 align="center"
                 sx={{
                   textTransform: "uppercase",
@@ -212,172 +273,120 @@ const ListShop: FC<ListShopProps> = () => {
               >
                 Chi tiết
               </TableCell> */}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell align="center">
-                  <Box display="flex" gap={2}>
-                    <Avatar
-                      sx={{
-                        border: "1px solid #757575",
-                        width: 45,
-                        height: 45,
-                      }}
-                      src="https://scontent.fhan14-1.fna.fbcdn.net/v/t39.30808-1/431866861_2055235028186071_413106678799918364_n.jpg?stp=dst-jpg_s320x320&_nc_cat=105&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeEAsHnxgbvoDnWpEGqaXy47UvKCrad9oi9S8oKtp32iL0D7zGQpV-Trk2UZ_T-tZTXlGH4FkZtsJaCC_7KiKHdj&_nc_ohc=gdSJt_LBcPIAb5TVN_P&_nc_ht=scontent.fhan14-1.fna&oh=00_AfDPdqAIn5VlB9D3nR49QssJqDuIedAUo2NzGkxNm65OnQ&oe=66189C51"
-                    ></Avatar>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="flex-start"
-                    >
-                      <Typography>Lương Thị Tâm</Typography>
-                      <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
-                        tamthanh@gmail.com
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {(rowsPerPage > 0
+                  ? users.slice(
+                      page * rowsPerPage,
+                      page * rowsPerPage + rowsPerPage
+                    )
+                  : users
+                ).map((user, key) => (
+                  <TableRow key={key} sx={{ height: 78 }}>
+                    <TableCell align="center">
+                      <Box display="flex" gap={2}>
+                        <Avatar
+                          sx={{
+                            border: "1px solid #757575",
+                            width: 45,
+                            height: 45,
+                          }}
+                          src={user.avatar}
+                        >
+                          {user.avatar
+                            ? null
+                            : user.fullName.at(0)?.toUpperCase()}
+                        </Avatar>
+                        <Box
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="flex-start"
+                        >
+                          <Typography>{user.fullName}</Typography>
+                          <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
+                            {user.email}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </TableCell>
+                    <TableCell align="center">{user.phone}</TableCell>
+                    <TableCell align="center">
+                      <Typography fontSize={14}>
+                        {new Date(user.dateOfBirth).toLocaleDateString("vi-VN")}
                       </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell align="center">Lưu chuồng theo ngày</TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Thoi gian: 7:30 - 17:30">
-                    <Typography fontSize={14}>30/12/2001</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label="Đang chờ xác nhận"
-                    sx={{
-                      color: "#FFB503",
-                      bgcolor: "#FFF3D6",
-                      fontWeight: 600,
-                    }}
-                  ></Chip>
-                </TableCell>
-
-                <TableCell align="center">
-                  <Box
-                    sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                  >
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#5BCC08",
-                        "&:hover": { bgcolor: "#56c606" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Xác nhận
-                    </Button>
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#f9903f",
-                        "&:hover": { bgcolor: "#F7822A" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Từ chối
-                    </Button>
-                  </Box>
-                </TableCell>
-                {/* <TableCell align="center">
+                    </TableCell>
+                    <TableCell align="center">
+                      {user.isActive ? (
+                        <ActiveChip label={"Active"}></ActiveChip>
+                      ) : (
+                        <InactiveChip label={"Inactive"}></InactiveChip>
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      {user.role == "user" && (
+                        <UserRoleChip label="User"></UserRoleChip>
+                      )}
+                      {user.role == "admin" && (
+                        <AdminRoleChip label="Admin"></AdminRoleChip>
+                      )}
+                      {user.role == "staff" && (
+                        <ActiveChip label="Staff"></ActiveChip>
+                      )}
+                    </TableCell>
+                    <TableCell align="center">
+                      <IconButton sx={{ "&:hover": { bgcolor: "#DAF2FF" } }}>
+                        <RemoveRedEyeOutlined></RemoveRedEyeOutlined>
+                      </IconButton>
+                      <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
+                        <LockOutlined></LockOutlined>
+                      </IconButton>
+                    </TableCell>
+                    {/* <TableCell align="center">
                 <IconButton>
                   <VisibilityOutlined></VisibilityOutlined>
                 </IconButton>
               </TableCell> */}
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">
-                  <Box display="flex" gap={2}>
-                    <Avatar
-                      sx={{
-                        border: "1px solid #757575",
-                        width: 45,
-                        height: 45,
-                      }}
-                      src="https://scontent.fhan14-4.fna.fbcdn.net/v/t39.30808-1/427438215_1724834511334725_871417535767916676_n.jpg?stp=dst-jpg_s320x320&_nc_cat=102&ccb=1-7&_nc_sid=5f2048&_nc_eui2=AeHTAUy5QiqGt2kr1PYF5f9J9wnaMMl6HKz3CdowyXocrMn2tJ10QdCy0Ufd63vmCBE4yOenh1wyV-zjbh_ZWaOE&_nc_ohc=k5PY-8RRZbcAb4-W3WO&_nc_oc=AdhtBLjq8g-X919MIifPg3CRviA9XhwaCzLC_m2x67APN-T2ldHTa1w9-zsRYtpReutqOwzblwgns4F_cwVi6CPH&_nc_ht=scontent.fhan14-4.fna&oh=00_AfDz9XIFNqvyY5Tz-EOijPaOFrJGMnS1-Jy6ZvF9w-GNqg&oe=66198503"
-                    ></Avatar>
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      alignItems="flex-start"
-                    >
-                      <Typography>Đinh Thị Thu Hà</Typography>
-                      <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
-                        thuha@gmail.com
-                      </Typography>
-                    </Box>
-                  </Box>
-                </TableCell>
-                <TableCell align="center">Tiêm vắc-xin phòng nấm</TableCell>
-                <TableCell align="center">
-                  <Tooltip title="Thoi gian: 10:30">
-                    <Typography fontSize={14}>30/12/2001</Typography>
-                  </Tooltip>
-                </TableCell>
-                <TableCell align="center">
-                  <Chip
-                    label="Đã duyệt"
-                    sx={{
-                      color: "#62CE12",
-                      bgcolor: "#E4F6D6",
-                      fontWeight: 600,
-                    }}
-                  ></Chip>
-                </TableCell>
-
-                <TableCell align="center">
-                  <Box
-                    sx={{ display: "flex", gap: 1, justifyContent: "center" }}
-                  >
-                    <Button
-                      sx={{
-                        textTransform: "initial",
-                        bgcolor: "#28B7FF",
-                        "&:hover": { bgcolor: "#18a6ed" },
-                      }}
-                      size="small"
-                      variant="contained"
-                    >
-                      Liên hệ với khách hàng
-                    </Button>
-                  </Box>
-                </TableCell>
-                {/* <TableCell align="center">
-                <IconButton>
-                  <VisibilityOutlined></VisibilityOutlined>
-                </IconButton>
-              </TableCell> */}
-              </TableRow>
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
-                  colSpan={5}
-                  count={2}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
-                  slotProps={{
-                    select: {
-                      inputProps: {
-                        "aria-label": "",
+                  </TableRow>
+                ))}
+                {emptyRows > 0 && (
+                  <TableRow style={{ height: 78 * emptyRows }}>
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                )}
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: "Tất cả", value: -1 },
+                    ]}
+                    colSpan={6}
+                    count={users.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    slotProps={{
+                      select: {
+                        inputProps: {
+                          "aria-label": "",
+                        },
+                        native: true,
                       },
-                      native: true,
-                    },
-                  }}
-                  labelRowsPerPage="Số hàng mỗi trang"
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
-                  ActionsComponent={TablePaginationActions}
-                ></TablePagination>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        </TableContainer>
+                    }}
+                    labelRowsPerPage="Số hàng mỗi trang"
+                    onPageChange={handleChangePage}
+                    onRowsPerPageChange={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  ></TablePagination>
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
+        )}
+
         {/* <TablePagination
 rowsPerPageOptions={[5, 10, 25]}
 component="div"

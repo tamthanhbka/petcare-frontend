@@ -74,7 +74,7 @@ const NavBar: FC<NavBarProps> = () => {
           flexDirection: "column",
         }}
       >
-        <NavLink to="dashboard">
+        {/* <NavLink to="dashboard">
           <MenuItem
             sx={{
               borderRadius: "1.5rem",
@@ -91,9 +91,9 @@ const NavBar: FC<NavBarProps> = () => {
             </ListItemIcon>
             <ListItemText>DashBoards</ListItemText>
           </MenuItem>
-        </NavLink>
+        </NavLink> */}
 
-        <Divider />
+        {/* <Divider /> */}
         <NavLink to="shop">
           <MenuItem
             sx={{ borderRadius: "1.5rem", "&:hover": { bgcolor: "#CEE7B9" } }}

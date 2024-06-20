@@ -24,6 +24,7 @@ import {
   AdminDashBoard,
   AdminHome,
   AdminListCustomer,
+  AdminListRequest,
   AdminListService,
   AdminListShop,
 } from "../layouts/admin";
@@ -40,7 +41,7 @@ const router = createBrowserRouter([
       {
         path: "history",
         element: (
-          <ProtectedRoute roles={["USER"]}>
+          <ProtectedRoute roles={["user"]}>
             <BookingList />
           </ProtectedRoute>
         ),
@@ -62,7 +63,7 @@ const router = createBrowserRouter([
   },
   {
     element: (
-      <ProtectedRoute roles={["STAFF"]}>
+      <ProtectedRoute roles={["staff"]}>
         <StaffHomeLayout />
       </ProtectedRoute>
     ),
@@ -99,12 +100,17 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: <AdminHome />,
+    element: (
+      <ProtectedRoute roles={["admin"]}>
+        <AdminHome />
+      </ProtectedRoute>
+    ),
     children: [
       { path: "dashboard", element: <AdminDashBoard /> },
       { path: "shops", element: <AdminListShop /> },
       { path: "customers", element: <AdminListCustomer /> },
       { path: "services", element: <AdminListService /> },
+      { path: "requests", element: <AdminListRequest /> },
     ],
   },
 ]);
