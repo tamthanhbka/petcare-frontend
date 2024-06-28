@@ -1,6 +1,5 @@
 import { ShopType, UserType } from "../type";
-import { axiosInstance, AxiosError } from "./axios";
-import axios from "axios";
+import { axiosInstance } from "./axios";
 
 const findAllShops = async () => {
   const response = await axiosInstance.get(`shops/admin`);
@@ -40,11 +39,11 @@ const acceptedRequestCooperation = async (id: number) => {
   return response.data;
 };
 export {
-  findAllShops,
+  acceptedRequestCooperation,
   findAllCustomer,
+  findAllShops,
   findCommentWithValueOf5,
-  getTopShop,
   getAllRequestCooperation,
   getAllUser,
-  acceptedRequestCooperation,
+  getTopShop,
 };

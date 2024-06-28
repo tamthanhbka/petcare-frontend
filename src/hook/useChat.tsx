@@ -77,13 +77,13 @@ const reducer = (
         (recent) => recent.shopId === newRecentChat.shopId
       );
       // Nếu đã từng nhắn với shop này rồi thì replace
-      if (!isExist)
+      if (!isExist) {
         // Thêm vào đầu recentChats (mới nhất) nếu chưa có
         state.recentChats.unshift(newRecentChat);
+        return { ...state };
+      }
       // Mở hộp tin nhắn với shop này luôn
       state.selectedChat = newRecentChat;
-      // Thêm tin nhắn này vào danh messBox
-      state.chats = [newRecentChat];
       return { ...state };
     default:
       return state;
@@ -111,6 +111,9 @@ const useChat = (props: UseChatProps = {}) => {
     });
     const unsubcribe2 = listenStartChat((chat) => {
       dispatch({ type: "start-chat", data: chat });
+      getAllChat(chat.shopId).then((chats) => {
+        dispatch({ type: "loaded-chat-shop", data: chats });
+      });
       onNewChat?.();
     });
     return () => {

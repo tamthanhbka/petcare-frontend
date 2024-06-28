@@ -7,19 +7,8 @@ import {
   ShopDetail,
   SubHome,
 } from "../layouts";
-import { Login, Register } from "../layouts/page";
-import {
-  BookingRequest,
-  CreateService,
-  Dashboard,
-  ListCustomer,
-  ListMessage,
-  ListService,
-  ReadService,
-  ShopInfo,
-  StaffHomeLayout,
-} from "../layouts/staff";
-import ProtectedRoute from "./ProtectedRoute";
+import HealthPage from "../layouts/HealthPage";
+import SpaPage from "../layouts/SpaPage";
 import {
   AdminDashBoard,
   AdminHome,
@@ -28,6 +17,19 @@ import {
   AdminListService,
   AdminListShop,
 } from "../layouts/admin";
+import { Login, Register } from "../layouts/page";
+import {
+  BookingRequest,
+  CreateService,
+  Dashboard,
+  ListMessage,
+  ListService,
+  ReadService,
+  ShopInfo,
+  StaffHomeLayout,
+} from "../layouts/staff";
+import ProtectedRoute from "./ProtectedRoute";
+import HotelPage from "../layouts/HotelPage";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -38,6 +40,9 @@ const router = createBrowserRouter([
         element: <ShopDetail />,
       },
       { path: "search", element: <SearchResult /> },
+      { path: "spa", element: <SpaPage /> },
+      { path: "health", element: <HealthPage /> },
+      { path: "hotel", element: <HotelPage /> },
       {
         path: "history",
         element: (

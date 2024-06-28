@@ -1,31 +1,22 @@
-import {
-  BorderAllOutlined,
-  CloudUpload,
-  LocationOn,
-} from "@mui/icons-material";
+import { CloudUpload } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControl,
-  FormHelperText,
-  Input,
-  InputBase,
   InputLabel,
   MenuItem,
   OutlinedInput,
   Paper,
   Select,
-  SelectChangeEvent,
   TextField,
-  Typography,
   styled,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { useEffect, useLayoutEffect, useState, type FC } from "react";
-import { getCommunes, getDistricts, getProvinces } from "../../api/address";
-import { AddressType, DistrictType, ProvinceType, ShopType } from "../../type";
-import { getShopByStaff, updateShopByStaff } from "../../api";
+import { useEffect, useState, type FC } from "react";
 import { toast } from "react-toastify";
+import { getShopByStaff, updateShopByStaff, uploadImg } from "../../api";
+import { getCommunes, getDistricts, getProvinces } from "../../api/address";
+import { ProvinceType, ShopType } from "../../type";
 
 const Image = styled("img")({});
 interface ShopInfoProps {}
@@ -64,6 +55,7 @@ const CssTextField = styled(TextField)({
 
 const ShopInfo: FC<ShopInfoProps> = () => {
   const [shop, setShop] = useState<ShopType>();
+  const [img, setImg] = useState<File>();
   const { data } = useQuery<ShopType>({
     queryKey: [`shop`],
     queryFn: () => getShopByStaff(),
@@ -107,10 +99,16 @@ const ShopInfo: FC<ShopInfoProps> = () => {
     }
   }, [shop, districts]);
 
-  const handleUpdateButton = () => {
-    updateShopByStaff(shop).then(() =>
-      toast.success("Cập nhật thông tin thành công!")
-    );
+  const handleUpdateButton = async () => {
+    if (shop) {
+      const image = img ? await uploadImg(img) : shop.avatar;
+      // setShop({ ...shop, avatar: image || shop.avatar });
+      updateShopByStaff({ ...shop, avatar: image }).then(() =>
+        toast.success("Cập nhật thông tin thành công!")
+      );
+      return;
+    }
+    toast.error("Cập nhật thông tin thất bại!");
   };
   console.table(shop);
   return (
@@ -119,7 +117,7 @@ const ShopInfo: FC<ShopInfoProps> = () => {
         <Paper elevation={4} sx={{ display: "flex" }}>
           <Box
             flex={5}
-            width={"100%"}
+            maxWidth={"500px"}
             display={"flex"}
             padding={"2rem"}
             flexDirection="column"
@@ -130,8 +128,10 @@ const ShopInfo: FC<ShopInfoProps> = () => {
             <Image
               sx={{
                 width: "100%",
-                // height: "100%",
-                borderRadius: "1rem",
+                borderRadius: ".5rem",
+                boxShadow: "0px 0px 5px -1px rgb(111, 111, 111)",
+                objectFit: "cover",
+                border: "1px solid rgba(255, 255, 255,1)",
               }}
               src={
                 shop?.avatar
@@ -148,8 +148,31 @@ const ShopInfo: FC<ShopInfoProps> = () => {
               startIcon={<CloudUpload />}
               sx={{ width: "45%", textTransform: "initial" }}
             >
-              Đổi ảnh đại diện
               {/* <VisuallyHiddenInput type="file" /> */}
+              <label htmlFor="avatar_input">Đổi ảnh đại diện</label>
+              <input
+                id="avatar_input"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const img = e.target.files?.[0];
+                  if (!img) return;
+                  setImg(img);
+                  const reader = new FileReader();
+                  reader.onload = (v) => {
+                    // setShop((prv) => ({
+                    //   ...prv,
+                    //   avatar: v.target?.result?.toString(),
+                    // }));
+                    setShop({
+                      ...shop,
+                      avatar: v.target?.result?.toString() || shop.avatar,
+                    });
+                  };
+                  reader.readAsDataURL(img);
+                }}
+              />
             </Button>
           </Box>
           <Box

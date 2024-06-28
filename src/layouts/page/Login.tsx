@@ -8,7 +8,7 @@ import {
   styled,
 } from "@mui/material";
 import { useState, useEffect } from "react";
-import { Link as RLink, useNavigate } from "react-router-dom";
+import { Link as RLink, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AxiosError, login as loginAPI } from "../../api";
 import { useAuth } from "../../components/Auth";
@@ -39,16 +39,23 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const [searchParam] = useSearchParams();
   const { action, login, user } = useAuth();
   useEffect(() => {
-    // if (login && !user) {
-    //   // navigate("/");
-    // }
     if (!login || !user) return;
-    if (user.role === "user") return navigate("/");
+    if (user.role === "user") {
+      const required = searchParam.get("required");
+      if (required) navigate(-1);
+      else navigate("/");
+      return;
+    }
     if (user.role === "staff") return navigate("/staff/dashboard");
     if (user.role === "admin") return navigate("/admin/dashboard");
   }, [login]);
+  useEffect(() => {
+    const required = searchParam.get("required");
+    if (required) toast.error("Vui lòng đăng nhập để sử dụng dịch vụ này");
+  }, []);
   const handleLogin = async () => {
     try {
       const data = await loginAPI(email, password);

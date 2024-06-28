@@ -1,7 +1,8 @@
-import type { FC } from "react";
+import { useEffect, useRef, type FC } from "react";
 import { Chat } from "../../socket";
-import { Box } from "@mui/material";
+import { styled } from "@mui/material";
 import MessageItem from "./MessageItem";
+const Box = styled("div")();
 
 interface MessageListProps {
   loading: boolean;
@@ -11,17 +12,12 @@ interface MessageListProps {
 
 const MessageList: FC<MessageListProps> = (props) => {
   const { loading, messages, isUser } = props;
+  const boxRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    boxRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
   return (
-    <Box
-      padding={"1rem"}
-      display={"flex"}
-      gap={1}
-      flexDirection={"column"}
-      flex={1}
-      justifyContent={"end"}
-      minHeight="100%"
-    >
-      {loading && <h1>Loading...</h1>}
+    <Box ref={boxRef} sx={{ padding: "1rem", flex: 1, overflow: "auto" }}>
       {messages.map((message) => (
         <MessageItem
           key={message.id}

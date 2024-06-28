@@ -1,9 +1,4 @@
-import {
-  CloseOutlined,
-  MarkUnreadChatAlt,
-  QuestionAnswer,
-  Search,
-} from "@mui/icons-material";
+import { CloseOutlined, MarkUnreadChatAlt, Search } from "@mui/icons-material";
 import { Box, Fab, OutlinedInput, Paper, Typography } from "@mui/material";
 import { useState, type FC } from "react";
 import useChat from "../../hook/useChat";
@@ -82,7 +77,13 @@ const ChatList: FC<ListChatProps> = () => {
                 <Search sx={{ color: "#aaa", marginRight: "0.5rem" }}></Search>
               }
             ></OutlinedInput>
-            <Box display="flex" flexDirection="column" gap={0.1}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap={0.1}
+              height="100%"
+              overflow="auto"
+            >
               {recentChats.map((chat) => (
                 <ChatItem
                   key={chat.id}

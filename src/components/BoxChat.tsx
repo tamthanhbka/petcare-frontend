@@ -8,8 +8,6 @@ import {
   Typography,
 } from "@mui/material";
 import { FC } from "react";
-import { Message } from "../components";
-import { useAuth } from "./Auth";
 
 interface ChatProps extends Omit<ModalProps, "children"> {
   onClose?: () => void;
@@ -18,7 +16,7 @@ interface ChatProps extends Omit<ModalProps, "children"> {
 }
 
 const Chat: FC<ChatProps> = (props) => {
-  const { onClose, shopName, shopId } = props;
+  const { onClose, shopName } = props;
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const form = new FormData(e.currentTarget);

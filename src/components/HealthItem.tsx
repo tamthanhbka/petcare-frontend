@@ -9,42 +9,55 @@ import {
 } from "@mui/material";
 import type { FC } from "react";
 import { useNavigate } from "react-router-dom";
+import { TopShopType } from "../api/shop";
 
-interface HealthProps {}
+interface HealthProps extends TopShopType {}
 
-const Health: FC<HealthProps> = () => {
+const Health: FC<HealthProps> = (props) => {
+  const { id, name, slogan, avatar } = props;
   const navigation = useNavigate();
   return (
     <Card
       variant="outlined"
-      sx={{ bgcolor: "#F2F2F4", borderRadius: 8, padding: 4 }}
+      sx={{
+        bgcolor: "#F2F2F4",
+        borderRadius: 5,
+        padding: 4,
+        width: 300,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
+      }}
     >
       <CardMedia
+        height={130}
         component="img"
-        image="https://tropicpet.vn/wp-content/uploads/2022/11/cua-hang-cham-soc-thu-cung-ha-noi.jpg"
+        image={
+          avatar ??
+          "https://tropicpet.vn/wp-content/uploads/2022/11/cua-hang-cham-soc-thu-cung-ha-noi.jpg"
+        }
         sx={{ borderRadius: 4 }}
       ></CardMedia>
       <CardHeader
-        title="Tropicpet"
+        title={name}
         sx={{
           textAlign: "center",
           ".MuiCardHeader-title": { fontWeight: 700 },
         }}
-      ></CardHeader>
+      />
       <CardContent sx={{ padding: 1 }}>
         <Typography
           sx={{
             textAlign: "center",
           }}
         >
-          Chẩn đoán chính xác tình trạng sức khỏe và đưa ra giải pháp an toàn
-          cho thú cưng của bạn.
+          {slogan}
         </Typography>
       </CardContent>
       <CardActions sx={{ display: "flex", justifyContent: "center" }}>
         <Button
           sx={{ textTransform: "initial", fontSize: 16, color: "#ED6436" }}
-          onClick={() => navigation("shop/1")}
+          onClick={() => navigation(`/shop/${id}`)}
         >
           Xem chi tiết
         </Button>

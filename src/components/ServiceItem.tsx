@@ -16,9 +16,7 @@ interface ServiceItemProps {
 }
 
 const ServiceItem: FC<ServiceItemProps> = (props) => {
-  const { id, name, description, image } = props;
-  // console.table(props);
-
+  const { name, description, image } = props;
   return (
     <Card
       variant="elevation"

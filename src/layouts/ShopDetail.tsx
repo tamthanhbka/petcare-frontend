@@ -30,14 +30,16 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { useQuery } from "@tanstack/react-query";
 import { Carousel } from "@trendyol-js/react-carousel";
 import { Dayjs } from "dayjs";
-import { useEffect, useState, type FC } from "react";
-import { useParams } from "react-router-dom";
+import { useState, type FC } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AxiosError, getShopInfo, sendRequestBooking } from "../api";
 import "../assets/css/shopDetail.css";
-import { BoxChat, CommentItem, ServiceItem } from "../components";
-import { listenSocket, startChatByUSer } from "../socket";
+import { CommentItem, ServiceItem } from "../components";
+import { startChatByUSer } from "../socket";
 import { ShopType } from "../type";
+import { useAuth } from "../components/Auth";
+import commentApi from "../api/comment";
 
 interface ShopDetailProps {}
 export const StyledRating = styled(Rating)({
@@ -51,6 +53,8 @@ export const StyledRating = styled(Rating)({
 
 const ShopDetail: FC<ShopDetailProps> = () => {
   const { id } = useParams() as { id: string };
+  const { login } = useAuth();
+  const navigate = useNavigate();
   const [service, setService] = useState<string>();
   const [dayBooking, setDayBooking] = useState<Dayjs | null>(null);
   const [open, setOpen] = useState(false);
@@ -61,12 +65,19 @@ const ShopDetail: FC<ShopDetailProps> = () => {
     refetchOnWindowFocus: false,
   });
 
-  // console.log(shop);
+  const { data: comments } = useQuery({
+    queryFn: () => commentApi.getAllByShop(+id),
+    queryKey: ["allComments", id],
+    refetchOnWindowFocus: false,
+  });
 
   const handleOpenChat = () => {
     if (shop) startChatByUSer(shop.id);
   };
-  const handleOpen = () => setOpen(true);
+  const handleOpen = () => {
+    if (login) return setOpen(true);
+    navigate("/login?required=true");
+  };
   const handleClose = () => setOpen(false);
   const handleChange = (event: SelectChangeEvent) => {
     setService(event.target.value);
@@ -284,27 +295,29 @@ const ShopDetail: FC<ShopDetailProps> = () => {
       {/* Nhan xet cua khach hang */}
       <Box height={500} alignItems="center" display="flex">
         <Box width={800}>
-          <Carousel
-            className="slider"
-            show={1}
-            slide={1}
-            transition={0.5}
-            swiping={true}
-            leftArrow={
-              <IconButton>
-                <ArrowBackIosNewOutlined />
-              </IconButton>
-            }
-            rightArrow={
-              <IconButton>
-                <ArrowForwardIos />
-              </IconButton>
-            }
-          >
-            <CommentItem />
-            <CommentItem />
-            <CommentItem />
-          </Carousel>
+          {comments && (
+            <Carousel
+              className="slider"
+              show={1}
+              slide={1}
+              transition={0.5}
+              swiping={true}
+              leftArrow={
+                <IconButton>
+                  <ArrowBackIosNewOutlined />
+                </IconButton>
+              }
+              rightArrow={
+                <IconButton>
+                  <ArrowForwardIos />
+                </IconButton>
+              }
+            >
+              {comments.map((c) => (
+                <CommentItem key={c.id} {...c} />
+              ))}
+            </Carousel>
+          )}
         </Box>
         <Box
           sx={{

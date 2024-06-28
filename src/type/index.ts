@@ -1,5 +1,3 @@
-import { Address } from "cluster";
-
 export type ShopType = {
   id: number;
   name: string;
@@ -8,7 +6,7 @@ export type ShopType = {
   avatar: string;
   staffId: number;
   addressId: number;
-  rating: number;
+  rating: number | null;
   address: AddressType;
   services: ServiceShopType[];
 };
@@ -58,7 +56,15 @@ export type CommuneType = {
   province: string;
 };
 
-export type CommentType = {};
+export type CommentType = {
+  id: number;
+  content: string;
+  value: number;
+  userId: number;
+  shopServiceId: number;
+  createdAt: string;
+  user: UserType;
+};
 
 export type RequestCooperationType = {
   id: number;
@@ -83,3 +89,25 @@ export type UserType = {
   role: string;
   isActive: boolean;
 };
+export interface BookingType {
+  id: number;
+  userId: number;
+  shopServiceId: number;
+  time: string;
+  status: "completed" | "pending" | "cancel";
+  createdAt: any;
+  shopService: ShopServiceType;
+}
+
+export interface ShopServiceType {
+  id: number;
+  image: any;
+  description: string;
+  lowestPrice: number;
+  highestPrice: number;
+  shopId: number;
+  serviceId: number;
+  rating: number;
+  shop: ShopType;
+  service: ServiceType;
+}

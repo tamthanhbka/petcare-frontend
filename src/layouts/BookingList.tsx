@@ -1,18 +1,10 @@
-import { DateRange, NavigateNext, RoomTwoTone } from "@mui/icons-material";
+import { NavigateNext } from "@mui/icons-material";
 import {
   Box,
   Breadcrumbs,
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  CardMedia,
-  Chip,
   FormControl,
-  InputLabel,
   Link,
   MenuItem,
-  Paper,
   Select,
   Typography,
   styled,
@@ -20,7 +12,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
 import { getListBooking } from "../api";
-import Booking from "../components/Booking";
+import Booking1 from "../components/Booking1";
 
 const Image = styled("img")({});
 
@@ -74,7 +66,7 @@ const BookingList: FC<BookingListProps> = () => {
       <Box
         display={"flex"}
         width={"100%"}
-        gap={8}
+        gap={2}
         sx={{ padding: "1rem 5rem" }}
       >
         {/* Filter */}
@@ -134,20 +126,10 @@ const BookingList: FC<BookingListProps> = () => {
           </Box>
         </Box>
         {/* List booking */}
-        <Box flex={9} display="flex" flexDirection="column" gap={4}>
-          {bookingList &&
-            bookingList.map((booking, index) => {
-              return (
-                <Booking
-                  id={booking.id}
-                  status={booking.status}
-                  time={booking.time}
-                  createdAt={booking.createdAt}
-                  serviceShop={booking.shopService}
-                  refetch={refetch}
-                ></Booking>
-              );
-            })}
+        <Box flex={10} display="grid" gap={3} gridTemplateColumns="auto">
+          {bookingList.map((booking) => (
+            <Booking1 key={booking.id} {...booking} refetch={refetch} />
+          ))}
         </Box>
       </Box>
     </Box>

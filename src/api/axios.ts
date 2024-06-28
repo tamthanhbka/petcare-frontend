@@ -1,7 +1,7 @@
 import axios, {
-  InternalAxiosRequestConfig,
-  AxiosResponse,
   AxiosError,
+  AxiosResponse,
+  InternalAxiosRequestConfig,
 } from "axios";
 const axiosInstance = axios.create({
   baseURL: "http://localhost:3000/",
@@ -31,4 +31,4 @@ axiosInstance.interceptors.response.use(
   onResponse
   // , onRejected
 );
-export { axiosInstance, AxiosError };
+export { AxiosError, axiosInstance };

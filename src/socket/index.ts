@@ -29,13 +29,18 @@ export interface RecentStaffChat extends Chat {
 
 const token = () => localStorage.getItem("token") || "";
 let socket: Socket;
-const listenSocket = (): (() => void) => {
+const listenSocket = (cb?: () => void) => {
   socket = io("http://localhost:3000", {
     extraHeaders: {
       authorization: token(),
     },
   });
-  return () => socket.disconnect();
+  cb &&
+    socket.on("authenticated", () => {
+      socket.off("authenticated");
+      cb();
+    });
+  return () => void socket.disconnect();
 };
 
 const getRecentChats = () => {

@@ -3,31 +3,29 @@ import {
   Autocomplete,
   Box,
   Button,
-  FormControl,
   IconButton,
-  InputAdornment,
-  InputBase,
   TextField,
   Typography,
 } from "@mui/material";
-import { type FC } from "react";
-import { Form, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { getListServiceByStaff } from "../api";
 import health from "../assets/img/health.svg";
 import img1 from "../assets/img/home1.svg";
 import hotel from "../assets/img/hotel.svg";
 import iconPet from "../assets/img/iconpet.svg";
 import spa from "../assets/img/spa.svg";
-import { HealthItem, HotelItem, SpaItem } from "../components";
+import { SpaList } from "../components";
+import HealthList from "../components/HealthList";
 import useShopSearch from "../hook/useShopSearch";
-import { useQuery } from "@tanstack/react-query";
 import { ServiceType } from "../type";
-import { getListServiceByStaff } from "../api";
+import HotelList from "../components/HotelList";
 
-interface SubHomeProps {}
+export interface SubHomeProps {}
 
-const SubHome: FC<SubHomeProps> = () => {
+const SubHome = () => {
   const navigate = useNavigate();
-  const { setSearch, shops, search } = useShopSearch();
+  const { setSearch, search } = useShopSearch();
   const { data: services } = useQuery<ServiceType[]>({
     queryKey: [`service`],
     queryFn: () => getListServiceByStaff(),
@@ -75,13 +73,6 @@ const SubHome: FC<SubHomeProps> = () => {
               justifyContent="space-between"
               alignItems="center"
             >
-              {/* <InputBase
-              onChange={(v) => {
-                setSearch(v.currentTarget.value);
-              }}
-              sx={{ marginLeft: 2 }}
-              placeholder="Nhập để tìm kiếm..."
-            /> */}
               <Autocomplete
                 id="free-solo-demo"
                 sx={{
@@ -89,8 +80,9 @@ const SubHome: FC<SubHomeProps> = () => {
                   marginLeft: 2,
                   borderStyle: "unset",
                 }}
-                onChange={(event, newInputValue) => {
-                  if (newInputValue) setSearch(newInputValue);
+                onChange={(_, newInputValue) => {
+                  if (!newInputValue) return;
+                  setSearch(encodeURIComponent(newInputValue));
                 }}
                 freeSolo
                 disableClearable
@@ -195,7 +187,7 @@ const SubHome: FC<SubHomeProps> = () => {
             </Box>
           </Box>
         </Box>
-        <SpaItem />
+        <SpaList />
       </Box>
 
       {/* Top kham sk */}
@@ -256,12 +248,7 @@ const SubHome: FC<SubHomeProps> = () => {
             <img src={health} />
           </Box>
         </Box>
-        <Box width="80%" display="flex" gap={4} paddingTop={4}>
-          <HealthItem />
-          <HealthItem />
-          <HealthItem />
-          <HealthItem />
-        </Box>
+        <HealthList />
       </Box>
 
       {/* Top khach san thu cung */}
@@ -321,17 +308,7 @@ const SubHome: FC<SubHomeProps> = () => {
             </Box>
           </Box>
         </Box>
-        <Box
-          // width="80%"
-          display="flex"
-          gap={4}
-          padding="40px 10rem"
-          alignItems="center"
-        >
-          <HotelItem />
-          <HotelItem />
-          <HotelItem />
-        </Box>
+        <HotelList />
       </Box>
     </Box>
   );

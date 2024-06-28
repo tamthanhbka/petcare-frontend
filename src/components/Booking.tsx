@@ -1,10 +1,10 @@
 import { DateRange, RoomTwoTone } from "@mui/icons-material";
 import { Box, Button, Chip, Paper, Typography, styled } from "@mui/material";
 import type { FC } from "react";
-import { ServiceShopType } from "../type";
 import { useNavigate } from "react-router-dom";
-import { AxiosError, cancelBooking } from "../api";
 import { toast } from "react-toastify";
+import { AxiosError, cancelBooking } from "../api";
+import { ServiceShopType } from "../type";
 
 const Image = styled("img")({});
 

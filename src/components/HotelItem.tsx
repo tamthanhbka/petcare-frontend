@@ -2,12 +2,19 @@ import { Box, Button, Typography } from "@mui/material";
 import type { FC } from "react";
 import bg from "../assets/img/image 17.png";
 import icon from "../assets/img/icon.svg";
+import { TopShopType } from "../api/shop";
+import { useNavigate } from "react-router-dom";
 
-interface HotelItemProps {}
+interface HotelItemProps extends TopShopType {}
 
-const HotelItem: FC<HotelItemProps> = () => {
+const HotelItem: FC<HotelItemProps> = (props) => {
+  const { id, name, slogan } = props;
+  const navigate = useNavigate();
+  const handleClick = () => {
+    navigate(`/shop/${id}`);
+  };
   return (
-    <Box sx={{ position: "relative" }}>
+    <Box sx={{ position: "relative", width: 350, height: "90%" }}>
       <Box
         sx={{ position: "absolute", top: 0, left: "50%", translate: "-50%" }}
       >
@@ -26,14 +33,14 @@ const HotelItem: FC<HotelItemProps> = () => {
           backgroundRepeat: "no-repeat",
           backgroundPosition: "center",
           backgroundSize: "cover",
+          height: "100%",
         }}
       >
         <Typography sx={{ fontSize: 20, fontWeight: 600, marginBottom: 1 }}>
-          Pet Hotel
+          {name}
         </Typography>
-        <Typography textAlign="center">
-          Dịch vụ chăm sóc tận tình ngay cả khi bạn không ở bên cạnh các bé thú
-          cưng.
+        <Typography textAlign="center" sx={{ flex: 1 }}>
+          {slogan}
         </Typography>
         <Button
           sx={{
@@ -45,6 +52,7 @@ const HotelItem: FC<HotelItemProps> = () => {
             marginTop: 2,
             ".Mui-focusVisible": { bgcolor: "red" },
           }}
+          onClick={handleClick}
         >
           <Typography sx={{ color: "black" }}>Xem chi tiết</Typography>
         </Button>

@@ -1,9 +1,9 @@
 import { Box } from "@mui/material";
 import { useEffect, useState, type FC } from "react";
 import { Outlet } from "react-router-dom";
-import { NavBar } from "./";
 import { useAuth } from "../../components/Auth";
 import { listenSocket } from "../../socket";
+import { NavBar } from "./";
 
 interface StaffHome {}
 
@@ -12,8 +12,7 @@ const StaffHome: FC<StaffHome> = () => {
   const [isConnected, setIsConnected] = useState(false);
   useEffect(() => {
     if (!login) return;
-    const disconnect = listenSocket();
-    setIsConnected(true);
+    const disconnect = listenSocket(() => setIsConnected(true));
     return disconnect;
   }, [login]);
   return (

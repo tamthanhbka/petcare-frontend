@@ -1,7 +1,12 @@
-import { Dayjs } from "dayjs";
-import { ServiceShopType, ServiceType, ShopType } from "../type";
-import { axiosInstance, AxiosError } from "./axios";
 import axios from "axios";
+import { Dayjs } from "dayjs";
+import type {
+  BookingType,
+  ServiceShopType,
+  ServiceType,
+  ShopType,
+} from "../type";
+import { AxiosError, axiosInstance } from "./axios";
 
 const getShopByStaff = async () => {
   const response = await axiosInstance.get<ShopType>(`/shops/staff`);
@@ -96,7 +101,9 @@ const searchShop = async (meta: {
 };
 
 const getListBooking = async () => {
-  const response = await axiosInstance.get<any[]>("/bookings/findAllByUser");
+  const response = await axiosInstance.get<BookingType[]>(
+    "/bookings/findAllByUser"
+  );
   return response.data;
 };
 
@@ -153,6 +160,25 @@ const sendRequestCooperation = async (
   });
   return response.data;
 };
+const CLOUD_NAME = "diom7seyg";
+const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+const PRESET = "stndhxae";
+const uploadImg = async (file: File) => {
+  // Initial FormData
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", PRESET);
+  formData.append("folder", "tamtam");
+
+  // Make an AJAX upload request using Axios (replace Cloudinary URL below with your own)
+  return axios
+    .post<{ secure_url: string }>(UPLOAD_URL, formData)
+    .then((response) => {
+      const data = response.data;
+      const fileURL = data.secure_url;
+      return fileURL;
+    });
+};
 
 const login = async (email: string, password: string) => {
   await axiosInstance.post("/auth/login", { email, password });
@@ -177,25 +203,26 @@ const signup = async (
 };
 
 export {
-  getMe,
-  login,
-  signup,
   AxiosError,
-  getShopInfo,
-  getServicesOfShop,
-  searchShop,
-  getListBooking,
-  sendRequestBooking,
-  getShopByStaff,
-  updateShopByStaff,
-  getAllServiceByStaff,
-  getShopServiceByStaff,
-  updateShopServiceByStaff,
-  removeShopServiceByStaff,
-  getListServiceByStaff,
   addShopServiceByStaff,
   cancelBooking,
+  getAllServiceByStaff,
+  getListBooking,
   getListBookingByStaff,
-  updateStatus,
+  getListServiceByStaff,
+  getMe,
+  getServicesOfShop,
+  getShopByStaff,
+  getShopInfo,
+  getShopServiceByStaff,
+  login,
+  removeShopServiceByStaff,
+  searchShop,
+  sendRequestBooking,
   sendRequestCooperation,
+  signup,
+  updateShopByStaff,
+  updateShopServiceByStaff,
+  updateStatus,
+  uploadImg,
 };

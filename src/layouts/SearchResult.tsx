@@ -19,12 +19,11 @@ import useShopSearch from "../hook/useShopSearch";
 interface SearchResultProps {}
 
 const SearchResult: FC<SearchResultProps> = () => {
-  console.log("render");
   const navigate = useNavigate();
   const [searchParam, setSearchParam] = useSearchParams();
   const { setSearch, shops, search } = useShopSearch();
   const { data: searchResult } = useQuery({
-    queryKey: [`search${searchParam.toString()}`],
+    queryKey: ["search", searchParam.toString()],
     initialData: { shops: [], count: 0 },
     queryFn: () => {
       const key = searchParam.get("q");
@@ -87,22 +86,15 @@ const SearchResult: FC<SearchResultProps> = () => {
           </Box>
         </Box>
         {/* Danh sach shop */}
-        <Box width={"80%"} paddingTop={5}>
+        <Box width={"80%"} paddingTop={2}>
           <Grid
             container
-            spacing={{ xs: 2, md: 6 }}
+            spacing={{ xs: 2, md: 2 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
-            {searchResult.shops.map((shop, index) => (
-              <Grid item xs={2} sm={4} md={3} key={index}>
-                <SearchItem
-                  id={shop.id}
-                  name={shop.name}
-                  avatar={shop.avatar}
-                  slogan={shop.slogan}
-                  hotline={shop.hotline}
-                  staffId={shop.staffId}
-                ></SearchItem>
+            {searchResult.shops.map((shop) => (
+              <Grid key={shop.id} item xs={2} sm={4} md={3}>
+                <SearchItem {...shop} />
               </Grid>
             ))}
           </Grid>

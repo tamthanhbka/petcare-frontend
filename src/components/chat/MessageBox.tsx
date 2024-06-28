@@ -1,4 +1,4 @@
-import type { ComponentProps, FC } from "react";
+import { useEffect, useRef, type ComponentProps, type FC } from "react";
 import { Chat } from "../../socket";
 import { Avatar, Box, Input, Typography } from "@mui/material";
 import { Send } from "@mui/icons-material";
@@ -42,9 +42,7 @@ const MessageBox: FC<MessageBoxProps> = (props) => {
         </Avatar>
         <Typography>{info.name}</Typography>
       </Box>
-      <Box sx={{ overflowY: "scroll" }} flex={1}>
-        <MessageList loading={loading} messages={messages} isUser={isUser} />
-      </Box>
+      <MessageList loading={loading} messages={messages} isUser={isUser} />
 
       <Box
         bgcolor={"white"}
