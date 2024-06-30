@@ -1,10 +1,10 @@
 import {
   DateRange,
-  RoomTwoTone,
-  LocalAtm,
   DeleteOutline,
+  LocalAtm,
+  RoomTwoTone,
 } from "@mui/icons-material";
-import { Box, Button, Chip, Paper, Typography, styled } from "@mui/material";
+import { Box, Button, Paper, Typography, styled } from "@mui/material";
 import { useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,9 +14,9 @@ import ServiceRatingDialog from "./ServiceRatingDialog";
 
 const Image = styled("img")({});
 
-const PendingChip = styled(Chip)({
-  color: "#06BB8A",
-});
+// const PendingChip = styled(Chip)({
+//   color: "#06BB8A",
+// });
 
 interface BookingProps extends BookingType {
   refetch: () => void;

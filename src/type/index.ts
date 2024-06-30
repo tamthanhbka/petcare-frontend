@@ -86,7 +86,7 @@ export type UserType = {
   phone: string;
   dateOfBirth: Date;
   avatar: string;
-  role: string;
+  role: "staff" | "user" | "admin";
   isActive: boolean;
 };
 export interface BookingType {
@@ -95,13 +95,13 @@ export interface BookingType {
   shopServiceId: number;
   time: string;
   status: "completed" | "pending" | "cancel";
-  createdAt: any;
+  createdAt: string;
   shopService: ShopServiceType;
 }
 
 export interface ShopServiceType {
   id: number;
-  image: any;
+  image: string;
   description: string;
   lowestPrice: number;
   highestPrice: number;

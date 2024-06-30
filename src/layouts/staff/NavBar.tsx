@@ -1,6 +1,5 @@
 import {
   ContactEmergency,
-  Dashboard,
   HomeRepairService,
   MedicalInformation,
   RecentActors,
@@ -10,16 +9,14 @@ import {
   Avatar,
   Badge,
   Box,
-  Divider,
   ListItemIcon,
   ListItemText,
-  Menu,
   MenuItem,
   MenuList,
   Typography,
   styled,
 } from "@mui/material";
-import { useState, type FC } from "react";
+import { type FC } from "react";
 
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/img/logo.png";
@@ -28,16 +25,16 @@ interface NavBarProps {}
 
 const NavBar: FC<NavBarProps> = () => {
   const { action, user } = useAuth();
-  const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
+  // const [anchorElUser, setAnchorElUser] = useState<HTMLElement | null>(null);
   const handleLogout = () => {
     action.logout();
   };
-  const handleToggleSettings = (e: any) => {
-    if (e) {
-      setAnchorElUser((prv) => (prv ? null : e.currentTarget));
-      return;
-    }
-  };
+  // const handleToggleSettings = (e: any) => {
+  //   if (e) {
+  //     setAnchorElUser((prv) => (prv ? null : e.currentTarget));
+  //     return;
+  //   }
+  // };
   return (
     <Box
       sx={{

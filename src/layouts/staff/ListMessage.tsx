@@ -1,18 +1,9 @@
-import { Search, Send } from "@mui/icons-material";
-import {
-  Avatar,
-  Box,
-  Input,
-  OutlinedInput,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { useEffect, type FC } from "react";
+import { Search } from "@mui/icons-material";
+import { Box, OutlinedInput, Paper } from "@mui/material";
+import { type FC } from "react";
 import ChatItem from "../../components/chat/ChatItem";
-import useChat from "../../hook/useChat";
-import { useAuth } from "../../components/Auth";
-import useStaffChat from "../../hook/useStaffChat";
 import MessageBox from "../../components/chat/MessageBox";
+import useStaffChat from "../../hook/useStaffChat";
 
 interface ListMessageProps {}
 

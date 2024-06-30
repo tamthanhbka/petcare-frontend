@@ -108,6 +108,7 @@ const getListBooking = async () => {
 };
 
 const getListBookingByStaff = async () => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const response = await axiosInstance.get<any[]>("/bookings/findAllByStaff");
   return response.data;
 };

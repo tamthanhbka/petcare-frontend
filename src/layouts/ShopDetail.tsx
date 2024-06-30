@@ -34,12 +34,12 @@ import { useState, type FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AxiosError, getShopInfo, sendRequestBooking } from "../api";
+import commentApi from "../api/comment";
 import "../assets/css/shopDetail.css";
 import { CommentItem, ServiceItem } from "../components";
+import { useAuth } from "../components/Auth";
 import { startChatByUSer } from "../socket";
 import { ShopType } from "../type";
-import { useAuth } from "../components/Auth";
-import commentApi from "../api/comment";
 
 interface ShopDetailProps {}
 export const StyledRating = styled(Rating)({
@@ -93,7 +93,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
         return;
       }
       try {
-        const request = await sendRequestBooking(+service, dayBooking);
+        await sendRequestBooking(+service, dayBooking);
         toast.success("Gửi yêu cầu đặt lịch thành công!", {});
         setOpen(false);
       } catch (error) {
@@ -180,15 +180,15 @@ const ShopDetail: FC<ShopDetailProps> = () => {
             <Box
               sx={{
                 WebkitMaskImage: `url(
-                "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAxMTk2LjkzIDEwNDYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDExOTYuOTMgMTA0NjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZD0iTTAsNDIuMzJDMTAwLjItMjMuMzYsMjU4Ljk5LTkuNDcsMzI2LjU2LDYyLjQ2Yzc5LjgyLDg0Ljk3LDE1NCwxNDQuMzcsMjM1LjEyLDEzNC43NQ0KCWMxNzUuMTItMjAuNzgsMzE1LjIzLTUwLjQyLDM4Mi4wOCw5OC4wNWM0MC4wNCw4OC45NCw1OC45MiwxMzQuNTgsMTYxLjA0LDE4Ny45NGMxNTIuNjIsNzkuNzUsMTE0LjM1LDM2Ny4zNS0xMDUuMjksMzY4LjU3DQoJYy0xMjMuNzMsMC42OS0yOTkuMjEtMi42Ni00NjIuNTcsNTYuM2MtMjAyLjcsNzMuMTctMjkyLjQzLDE1MC44Mi00NTUuMTIsMTM2LjEyYy0zMi40NS0yLjkzLTU5LjctMTUuNjUtODEuODEtMzEuNjdMMCw0Mi4zMnoiLz4NCjwvc3ZnPg0K"
-              )`,
+                  "data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAyMy4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjxzdmcgdmVyc2lvbj0iMS4xIiBpZD0iTGF5ZXJfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiDQoJIHZpZXdCb3g9IjAgMCAxMTk2LjkzIDEwNDYiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDExOTYuOTMgMTA0NjsiIHhtbDpzcGFjZT0icHJlc2VydmUiPg0KPHBhdGggZD0iTTAsNDIuMzJDMTAwLjItMjMuMzYsMjU4Ljk5LTkuNDcsMzI2LjU2LDYyLjQ2Yzc5LjgyLDg0Ljk3LDE1NCwxNDQuMzcsMjM1LjEyLDEzNC43NQ0KCWMxNzUuMTItMjAuNzgsMzE1LjIzLTUwLjQyLDM4Mi4wOCw5OC4wNWM0MC4wNCw4OC45NCw1OC45MiwxMzQuNTgsMTYxLjA0LDE4Ny45NGMxNTIuNjIsNzkuNzUsMTE0LjM1LDM2Ny4zNS0xMDUuMjksMzY4LjU3DQoJYy0xMjMuNzMsMC42OS0yOTkuMjEtMi42Ni00NjIuNTcsNTYuM2MtMjAyLjcsNzMuMTctMjkyLjQzLDE1MC44Mi00NTUuMTIsMTM2LjEyYy0zMi40NS0yLjkzLTU5LjctMTUuNjUtODEuODEtMzEuNjdMMCw0Mi4zMnoiLz4NCjwvc3ZnPg0K"
+                )`,
                 WebkitMaskRepeat: "no-repeat",
                 WebkitMaskPosition: "left",
               }}
             >
               <img
                 width="100%"
-                src="https://tropicpet.vn/wp-content/uploads/2022/06/dich-vu-tiem-phong-vaccine-1-425x313.jpg"
+                src="https://imagev3.vietnamplus.vn/w1000/Uploaded/2024/aobjahw/2021_11_30/IMG_5238.jpg.webp"
               />
             </Box>
           </Box>
@@ -276,7 +276,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                   <ArrowForwardIos />
                 </IconButton>
               }
-              children={shop.services.map((s: any) => {
+              children={shop.services.map((s) => {
                 return (
                   <ServiceItem
                     key={s.id}
@@ -465,7 +465,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 autoWidth
                 label="Dịch vụ"
               >
-                {shop?.services.map((s: any) => {
+                {shop?.services.map((s) => {
                   return (
                     <MenuItem key={s.id} value={s.id}>
                       {s.service.name}

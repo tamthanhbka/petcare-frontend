@@ -1,12 +1,13 @@
+/* eslint-disable no-case-declarations */
 import { useCallback, useEffect, useReducer } from "react";
 import {
-  RecentChat,
   Chat,
-  getRecentChats,
+  RecentChat,
   getAllChat,
-  sendChat,
+  getRecentChats,
   listenChat,
   listenStartChat,
+  sendChat,
 } from "../socket";
 export interface ChatState {
   recentChats: RecentChat[];
@@ -40,10 +41,12 @@ const reducer = (
       return { ...state, chatLoading: true, selectedChat };
     case "loaded-chat-shop":
       // Sau khi đã lấy được danh sách tin nhắn cùng với shop đã chọn thì chuyển loading thành false và cập nhật chats
+       
       const chats = action.data as Chat[];
       return { ...state, chatLoading: false, chats };
     case "new-chat":
       // Khi có tin nhắn mới
+       
       const chat = action.data as Chat;
       let oldRecent: RecentChat | undefined, newRecent: RecentChat;
       // Lấy ra danh sách tin nhắn gần nhất
@@ -120,7 +123,7 @@ const useChat = (props: UseChatProps = {}) => {
       unsubcribe1();
       unsubcribe2();
     };
-  }, []);
+  }, [onNewChat]);
   const selectChatShop = useCallback(
     (shopId: number) => {
       if (shopId === state.selectedChat?.shopId) return;

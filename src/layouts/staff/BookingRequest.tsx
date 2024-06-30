@@ -130,7 +130,7 @@ const BookingRequest: FC<BookingRequestProps> = () => {
       : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
@@ -246,7 +246,7 @@ const BookingRequest: FC<BookingRequestProps> = () => {
                       page * rowsPerPage + rowsPerPage
                     )
                   : bookings
-                ).map((booking, key) => (
+                ).map((booking) => (
                   <TableRow>
                     <TableCell align="center">
                       <Box display="flex" gap={2}>

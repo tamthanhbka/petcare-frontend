@@ -7,7 +7,7 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Link as RLink, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { AxiosError, login as loginAPI } from "../../api";
@@ -51,17 +51,17 @@ export default function Login() {
     }
     if (user.role === "staff") return navigate("/staff/dashboard");
     if (user.role === "admin") return navigate("/admin/dashboard");
-  }, [login]);
+  }, [login, navigate, searchParam, user]);
   useEffect(() => {
     const required = searchParam.get("required");
     if (required) toast.error("Vui lòng đăng nhập để sử dụng dịch vụ này");
-  }, []);
+  }, [searchParam]);
   const handleLogin = async () => {
     try {
       const data = await loginAPI(email, password);
       console.log(data);
       action.login(data);
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message, {
           autoClose: 2000,

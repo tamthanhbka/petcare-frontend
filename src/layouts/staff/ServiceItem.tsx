@@ -3,35 +3,30 @@ import {
   Box,
   Button,
   FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
   Paper,
-  Select,
   TextField,
   styled,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type FC } from "react";
-import { ServiceShopType } from "../../type";
 import { useNavigate, useParams } from "react-router-dom";
-import { getShopServiceByStaff, updateShopServiceByStaff } from "../../api";
 import { toast } from "react-toastify";
+import { getShopServiceByStaff, updateShopServiceByStaff } from "../../api";
+import { ServiceShopType } from "../../type";
 const Image = styled("img")({});
 
 interface ReadServiceProps {}
 
-const ITEM_HEIGHT = 48;
-const ITEM_PADDING_TOP = 8;
-const MenuProps = {
-  PaperProps: {
-    style: {
-      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-      width: 250,
-    },
-  },
-};
+// const ITEM_HEIGHT = 48;
+// const ITEM_PADDING_TOP = 8;
+// const MenuProps = {
+//   PaperProps: {
+//     style: {
+//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+//       width: 250,
+//     },
+//   },
+// };
 const CssTextField = styled(TextField)({
   margin: "0.5rem",
   borderRadius: "10px",

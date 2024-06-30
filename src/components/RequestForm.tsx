@@ -13,10 +13,10 @@ import {
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type FC } from "react";
-import { ProvinceType, RequestCooperationType } from "../type";
-import { getCommunes, getDistricts, getProvinces } from "../api/address";
-import { AxiosError, sendRequestCooperation } from "../api";
 import { toast } from "react-toastify";
+import { sendRequestCooperation } from "../api";
+import { getCommunes, getDistricts, getProvinces } from "../api/address";
+import { ProvinceType } from "../type";
 
 interface RequestFromProps {
   open: boolean;
@@ -85,7 +85,7 @@ const RequestFrom: FC<RequestFromProps> = (props) => {
         findDistricts(result.code);
       }
     }
-  }, [province, provinces]);
+  }, [findDistricts, province, provinces]);
 
   useEffect(() => {
     if (districts && district) {
@@ -94,7 +94,7 @@ const RequestFrom: FC<RequestFromProps> = (props) => {
         findWards(result.code);
       }
     }
-  }, [district, districts]);
+  }, [district, districts, findWards]);
   const handleRequestButton = async () => {
     if (
       email &&

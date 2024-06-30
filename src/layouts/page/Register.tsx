@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
-import { toast } from "react-toastify";
 import { Box, Button, TextField, Typography, styled } from "@mui/material";
+import { useEffect, useState } from "react";
 import { Link as RLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { AxiosError, signup } from "../../api";
 import { useAuth } from "../../components/Auth";
 import { signupValidate } from "../../validate";
@@ -40,20 +40,20 @@ export default function Register() {
     if (login) {
       navigate("/");
     }
-  }, [login]);
+  }, [login, navigate]);
   const handleSignup = async () => {
     try {
       const error = signupValidate(password, confirmPass);
       if (error) throw error;
       const data = await signup(email, phone, password, username);
       action.login(data);
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof AxiosError) {
         toast.error(error.response?.data.message, {
           autoClose: 2000,
         });
       } else {
-        toast.error(error, { autoClose: 2000 });
+        toast.error(error as string, { autoClose: 2000 });
       }
     }
   };

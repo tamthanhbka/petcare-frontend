@@ -1,16 +1,13 @@
+/* eslint-disable no-case-declarations */
 import { useCallback, useEffect, useReducer } from "react";
 import {
-  RecentChat,
   Chat,
-  getRecentChats,
-  getAllChat,
-  sendChat,
+  RecentStaffChat,
+  getAllChatByStaff,
+  getRecentChatsByStaff,
   listenChat,
   listenStartChat,
-  getAllChatByStaff,
   sendChatByStaff,
-  RecentStaffChat,
-  getRecentChatsByStaff,
 } from "../socket";
 export interface ChatState {
   recentChats: RecentStaffChat[];
@@ -121,7 +118,7 @@ const useStaffChat = (props: UseChatProps = {}) => {
       unsubcribe1();
       unsubcribe2();
     };
-  }, []);
+  }, [onNewChat]);
   const selectChatUser = useCallback(
     (userId: number) => {
       if (userId === state.selectedChat?.userId) return;

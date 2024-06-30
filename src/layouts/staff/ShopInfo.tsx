@@ -88,7 +88,7 @@ const ShopInfo: FC<ShopInfoProps> = () => {
         findDistricts(province.code);
       }
     }
-  }, [shop, provinces]);
+  }, [shop, provinces, findDistricts]);
 
   useEffect(() => {
     if (districts && shop) {
@@ -97,7 +97,7 @@ const ShopInfo: FC<ShopInfoProps> = () => {
         findWards(district.code);
       }
     }
-  }, [shop, districts]);
+  }, [shop, districts, findWards]);
 
   const handleUpdateButton = async () => {
     if (shop) {

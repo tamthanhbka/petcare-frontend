@@ -1,29 +1,18 @@
 import {
-  Add,
-  DeleteOutlineOutlined,
-  Edit,
   FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
   LockOutlined,
-  LockPerson,
-  LockPersonOutlined,
   RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Button,
   Chip,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
   OutlinedInput,
   Paper,
-  Select,
-  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -32,15 +21,13 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   styled,
   useTheme,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState, type FC } from "react";
-import { findAllCustomer, getAllUser } from "../../api/admin";
-import { UserType } from "../../type";
+import { useState, type FC } from "react";
+import { getAllUser } from "../../api/admin";
 const ActiveChip = styled(Chip)({
   backgroundColor: "#E4F6D6",
   color: "#61CD10",
@@ -155,7 +142,7 @@ const ListShop: FC<ListShopProps> = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.length || 0)) : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);

@@ -9,7 +9,7 @@ const useShopSearch = () => {
   });
   useLayoutEffect(() => {
     findShop(search);
-  }, [search]);
+  }, [findShop, search]);
   return { setSearch, shops, search };
 };
 

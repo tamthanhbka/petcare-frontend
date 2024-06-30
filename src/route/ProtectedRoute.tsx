@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren } from "react";
-import { useAuth } from "../components/Auth";
 import { Navigate } from "react-router-dom";
-export interface ProtectedRouteProps extends PropsWithChildren {
+import { useAuth } from "../components/Auth";
+export interface ProtectedRouteProps extends Required<PropsWithChildren> {
   roles: ("staff" | "user" | "admin" | "guest")[];
 }
 const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
@@ -12,7 +12,7 @@ const ProtectedRoute: FC<ProtectedRouteProps> = (props) => {
   const isAllow = roles.includes(user.role);
   //   if (!isAllow) return <Navigate to="/404" />;
   if (!isAllow) return <h1>404 NotFound!!!</h1>;
-  return <>{children}</>;
+  return children;
 };
 
 export default ProtectedRoute;

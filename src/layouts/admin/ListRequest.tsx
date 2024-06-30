@@ -1,26 +1,14 @@
 import {
-  Add,
-  DeleteOutlineOutlined,
-  Edit,
   FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
-  RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   Button,
-  Chip,
-  FormControl,
   IconButton,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
   Paper,
-  Select,
-  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -29,19 +17,17 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
+import { toast } from "react-toastify";
 import {
   acceptedRequestCooperation,
   getAllRequestCooperation,
 } from "../../api/admin";
-import { log } from "console";
 import { RequestCooperationType } from "../../type";
-import { toast } from "react-toastify";
 
 interface ListShopProps {}
 interface TablePaginationActionsProps {
@@ -140,7 +126,7 @@ const ListShop: FC<ListShopProps> = () => {
       ? Math.max(0, (1 + page) * rowsPerPage - (request.length || 0))
       : 0;
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);

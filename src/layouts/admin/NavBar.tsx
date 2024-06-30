@@ -4,7 +4,6 @@ import {
   HomeRepairService,
   Logout,
   MedicalInformation,
-  RecentActors,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -18,9 +17,9 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import logo from "../../assets/img/logo.png";
 import type { FC } from "react";
 import { NavLink } from "react-router-dom";
+import logo from "../../assets/img/logo.png";
 import { useAuth } from "../../components/Auth";
 
 interface NavBarProps {}

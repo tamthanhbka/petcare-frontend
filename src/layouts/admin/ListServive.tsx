@@ -1,17 +1,12 @@
 import {
   Add,
   DeleteOutlineOutlined,
-  Edit,
-  FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
-  LastPage,
 } from "@mui/icons-material";
 import {
-  Avatar,
   Box,
   Button,
-  Chip,
   FormControl,
   IconButton,
   InputLabel,
@@ -19,7 +14,6 @@ import {
   OutlinedInput,
   Paper,
   Select,
-  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -28,7 +22,6 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
@@ -49,11 +42,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   const theme = useTheme();
   const { count, page, rowsPerPage, onPageChange } = props;
 
-  const handleFirstPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, 0);
-  };
+  // const handleFirstPageButtonClick = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   onPageChange(event, 0);
+  // };
 
   const handleBackButtonClick = (
     event: React.MouseEvent<HTMLButtonElement>
@@ -67,11 +60,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
     onPageChange(event, page + 1);
   };
 
-  const handleLastPageButtonClick = (
-    event: React.MouseEvent<HTMLButtonElement>
-  ) => {
-    onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
-  };
+  // const handleLastPageButtonClick = (
+  //   event: React.MouseEvent<HTMLButtonElement>
+  // ) => {
+  //   onPageChange(event, Math.max(0, Math.ceil(count / rowsPerPage) - 1));
+  // };
 
   return (
     <Box sx={{ flexShrink: 0, ml: 2.5 }}>
@@ -118,10 +111,10 @@ const ListShop: FC<ListShopProps> = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 2) : 0;
+  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 2) : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);

@@ -1,7 +1,7 @@
+import { MoreVert, Star } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Chip,
   IconButton,
   Paper,
   Table,
@@ -12,11 +12,8 @@ import {
   Typography,
   styled,
 } from "@mui/material";
-import { url } from "inspector";
-import type { FC } from "react";
-import { ChartContainer, BarPlot, BarChart } from "@mui/x-charts";
-import { MoreVert, Star } from "@mui/icons-material";
 import { useQuery } from "@tanstack/react-query";
+import type { FC } from "react";
 import {
   findAllCustomer,
   findAllShops,
@@ -178,7 +175,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                   align="right"
                   sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
                 >
-                  <Typography fontWeight={550}>200</Typography>
+                  <Typography fontWeight={550}>210</Typography>
                   <Typography color="#ADAAB3" fontSize={14}>
                     Lượt sử dụng
                   </Typography>
@@ -196,9 +193,9 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                   <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
                 </TableCell>
                 <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
-                  <Typography fontWeight={550}>Tắm gội spa</Typography>
+                  <Typography fontWeight={550}>Khách sạn thú cưng</Typography>
                   <Typography fontSize={14} color="#7E7988">
-                    Hệ thống thú y tropicpet
+                    Hạnh Phúc Lông Xù
                   </Typography>
                 </TableCell>
                 <TableCell
@@ -206,6 +203,62 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                   sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
                 >
                   <Typography fontWeight={550}>200</Typography>
+                  <Typography color="#ADAAB3" fontSize={14}>
+                    Lượt đặt lịch
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottom: "none",
+                    padding: "8px",
+                    width: "5%",
+                  }}
+                >
+                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
+                </TableCell>
+                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
+                  <Typography fontWeight={550}>Đỡ đẻ - Hộ sinh</Typography>
+                  <Typography fontSize={14} color="#7E7988">
+                    PetCare Center
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
+                >
+                  <Typography fontWeight={550}>150</Typography>
+                  <Typography color="#ADAAB3" fontSize={14}>
+                    Lượt đặt lịch
+                  </Typography>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell
+                  align="right"
+                  sx={{
+                    borderBottom: "none",
+                    padding: "8px",
+                    width: "5%",
+                  }}
+                >
+                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
+                </TableCell>
+                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
+                  <Typography fontWeight={550}>
+                    Chẩn đoán và điều trị bệnh
+                  </Typography>
+                  <Typography fontSize={14} color="#7E7988">
+                    Hạnh Phúc Lông Xù
+                  </Typography>
+                </TableCell>
+                <TableCell
+                  align="right"
+                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
+                >
+                  <Typography fontWeight={550}>127</Typography>
                   <Typography color="#ADAAB3" fontSize={14}>
                     Lượt đặt lịch
                   </Typography>
@@ -271,7 +324,7 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                         m="auto"
                       >
                         <Typography>
-                          {Number(topShop.rating.toFixed(2))}
+                          {Number(topShop.rating?.toFixed(2) || 0)}
                         </Typography>
                         <Star fontSize="small" sx={{ color: "#FFB400" }}></Star>
                       </Box>

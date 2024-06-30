@@ -4,7 +4,7 @@ import axios, {
   InternalAxiosRequestConfig,
 } from "axios";
 const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/",
+  baseURL: import.meta.env.VITE_BACKEND_URL,
 });
 const onRequest = (config: InternalAxiosRequestConfig) => {
   config.headers.set("Content-Type", "application/json");

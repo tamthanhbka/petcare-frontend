@@ -1,11 +1,19 @@
 import { Box } from "@mui/material";
-import type { FC } from "react";
+import { useEffect, type FC } from "react";
 import { Outlet } from "react-router-dom";
 import NavBar from "./NavBar";
 
 interface AdminHomeProps {}
 
 const AdminHome: FC<AdminHomeProps> = () => {
+  useEffect(() => {
+    const rasa = document.getElementById("rasa-chat-widget-container");
+    if (!rasa) return;
+    rasa.style.display = "none";
+    return () => {
+      rasa.style.display = "block";
+    };
+  }, []);
   return (
     <Box bgcolor="#F4F5FA" display="flex" minHeight="100vh">
       <Box flex={2}>

@@ -1,3 +1,4 @@
+import { ArrowBack, PhotoCameraBackOutlined } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -11,20 +12,13 @@ import {
   TextField,
   styled,
 } from "@mui/material";
-import { useState, type FC } from "react";
-import { ServiceShopType, ServiceType } from "../../type";
-import {
-  AddPhotoAlternate,
-  AddPhotoAlternateOutlined,
-  ArrowBack,
-  CloudUpload,
-  PhotoCameraBackOutlined,
-} from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { addShopServiceByStaff, getListServiceByStaff } from "../../api";
+import { useState, type FC } from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-const Image = styled("img")({});
+import { addShopServiceByStaff, getListServiceByStaff } from "../../api";
+import { ServiceType } from "../../type";
+// const Image = styled("img")({});
 interface CreateNewServiceProps {}
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;

@@ -30,7 +30,7 @@ export interface RecentStaffChat extends Chat {
 const token = () => localStorage.getItem("token") || "";
 let socket: Socket;
 const listenSocket = (cb?: () => void) => {
-  socket = io("http://localhost:3000", {
+  socket = io(import.meta.env.VITE_BACKEND_URL, {
     extraHeaders: {
       authorization: token(),
     },
@@ -115,14 +115,14 @@ const getAllChatByStaff = (userId: number) => {
   });
 };
 export {
-  sendChat,
   getAllChat,
-  listenChat,
-  listenStartChat,
-  listenSocket,
-  getRecentChats,
-  startChatByUSer,
-  getRecentChatsByStaff,
-  sendChatByStaff,
   getAllChatByStaff,
+  getRecentChats,
+  getRecentChatsByStaff,
+  listenChat,
+  listenSocket,
+  listenStartChat,
+  sendChat,
+  sendChatByStaff,
+  startChatByUSer,
 };

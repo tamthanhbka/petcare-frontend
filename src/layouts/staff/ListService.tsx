@@ -6,7 +6,6 @@ import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
-  VisibilityOutlined,
 } from "@mui/icons-material";
 import {
   Box,
@@ -28,10 +27,10 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
+import { Link as RTLink, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getAllServiceByStaff, removeShopServiceByStaff } from "../../api";
 import { ServiceShopType } from "../../type";
-import { useNavigate, Link as RTLink } from "react-router-dom";
-import { toast } from "react-toastify";
 const Image = styled("img")({});
 
 interface ListServiceProps {}
@@ -127,11 +126,11 @@ const ListService: FC<ListServiceProps> = () => {
   });
 
   // Avoid a layout jump when reaching the last page with empty rows.
-  const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - services.length) : 0;
+  // const emptyRows =
+  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - services.length) : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);

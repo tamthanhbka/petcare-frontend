@@ -18,6 +18,15 @@ const HomeLayout: FC<HomeLayout> = () => {
       setShow(false);
     };
   }, [login]);
+
+  useEffect(() => {
+    const rasa = document.getElementById("rasa-chat-widget-container");
+    if (!rasa) return;
+    rasa.style.display = "block";
+    return () => {
+      rasa.style.display = "none";
+    };
+  }, []);
   return (
     <>
       <Header />

@@ -1,7 +1,7 @@
-import { useEffect, useRef, type ComponentProps, type FC } from "react";
-import { Chat } from "../../socket";
-import { Avatar, Box, Input, Typography } from "@mui/material";
 import { Send } from "@mui/icons-material";
+import { Avatar, Box, Input, Typography } from "@mui/material";
+import { type ComponentProps, type FC } from "react";
+import { Chat } from "../../socket";
 import MessageList from "./MessageList";
 
 interface MessageBoxProps {

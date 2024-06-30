@@ -21,7 +21,7 @@ interface SearchResultProps {}
 const SearchResult: FC<SearchResultProps> = () => {
   const navigate = useNavigate();
   const [searchParam, setSearchParam] = useSearchParams();
-  const { setSearch, shops, search } = useShopSearch();
+  const { setSearch, search } = useShopSearch();
   const { data: searchResult } = useQuery({
     queryKey: ["search", searchParam.toString()],
     initialData: { shops: [], count: 0 },

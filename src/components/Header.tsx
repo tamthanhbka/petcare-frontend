@@ -1,26 +1,22 @@
-import { Phone, AccountCircle } from "@mui/icons-material";
+import { Phone } from "@mui/icons-material";
 import {
   Avatar,
   Badge,
   Box,
   Button,
   ClickAwayListener,
-  Fade,
   Grow,
-  IconButton,
-  Menu,
   MenuItem,
   MenuList,
   Paper,
-  Popover,
   Popper,
   Typography,
   styled,
 } from "@mui/material";
 import React, { useState, type FC } from "react";
-import logo from "../assets/img/logo.svg";
-import "../assets/css/header.css";
 import { NavLink, useNavigate } from "react-router-dom";
+import "../assets/css/header.css";
+import logo from "../assets/img/logo.svg";
 import { useAuth } from "./Auth";
 import RequestFrom from "./RequestForm";
 const StyledNavLink = styled(NavLink)({
@@ -47,7 +43,7 @@ const Header: FC<Header> = () => {
   const navigate = useNavigate();
   const { action, user } = useAuth();
   const [openPoper, setOpenPoper] = useState(false);
-  const [openLogin, setOpenLogin] = useState(false);
+  // const [openLogin, setOpenLogin] = useState(false);
   const [openRequestForm, setOpenRequestForm] = useState(false);
   const anchorRef = React.useRef<HTMLElement>(null);
   const handleLogout = () => {
@@ -59,12 +55,12 @@ const Header: FC<Header> = () => {
   const handleClosePoper = () => {
     setOpenPoper(false);
   };
-  const handleOpenLogin = () => {
-    setOpenLogin(true);
-  };
-  const handleCloseLogin = () => {
-    setOpenLogin(false);
-  };
+  // const handleOpenLogin = () => {
+  //   setOpenLogin(true);
+  // };
+  // const handleCloseLogin = () => {
+  //   setOpenLogin(false);
+  // };
 
   const handleOpenRequestForm = () => setOpenRequestForm(true);
   const handleCloseRequestForm = () => setOpenRequestForm(false);

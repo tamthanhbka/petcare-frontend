@@ -11,6 +11,14 @@ const StaffHome: FC<StaffHome> = () => {
   const { login } = useAuth();
   const [isConnected, setIsConnected] = useState(false);
   useEffect(() => {
+    const rasa = document.getElementById("rasa-chat-widget-container");
+    if (!rasa) return;
+    rasa.style.display = "none";
+    return () => {
+      rasa.style.display = "block";
+    };
+  }, []);
+  useEffect(() => {
     if (!login) return;
     const disconnect = listenSocket(() => setIsConnected(true));
     return disconnect;

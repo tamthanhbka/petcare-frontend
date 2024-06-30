@@ -8,9 +8,9 @@ import { ServiceShopType } from "../type";
 
 const Image = styled("img")({});
 
-const PendingChip = styled(Chip)({
-  color: "#06BB8A",
-});
+// const PendingChip = styled(Chip)({
+//   color: "#06BB8A",
+// });
 
 interface BookingProps {
   id: number;
@@ -18,7 +18,7 @@ interface BookingProps {
   time: string;
   createdAt: string;
   serviceShop: ServiceShopType;
-  refetch: () => {};
+  refetch: () => void;
 }
 
 const Booking: FC<BookingProps> = (props) => {
@@ -26,7 +26,7 @@ const Booking: FC<BookingProps> = (props) => {
   const { id, status, time, createdAt, serviceShop, refetch } = props;
   const { province, district, ward, detail } = serviceShop.shop.address;
 
-  const handleCancelButton = (bookingId: number, refetch: () => {}) => {
+  const handleCancelButton = (bookingId: number, refetch: () => void) => {
     try {
       cancelBooking(bookingId).then(() => refetch());
       toast.success("Hủy lịch hẹn thành công!");

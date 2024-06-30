@@ -8,24 +8,15 @@ import {
   useState,
 } from "react";
 import { getMe } from "../api";
-type Role = "staff" | "user" | "admin";
-export type User = {
-  id: number;
-  username: string;
-  phone: string;
-  isActivated: boolean;
-  role: Role;
-  email: string;
-  fullName: string;
-  followers: User[];
-  createdAt: string;
-  updatedAt: string;
-  avatar: string;
-};
+import { UserType } from "../type";
 type ContextPayloadType = {
   login: boolean;
-  action: { login: (user: any) => any; logout: Function; update: Function };
-  user?: User;
+  action: {
+    login: (user: UserType) => void;
+    logout: () => void;
+    update: () => void;
+  };
+  user?: UserType;
   loading: boolean;
 };
 const AuthContext = createContext<ContextPayloadType>({
@@ -37,10 +28,10 @@ const AuthContext = createContext<ContextPayloadType>({
 const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [login, setLogin] = useState(false);
-  const [user, setUser] = useState<User>();
+  const [user, setUser] = useState<UserType>();
   const action = useMemo(
     () => ({
-      login: (user: User) => {
+      login: (user: UserType) => {
         localStorage.setItem("user", JSON.stringify(user));
         setLogin(true);
         setUser(user);
@@ -78,7 +69,7 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
       .catch(() => {
         action.logout();
       });
-  }, []);
+  }, [action]);
   return (
     <>
       <AuthContext.Provider value={{ login, action, user, loading }}>
@@ -87,5 +78,6 @@ const AuthProvider: FC<PropsWithChildren> = ({ children }) => {
     </>
   );
 };
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 export default AuthProvider;

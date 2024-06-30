@@ -1,6 +1,6 @@
+import { styled } from "@mui/material";
 import { useEffect, useRef, type FC } from "react";
 import { Chat } from "../../socket";
-import { styled } from "@mui/material";
 import MessageItem from "./MessageItem";
 const Box = styled("div")();
 
@@ -11,7 +11,7 @@ interface MessageListProps {
 }
 
 const MessageList: FC<MessageListProps> = (props) => {
-  const { loading, messages, isUser } = props;
+  const { messages, isUser } = props;
   const boxRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     boxRef.current?.scrollIntoView({ behavior: "smooth" });

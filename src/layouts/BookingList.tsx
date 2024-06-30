@@ -7,19 +7,18 @@ import {
   MenuItem,
   Select,
   Typography,
-  styled,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
 import { getListBooking } from "../api";
 import Booking1 from "../components/Booking1";
 
-const Image = styled("img")({});
+// const Image = styled("img")({});
 
 interface BookingListProps {}
 
 const BookingList: FC<BookingListProps> = () => {
-  const [age, setAge] = useState("");
+  const [age] = useState("");
 
   const handleChange = () => {};
 

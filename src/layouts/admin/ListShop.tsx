@@ -1,13 +1,10 @@
 import {
   Add,
-  DeleteOutlineOutlined,
-  Edit,
   FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
   LockOutlined,
-  LockPersonOutlined,
   RemoveRedEyeOutlined,
   Star,
 } from "@mui/icons-material";
@@ -15,15 +12,12 @@ import {
   Avatar,
   Box,
   Button,
-  Chip,
   FormControl,
   IconButton,
-  InputLabel,
   MenuItem,
   OutlinedInput,
   Paper,
   Select,
-  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -32,16 +26,15 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Tooltip,
   Typography,
   useTheme,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState, type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
+import { getProvinces } from "../../api/address";
 import { findAllShops } from "../../api/admin";
 import { ProvinceType, ShopType } from "../../type";
-import { getProvinces } from "../../api/address";
 
 interface ListShopProps {}
 const ITEM_HEIGHT = 48;
@@ -159,7 +152,7 @@ const ListShop: FC<ListShopProps> = () => {
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (shops?.length || 0)) : 0;
 
   const handleChangePage = (
-    event: React.MouseEvent<HTMLButtonElement> | null,
+    _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
     setPage(newPage);
@@ -392,7 +385,7 @@ const ListShop: FC<ListShopProps> = () => {
                         m="auto"
                       >
                         <Typography>
-                          {Number(shop.rating.toFixed(2))}
+                          {Number(shop.rating?.toFixed(2) || 0)}
                         </Typography>
                         <Star fontSize="small" sx={{ color: "#FFB400" }}></Star>
                       </Box>

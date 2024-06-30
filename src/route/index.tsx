@@ -8,6 +8,7 @@ import {
   SubHome,
 } from "../layouts";
 import HealthPage from "../layouts/HealthPage";
+import HotelPage from "../layouts/HotelPage";
 import SpaPage from "../layouts/SpaPage";
 import {
   AdminDashBoard,
@@ -29,33 +30,22 @@ import {
   StaffHomeLayout,
 } from "../layouts/staff";
 import ProtectedRoute from "./ProtectedRoute";
-import HotelPage from "../layouts/HotelPage";
 const router = createBrowserRouter([
   {
     path: "/",
     element: <HomeLayout />,
     children: [
-      {
-        path: "shop/:id",
-        element: <ShopDetail />,
-      },
+      { path: "shop/:id", element: <ShopDetail /> },
       { path: "search", element: <SearchResult /> },
       { path: "spa", element: <SpaPage /> },
       { path: "health", element: <HealthPage /> },
       { path: "hotel", element: <HotelPage /> },
       {
         path: "history",
-        element: (
-          <ProtectedRoute roles={["user"]}>
-            <BookingList />
-          </ProtectedRoute>
-        ),
+        element: <ProtectedRoute roles={["user"]} children={<BookingList />} />,
       },
       { path: "message", element: <ListMessage /> },
-      {
-        path: "",
-        element: <SubHome />,
-      },
+      { path: "", element: <SubHome /> },
     ],
   },
   {
@@ -68,9 +58,7 @@ const router = createBrowserRouter([
   },
   {
     element: (
-      <ProtectedRoute roles={["staff"]}>
-        <StaffHomeLayout />
-      </ProtectedRoute>
+      <ProtectedRoute roles={["staff"]} children={<StaffHomeLayout />} />
     ),
     path: "/staff",
     children: [
@@ -105,11 +93,7 @@ const router = createBrowserRouter([
   },
   {
     path: "/admin",
-    element: (
-      <ProtectedRoute roles={["admin"]}>
-        <AdminHome />
-      </ProtectedRoute>
-    ),
+    element: <ProtectedRoute roles={["admin"]} children={<AdminHome />} />,
     children: [
       { path: "dashboard", element: <AdminDashBoard /> },
       { path: "shops", element: <AdminListShop /> },
