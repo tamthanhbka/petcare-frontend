@@ -7,15 +7,15 @@ import { useAuth } from "../../components/Auth";
 import { signupValidate } from "../../validate";
 const CssTextField = styled(TextField)({
   "& label, & label.Mui-focused": {
-    color: "black",
+    color: "#428f28",
   },
   "& .MuiInput-underline:after": {
-    borderBottomColor: "black",
+    borderBottomColor: "#51b032",
   },
   "& .MuiInput-underline": {
-    borderBottomColor: "black",
+    borderBottomColor: "#2d940a",
   },
-  "& .MuiInput-input": { color: "black" },
+  "& .MuiInput-input": { color: "#51b032" },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "red",
@@ -60,16 +60,16 @@ export default function Register() {
   return (
     <div className="register-form" style={{ backgroundColor: "white" }}>
       <Typography
-        variant="h2"
-        sx={{ flex: 2, color: "#1877F2" }}
+        sx={{ flex: 1, color: "#51b032", fontSize: 40 }}
         align="center"
-        fontWeight={900}
+        fontWeight={700}
+        textTransform="uppercase"
       >
-        Register
+        Đăng ký
       </Typography>
       <Box
         display="block"
-        sx={{ flex: 2, display: "flex", flexDirection: "column" }}
+        sx={{ flex: 3, display: "flex", flexDirection: "column", gap: 0.5 }}
       >
         <CssTextField
           label="Email"
@@ -84,7 +84,7 @@ export default function Register() {
           }}
         />
         <CssTextField
-          label="Phone Number"
+          label="Số điện thoại"
           variant="standard"
           className="text-field"
           fullWidth
@@ -95,7 +95,7 @@ export default function Register() {
           }}
         />
         <CssTextField
-          label="Username"
+          label="Tên hiển thị"
           variant="standard"
           className="text-field"
           fullWidth
@@ -106,7 +106,7 @@ export default function Register() {
           }}
         />
         <CssTextField
-          label="Password"
+          label="Mật khẩu"
           variant="standard"
           type="password"
           className="text-field"
@@ -118,7 +118,7 @@ export default function Register() {
           }}
         />
         <CssTextField
-          label="Confirm Password"
+          label="Xác nhận mật khẩu"
           variant="standard"
           type="password"
           className="text-field"
@@ -136,16 +136,16 @@ export default function Register() {
           size="large"
           fullWidth
           sx={{
-            backgroundColor: "#4b9bfc",
+            backgroundColor: "#5ebd3e",
             backdropFilter: "blur(20px)",
             ":hover": {
               transition: "all 0.3s ease",
-              backgroundColor: "#0068e8",
+              backgroundColor: "#45a227",
             },
           }}
           onClick={handleSignup}
         >
-          Register
+          Đăng ký
         </Button>
       </Box>
       <Box
@@ -157,9 +157,9 @@ export default function Register() {
         }}
       >
         <Typography sx={{ color: "black" }} variant="subtitle1" align="center">
-          Have an account?{" "}
+          Bạn đã có tài khoản?{" "}
           <RLink style={{ color: "black" }} to="/login">
-            Login
+            Đăng nhập ngay
           </RLink>
         </Typography>
       </Box>

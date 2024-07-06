@@ -11,7 +11,7 @@ function AuthLayout() {
     };
   }, []);
   return (
-    <div className="auth-container">
+    <div className="auth-container" style={{ backgroundColor: "#d2edd2" }}>
       <Outlet />
     </div>
   );

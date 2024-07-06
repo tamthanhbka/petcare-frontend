@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { AxiosError, cancelBooking } from "../api";
 import { BookingType } from "../type";
 import ServiceRatingDialog from "./ServiceRatingDialog";
+import { startChatByUSer } from "../socket";
 
 const Image = styled("img")({});
 
@@ -39,6 +40,9 @@ const Booking1: FC<BookingProps> = (props) => {
     }
   };
   const handleOpenRating = (open?: boolean) => () => setOpenRating(!!open);
+  const handleOpenChat = (shopId: number) => {
+    startChatByUSer(shopId);
+  };
   return (
     <Paper
       sx={{
@@ -66,6 +70,10 @@ const Booking1: FC<BookingProps> = (props) => {
                 ? "#ffbb3b"
                 : status === "completed"
                 ? "#45de45"
+                : status === "accepted"
+                ? "#6dc1f9"
+                : status === "rejected"
+                ? "#ff893a"
                 : "#ff7171",
             pt: 3,
             transform: "rotate(45deg)",
@@ -78,7 +86,11 @@ const Booking1: FC<BookingProps> = (props) => {
               ? "Đang chờ"
               : status === "completed"
               ? "Hoàn thành"
-              : "Đã hủy"
+              : status === "cancel"
+              ? "Đã hủy"
+              : status === "accepted"
+              ? "Đã duyệt"
+              : "Bị từ chối"
           }
         />
         <Image
@@ -171,7 +183,7 @@ const Booking1: FC<BookingProps> = (props) => {
             >
               Đã hủy
             </Button>
-          ) : (
+          ) : status === "completed" ? (
             <Button
               variant="contained"
               color="warning"
@@ -181,6 +193,17 @@ const Booking1: FC<BookingProps> = (props) => {
               onClick={handleOpenRating(true)}
             >
               Đánh giá
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              sx={{
+                textTransform: "inherit",
+                bgcolor: "#7EC247",
+              }}
+              onClick={() => handleOpenChat(shopService.shop.id)}
+            >
+              Liên hệ
             </Button>
           )}
         </Box>

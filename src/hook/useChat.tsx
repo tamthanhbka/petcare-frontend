@@ -41,12 +41,12 @@ const reducer = (
       return { ...state, chatLoading: true, selectedChat };
     case "loaded-chat-shop":
       // Sau khi đã lấy được danh sách tin nhắn cùng với shop đã chọn thì chuyển loading thành false và cập nhật chats
-       
+
       const chats = action.data as Chat[];
       return { ...state, chatLoading: false, chats };
     case "new-chat":
       // Khi có tin nhắn mới
-       
+
       const chat = action.data as Chat;
       let oldRecent: RecentChat | undefined, newRecent: RecentChat;
       // Lấy ra danh sách tin nhắn gần nhất
@@ -101,7 +101,7 @@ const initState: ChatState = {
 type UseChatProps = {
   onNewChat?: () => void;
 };
-const useChat = (props: UseChatProps = {}) => {
+const useChat = (props: UseChatProps) => {
   const onNewChat = props.onNewChat;
   const [state, dispatch] = useReducer(reducer, initState);
   useEffect(() => {
@@ -123,7 +123,8 @@ const useChat = (props: UseChatProps = {}) => {
       unsubcribe1();
       unsubcribe2();
     };
-  }, [onNewChat]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const selectChatShop = useCallback(
     (shopId: number) => {
       if (shopId === state.selectedChat?.shopId) return;

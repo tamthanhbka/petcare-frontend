@@ -94,7 +94,7 @@ export interface BookingType {
   userId: number;
   shopServiceId: number;
   time: string;
-  status: "completed" | "pending" | "cancel";
+  status: "completed" | "pending" | "cancel" | "rejected" | "accepted";
   createdAt: string;
   shopService: ShopServiceType;
 }

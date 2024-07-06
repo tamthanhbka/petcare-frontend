@@ -1,0 +1,140 @@
+Date : 2024-06-30 18:16:12
+Directory : d:\GR\GR2\Frontend\src
+Total : 94 files,  8936 codes, 686 comments, 438 blanks, all 10060 lines
+
+Languages
++----------------+------------+------------+------------+------------+------------+
+| language       | files      | code       | comment    | blank      | total      |
++----------------+------------+------------+------------+------------+------------+
+| TypeScript JSX |         64 |      8,076 |        544 |        348 |      8,968 |
+| TypeScript     |         13 |        582 |         13 |         66 |        661 |
+| XML            |         12 |        196 |          0 |         12 |        208 |
+| CSS            |          5 |         82 |        129 |         12 |        223 |
++----------------+------------+------------+------------+------------+------------+
+
+Directories
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                      | files      | code       | comment    | blank      | total      |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                         |         94 |      8,936 |        686 |        438 |     10,060 |
+| . (Files)                                                 |          5 |         58 |        113 |         14 |        185 |
+| api                                                       |          7 |        341 |         12 |         40 |        393 |
+| assets                                                    |         14 |        206 |         17 |         14 |        237 |
+| assets\css                                                |          2 |         10 |         17 |          2 |         29 |
+| assets\img                                                |         12 |        196 |          0 |         12 |        208 |
+| components                                                |         26 |      2,273 |         60 |        105 |      2,438 |
+| components (Files)                                        |         19 |      1,686 |         60 |         79 |      1,825 |
+| components\chat                                           |          7 |        587 |          0 |         26 |        613 |
+| hook                                                      |          3 |        264 |         35 |          9 |        308 |
+| layouts                                                   |         33 |      5,402 |        448 |        229 |      6,079 |
+| layouts (Files)                                           |         10 |      1,254 |         23 |         51 |      1,328 |
+| layouts\admin                                             |          8 |      1,886 |        250 |         82 |      2,218 |
+| layouts\page                                              |          3 |        320 |          5 |          4 |        329 |
+| layouts\staff                                             |         12 |      1,942 |        170 |         92 |      2,204 |
+| route                                                     |          2 |        122 |          1 |          3 |        126 |
+| socket                                                    |          1 |        120 |          0 |          9 |        129 |
+| styles                                                    |          1 |         43 |          0 |          3 |         46 |
+| type                                                      |          1 |        103 |          0 |         11 |        114 |
+| validate                                                  |          1 |          4 |          0 |          1 |          5 |
++-----------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++-----------------------------------------------------------+----------------+------------+------------+------------+------------+
+| filename                                                  | language       | code       | comment    | blank      | total      |
++-----------------------------------------------------------+----------------+------------+------------+------------+------------+
+| d:\GR\GR2\Frontend\src\App.css                            | CSS            |          0 |         42 |          1 |         43 |
+| d:\GR\GR2\Frontend\src\App.tsx                            | TypeScript JSX |         20 |          0 |          4 |         24 |
+| d:\GR\GR2\Frontend\src\api\address.ts                     | TypeScript     |         25 |          0 |          4 |         29 |
+| d:\GR\GR2\Frontend\src\api\admin.ts                       | TypeScript     |         43 |          0 |          7 |         50 |
+| d:\GR\GR2\Frontend\src\api\axios.ts                       | TypeScript     |         25 |          9 |          1 |         35 |
+| d:\GR\GR2\Frontend\src\api\comment.ts                     | TypeScript     |         13 |          0 |          2 |         15 |
+| d:\GR\GR2\Frontend\src\api\index.ts                       | TypeScript     |        205 |          3 |         22 |        230 |
+| d:\GR\GR2\Frontend\src\api\shop.ts                        | TypeScript     |         18 |          0 |          2 |         20 |
+| d:\GR\GR2\Frontend\src\api\shopService.ts                 | TypeScript     |         12 |          0 |          2 |         14 |
+| d:\GR\GR2\Frontend\src\assets\css\header.css              | CSS            |          0 |         17 |          0 |         17 |
+| d:\GR\GR2\Frontend\src\assets\css\shopDetail.css          | CSS            |         10 |          0 |          2 |         12 |
+| d:\GR\GR2\Frontend\src\assets\img\bgSpa1.svg              | XML            |         15 |          0 |          1 |         16 |
+| d:\GR\GR2\Frontend\src\assets\img\bgSpa2.svg              | XML            |         15 |          0 |          1 |         16 |
+| d:\GR\GR2\Frontend\src\assets\img\bgSpa3.svg              | XML            |         15 |          0 |          1 |         16 |
+| d:\GR\GR2\Frontend\src\assets\img\bghotel.svg             | XML            |          9 |          0 |          1 |         10 |
+| d:\GR\GR2\Frontend\src\assets\img\chat.svg                | XML            |         21 |          0 |          1 |         22 |
+| d:\GR\GR2\Frontend\src\assets\img\health.svg              | XML            |         19 |          0 |          1 |         20 |
+| d:\GR\GR2\Frontend\src\assets\img\home1.svg               | XML            |         15 |          0 |          1 |         16 |
+| d:\GR\GR2\Frontend\src\assets\img\hotel.svg               | XML            |         20 |          0 |          1 |         21 |
+| d:\GR\GR2\Frontend\src\assets\img\icon.svg                | XML            |         30 |          0 |          1 |         31 |
+| d:\GR\GR2\Frontend\src\assets\img\iconpet.svg             | XML            |          9 |          0 |          1 |         10 |
+| d:\GR\GR2\Frontend\src\assets\img\logo.svg                | XML            |          9 |          0 |          1 |         10 |
+| d:\GR\GR2\Frontend\src\assets\img\spa.svg                 | XML            |         19 |          0 |          1 |         20 |
+| d:\GR\GR2\Frontend\src\components\Auth.tsx                | TypeScript JSX |         81 |          1 |          2 |         84 |
+| d:\GR\GR2\Frontend\src\components\Booking.tsx             | TypeScript JSX |        121 |          3 |          8 |        132 |
+| d:\GR\GR2\Frontend\src\components\Booking1.tsx            | TypeScript JSX |        189 |          3 |          6 |        198 |
+| d:\GR\GR2\Frontend\src\components\BoxChat.tsx             | TypeScript JSX |         90 |          1 |          6 |         97 |
+| d:\GR\GR2\Frontend\src\components\Comment.tsx             | TypeScript JSX |         47 |          0 |          4 |         51 |
+| d:\GR\GR2\Frontend\src\components\Footer.tsx              | TypeScript JSX |        115 |          4 |          4 |        123 |
+| d:\GR\GR2\Frontend\src\components\Header.tsx              | TypeScript JSX |        206 |         20 |          5 |        231 |
+| d:\GR\GR2\Frontend\src\components\HealthItem.tsx          | TypeScript JSX |         66 |          0 |          4 |         70 |
+| d:\GR\GR2\Frontend\src\components\HealthList.tsx          | TypeScript JSX |         20 |          0 |          3 |         23 |
+| d:\GR\GR2\Frontend\src\components\HotelItem.tsx           | TypeScript JSX |         60 |          0 |          5 |         65 |
+| d:\GR\GR2\Frontend\src\components\HotelList.tsx           | TypeScript JSX |         26 |          0 |          3 |         29 |
+| d:\GR\GR2\Frontend\src\components\Message.tsx             | TypeScript JSX |         32 |          1 |          4 |         37 |
+| d:\GR\GR2\Frontend\src\components\OrderForm.tsx           | TypeScript JSX |          0 |          0 |          1 |          1 |
+| d:\GR\GR2\Frontend\src\components\RequestForm.tsx         | TypeScript JSX |        283 |          9 |          8 |        300 |
+| d:\GR\GR2\Frontend\src\components\SearchItem.tsx          | TypeScript JSX |        138 |          0 |          3 |        141 |
+| d:\GR\GR2\Frontend\src\components\ServiceItem.tsx         | TypeScript JSX |         65 |          7 |          5 |         77 |
+| d:\GR\GR2\Frontend\src\components\ServiceRatingDialog.tsx | TypeScript JSX |        108 |          0 |          4 |        112 |
+| d:\GR\GR2\Frontend\src\components\SpaList.tsx             | TypeScript JSX |         28 |         11 |          3 |         42 |
+| d:\GR\GR2\Frontend\src\components\chat\ChatBot.tsx        | TypeScript JSX |        255 |          0 |          5 |        260 |
+| d:\GR\GR2\Frontend\src\components\chat\ChatItem.tsx       | TypeScript JSX |         87 |          0 |          3 |         90 |
+| d:\GR\GR2\Frontend\src\components\chat\ChatList.tsx       | TypeScript JSX |        112 |          0 |          4 |        116 |
+| d:\GR\GR2\Frontend\src\components\chat\MessageBox.tsx     | TypeScript JSX |         65 |          0 |          5 |         70 |
+| d:\GR\GR2\Frontend\src\components\chat\MessageItem.tsx    | TypeScript JSX |         39 |          0 |          4 |         43 |
+| d:\GR\GR2\Frontend\src\components\chat\MessageList.tsx    | TypeScript JSX |         29 |          0 |          4 |         33 |
+| d:\GR\GR2\Frontend\src\components\chat\index.ts           | TypeScript     |          0 |          0 |          1 |          1 |
+| d:\GR\GR2\Frontend\src\components\index.tsx               | TypeScript JSX |         11 |          0 |          1 |         12 |
+| d:\GR\GR2\Frontend\src\hook\useChat.tsx                   | TypeScript JSX |        127 |         17 |          4 |        148 |
+| d:\GR\GR2\Frontend\src\hook\useShopSearch.ts              | TypeScript     |         14 |          0 |          3 |         17 |
+| d:\GR\GR2\Frontend\src\hook\useStaffChat.tsx              | TypeScript JSX |        123 |         18 |          2 |        143 |
+| d:\GR\GR2\Frontend\src\index.css                          | CSS            |         29 |         70 |          6 |        105 |
+| d:\GR\GR2\Frontend\src\layouts\Auth.tsx                   | TypeScript JSX |         19 |          0 |          2 |         21 |
+| d:\GR\GR2\Frontend\src\layouts\BookingList.tsx            | TypeScript JSX |        125 |          6 |          8 |        139 |
+| d:\GR\GR2\Frontend\src\layouts\HealthPage.tsx             | TypeScript JSX |         52 |          0 |          4 |         56 |
+| d:\GR\GR2\Frontend\src\layouts\HomeLayout.tsx             | TypeScript JSX |         38 |          0 |          5 |         43 |
+| d:\GR\GR2\Frontend\src\layouts\HotelPage.tsx              | TypeScript JSX |         52 |          0 |          4 |         56 |
+| d:\GR\GR2\Frontend\src\layouts\SearchResult.tsx           | TypeScript JSX |        110 |          4 |          4 |        118 |
+| d:\GR\GR2\Frontend\src\layouts\ShopDetail.tsx             | TypeScript JSX |        497 |          6 |         11 |        514 |
+| d:\GR\GR2\Frontend\src\layouts\SpaPage.tsx                | TypeScript JSX |         52 |          0 |          4 |         56 |
+| d:\GR\GR2\Frontend\src\layouts\SubHome.tsx                | TypeScript JSX |        303 |          7 |          8 |        318 |
+| d:\GR\GR2\Frontend\src\layouts\admin\AdminDashboard.tsx   | TypeScript JSX |        320 |         15 |          9 |        344 |
+| d:\GR\GR2\Frontend\src\layouts\admin\AdminHome.tsx        | TypeScript JSX |         26 |          2 |          4 |         32 |
+| d:\GR\GR2\Frontend\src\layouts\admin\ListCustomer.tsx     | TypeScript JSX |        338 |         38 |         16 |        392 |
+| d:\GR\GR2\Frontend\src\layouts\admin\ListRequest.tsx      | TypeScript JSX |        279 |         43 |         15 |        337 |
+| d:\GR\GR2\Frontend\src\layouts\admin\ListServive.tsx      | TypeScript JSX |        333 |         88 |         14 |        435 |
+| d:\GR\GR2\Frontend\src\layouts\admin\ListShop.tsx         | TypeScript JSX |        403 |         44 |         16 |        463 |
+| d:\GR\GR2\Frontend\src\layouts\admin\NavBar.tsx           | TypeScript JSX |        180 |         20 |          7 |        207 |
+| d:\GR\GR2\Frontend\src\layouts\admin\index.tsx            | TypeScript JSX |          7 |          0 |          1 |          8 |
+| d:\GR\GR2\Frontend\src\layouts\index.tsx                  | TypeScript JSX |          6 |          0 |          1 |          7 |
+| d:\GR\GR2\Frontend\src\layouts\page\Login.tsx             | TypeScript JSX |        150 |          5 |          2 |        157 |
+| d:\GR\GR2\Frontend\src\layouts\page\Register.tsx          | TypeScript JSX |        168 |          0 |          1 |        169 |
+| d:\GR\GR2\Frontend\src\layouts\page\index.tsx             | TypeScript JSX |          2 |          0 |          1 |          3 |
+| d:\GR\GR2\Frontend\src\layouts\staff\BookingRequest.tsx   | TypeScript JSX |        387 |         23 |         17 |        427 |
+| d:\GR\GR2\Frontend\src\layouts\staff\CreateNewService.tsx | TypeScript JSX |        202 |         27 |          7 |        236 |
+| d:\GR\GR2\Frontend\src\layouts\staff\Dashboard.tsx        | TypeScript JSX |          6 |          0 |          4 |         10 |
+| d:\GR\GR2\Frontend\src\layouts\staff\HeaderStaff.tsx      | TypeScript JSX |        119 |          6 |          5 |        130 |
+| d:\GR\GR2\Frontend\src\layouts\staff\ListCustomer.tsx     | TypeScript JSX |        159 |          9 |          5 |        173 |
+| d:\GR\GR2\Frontend\src\layouts\staff\ListMessage.tsx      | TypeScript JSX |         61 |          0 |          6 |         67 |
+| d:\GR\GR2\Frontend\src\layouts\staff\ListService.tsx      | TypeScript JSX |        290 |         12 |         15 |        317 |
+| d:\GR\GR2\Frontend\src\layouts\staff\NavBar.tsx           | TypeScript JSX |        169 |         46 |          7 |        222 |
+| d:\GR\GR2\Frontend\src\layouts\staff\ServiceItem.tsx      | TypeScript JSX |        192 |         24 |          8 |        224 |
+| d:\GR\GR2\Frontend\src\layouts\staff\ShopInfo.tsx         | TypeScript JSX |        311 |         22 |         13 |        346 |
+| d:\GR\GR2\Frontend\src\layouts\staff\StaffHome.tsx        | TypeScript JSX |         35 |          1 |          4 |         40 |
+| d:\GR\GR2\Frontend\src\layouts\staff\index.tsx            | TypeScript JSX |         11 |          0 |          1 |         12 |
+| d:\GR\GR2\Frontend\src\main.tsx                           | TypeScript JSX |          9 |          0 |          2 |         11 |
+| d:\GR\GR2\Frontend\src\route\ProtectedRoute.tsx           | TypeScript JSX |         16 |          1 |          2 |         19 |
+| d:\GR\GR2\Frontend\src\route\index.tsx                    | TypeScript JSX |        106 |          0 |          1 |        107 |
+| d:\GR\GR2\Frontend\src\socket\index.ts                    | TypeScript     |        120 |          0 |          9 |        129 |
+| d:\GR\GR2\Frontend\src\styles\Auth.css                    | CSS            |         43 |          0 |          3 |         46 |
+| d:\GR\GR2\Frontend\src\type\index.ts                      | TypeScript     |        103 |          0 |         11 |        114 |
+| d:\GR\GR2\Frontend\src\validate\index.ts                  | TypeScript     |          4 |          0 |          1 |          5 |
+| d:\GR\GR2\Frontend\src\vite-env.d.ts                      | TypeScript     |          0 |          1 |          1 |          2 |
+| Total                                                     |                |      8,936 |        686 |        438 |     10,060 |
++-----------------------------------------------------------+----------------+------------+------------+------------+------------+

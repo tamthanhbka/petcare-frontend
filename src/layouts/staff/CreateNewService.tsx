@@ -1,4 +1,8 @@
-import { ArrowBack, PhotoCameraBackOutlined } from "@mui/icons-material";
+import {
+  ArrowBack,
+  CloudUpload,
+  PhotoCameraBackOutlined,
+} from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -16,9 +20,14 @@ import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import { addShopServiceByStaff, getListServiceByStaff } from "../../api";
+import {
+  addShopServiceByStaff,
+  AxiosError,
+  getListServiceByStaff,
+  uploadImg,
+} from "../../api";
 import { ServiceType } from "../../type";
-// const Image = styled("img")({});
+const Image = styled("img")({});
 interface CreateNewServiceProps {}
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,6 +67,8 @@ const CreateNewService: FC<CreateNewServiceProps> = () => {
   const [description, setDescription] = useState<string>();
   const [lowestPrice, setLowestPrice] = useState<number>();
   const [highestPrice, setHighestPrice] = useState<number>();
+  const [img, setImg] = useState<File>();
+  const [url, setURL] = useState<string>();
 
   const { data: services } = useQuery<ServiceType[]>({
     queryKey: [`service`],
@@ -69,16 +80,23 @@ const CreateNewService: FC<CreateNewServiceProps> = () => {
     setService(services?.find((s) => s.name === e.target.value));
   };
 
-  const handleAddButton = () => {
-    addShopServiceByStaff(
-      description,
-      lowestPrice,
-      highestPrice,
-      service?.id
-    ).then(() => {
-      toast("Thêm dịch vụ thành công!");
-      navigation(`/staff/services`);
-    });
+  const handleAddButton = async () => {
+    try {
+      const image = img ? await uploadImg(img) : undefined;
+      addShopServiceByStaff(
+        description,
+        lowestPrice,
+        highestPrice,
+        service?.id,
+        image
+      ).then(() => {
+        toast("Thêm dịch vụ thành công!");
+        navigation(`/staff/services`);
+      });
+    } catch (error) {
+      const err = error as AxiosError<{ message: string }>;
+      toast.error(err.response?.data.message);
+    }
   };
 
   return (
@@ -96,33 +114,62 @@ const CreateNewService: FC<CreateNewServiceProps> = () => {
               "&:hover": { color: "#676767" },
             }}
           ></ArrowBack>
-          <Box
-            flex={5}
-            width={"100%"}
-            display={"flex"}
-            padding={"2rem"}
-            flexDirection="column"
-            alignItems={"center"}
-            justifyContent="center"
-            gap={2}
-          >
-            {/* <Image
-              sx={{
-                width: "100%",
-                // height: "100%",
-                borderRadius: "1rem",
-              }}
-              src={
-                "https://thanhcongfarm.com/wp-content/uploads/2022/10/320456_best_dog_spa_0.jpg"
-              }
-            /> */}
-            <input
-              accept="image"
-              type="file"
-              id="select-image"
-              style={{ display: "none" }}
-            />
-            <label htmlFor="select-image">
+
+          {url ? (
+            <Box
+              flex={5}
+              width={"100%"}
+              display={"flex"}
+              padding={"2rem"}
+              flexDirection="column"
+              alignItems={"center"}
+              justifyContent="center"
+              gap={2}
+            >
+              <Image
+                sx={{
+                  width: "100%",
+                  // height: "100%",
+                  borderRadius: "1rem",
+                  border: "1px solid #d1d1d1",
+                }}
+                src={url}
+              />
+
+              <Button
+                color="success"
+                // role={undefined}
+                variant="outlined"
+                // tabIndex={-1}
+                startIcon={<CloudUpload />}
+                sx={{ width: "45%", textTransform: "initial" }}
+              >
+                <label htmlFor="avatar_input">Thêm ảnh dịch vụ</label>
+                <input
+                  id="avatar_input"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const img = e.target.files?.[0];
+                    if (!img) return;
+                    setImg(img);
+                    setURL(URL.createObjectURL(img));
+                  }}
+                />
+              </Button>
+            </Box>
+          ) : (
+            <Box
+              flex={5}
+              width={"100%"}
+              display={"flex"}
+              padding={"2rem"}
+              flexDirection="column"
+              alignItems={"center"}
+              justifyContent="center"
+              gap={2}
+            >
               <Button
                 color="success"
                 // role={undefined}
@@ -139,11 +186,22 @@ const CreateNewService: FC<CreateNewServiceProps> = () => {
                 <PhotoCameraBackOutlined
                   sx={{ fontSize: "10rem", color: "#91CB63" }}
                 ></PhotoCameraBackOutlined>
-                Thêm ảnh dịch vụ
-                {/* <VisuallyHiddenInput type="file" /> */}
+                <label htmlFor="avatar_input">Thêm ảnh dịch vụ</label>
+                <input
+                  id="avatar_input"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const img = e.target.files?.[0];
+                    if (!img) return;
+                    setImg(img);
+                    setURL(URL.createObjectURL(img));
+                  }}
+                />
               </Button>
-            </label>
-          </Box>
+            </Box>
+          )}
           <Box
             flex={8}
             display="flex"

@@ -29,13 +29,15 @@ const addShopServiceByStaff = async (
   description?: string,
   lowestPrice?: number,
   highestPrice?: number,
-  serviceId?: number
+  serviceId?: number,
+  image?: string
 ) => {
   const response = await axiosInstance.post(`shop-service`, {
     description: description,
     lowestPrice: lowestPrice,
     highestPrice: highestPrice,
     serviceId: serviceId,
+    image: image,
   });
   return response.data;
 };
@@ -96,6 +98,12 @@ const searchShop = async (meta: {
   order && searchParam.set("order", order);
   const res = await axiosInstance.get<{ shops: ShopType[]; count: number }>(
     `/shops?${searchParam.toString()}`
+  );
+  return res.data;
+};
+const getShopsByParent = async (parentId: number) => {
+  const res = await axiosInstance.get<ShopType[]>(
+    `/shops/getByParent?parentServiceId=${parentId}`
   );
   return res.data;
 };
@@ -161,9 +169,9 @@ const sendRequestCooperation = async (
   });
   return response.data;
 };
-const CLOUD_NAME = "diom7seyg";
+const CLOUD_NAME = "dk9mcaqzu";
 const UPLOAD_URL = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
-const PRESET = "stndhxae";
+const PRESET = "petcare";
 const uploadImg = async (file: File) => {
   // Initial FormData
   const formData = new FormData();
@@ -226,4 +234,5 @@ export {
   updateShopServiceByStaff,
   updateStatus,
   uploadImg,
+  getShopsByParent,
 };

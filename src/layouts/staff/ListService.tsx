@@ -22,6 +22,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
   styled,
   useTheme,
 } from "@mui/material";
@@ -118,16 +119,20 @@ const ListService: FC<ListServiceProps> = () => {
   const navigation = useNavigate();
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data: services } = useQuery<ServiceShopType[]>({
+  const [key, setKey] = useState<string>("");
+  const { data: services, refetch } = useQuery<ServiceShopType[]>({
     queryKey: [`services`],
     queryFn: () => getAllServiceByStaff(),
     initialData: [],
     refetchOnWindowFocus: false,
   });
-
-  // Avoid a layout jump when reaching the last page with empty rows.
-  // const emptyRows =
-  //   page > 0 ? Math.max(0, (1 + page) * rowsPerPage - services.length) : 0;
+  const filtered = services.filter((sv) =>
+    sv.service.name.toLowerCase().includes(key.toLowerCase())
+  );
+  const emptyRows =
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - (filtered?.length || 0))
+      : 0;
 
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement> | null,
@@ -144,14 +149,19 @@ const ListService: FC<ListServiceProps> = () => {
   };
 
   const handleDeleteButton = (id: string) => {
-    removeShopServiceByStaff(id).then(() =>
-      toast.success("Xóa dịch vụ thành công!")
-    );
+    removeShopServiceByStaff(id).then(() => {
+      toast.success("Xóa dịch vụ thành công!");
+      refetch();
+    });
   };
   return (
     <Box padding="2rem">
-      <Paper elevation={5} sx={{ padding: "2rem" }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
+      <Paper elevation={5} sx={{ padding: "1.5rem" }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          paddingBottom="0.5rem"
+        >
           <Button
             startIcon={<Add></Add>}
             variant="contained"
@@ -167,6 +177,7 @@ const ListService: FC<ListServiceProps> = () => {
 
           <OutlinedInput
             placeholder="Tìm kiếm dịch vụ"
+            onChange={(e) => setKey(e.target.value)}
             size="small"
             sx={{
               "&.MuiOutlinedInput-root": {
@@ -186,7 +197,7 @@ const ListService: FC<ListServiceProps> = () => {
         <TableContainer>
           <Table>
             <TableHead>
-              <TableRow>
+              <TableRow style={{ height: 78 }}>
                 <TableCell
                   sx={{
                     textTransform: "uppercase",
@@ -201,6 +212,7 @@ const ListService: FC<ListServiceProps> = () => {
                   sx={{
                     textTransform: "uppercase",
                     color: "#696969",
+                    // width: "20%",
                   }}
                 >
                   Tên dịch vụ
@@ -210,6 +222,7 @@ const ListService: FC<ListServiceProps> = () => {
                   sx={{
                     textTransform: "uppercase",
                     color: "#696969",
+                    // width: "30%",
                   }}
                 >
                   Mô tả
@@ -219,6 +232,7 @@ const ListService: FC<ListServiceProps> = () => {
                   sx={{
                     textTransform: "uppercase",
                     color: "#696969",
+                    // width: "20%",
                   }}
                 >
                   Khoảng giá
@@ -228,41 +242,74 @@ const ListService: FC<ListServiceProps> = () => {
                   sx={{
                     textTransform: "uppercase",
                     color: "#696969",
+                    // width: "10%",
                   }}
                 >
                   Thao tác
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {services.map((s, key) => (
+            <TableBody sx={{ width: "100%" }}>
+              {(rowsPerPage > 0
+                ? filtered.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filtered
+              ).map((s, key) => (
                 <TableRow key={key}>
-                  <TableCell align="center">
+                  <TableCell
+                    align="center"
+                    // sx={{ display: "inline-block", width: "20%" }}
+                  >
                     <Image
-                      sx={{ height: "50px", border: "1px solid #c1c1c1" }}
-                      src="https://thanhcongfarm.com/wp-content/uploads/2022/10/320456_best_dog_spa_0.jpg"
+                      sx={{ height: "42px", border: "1px solid #c1c1c1" }}
+                      src={
+                        s.image ??
+                        "https://thanhcongfarm.com/wp-content/uploads/2022/10/320456_best_dog_spa_0.jpg"
+                      }
                     ></Image>
                   </TableCell>
-                  <TableCell align="center">
+                  <TableCell
+                    align="center"
+                    sx={{
+                      width: "200px",
+                    }}
+                  >
                     <Link component={RTLink} to={s.id + ""} underline="hover">
                       {s.service.name}
                     </Link>
                   </TableCell>
-                  <TableCell>{s.description}</TableCell>
+                  <TableCell sx={{}}>
+                    <Typography
+                      sx={{
+                        whiteSpace: "nowrap",
+                        textOverflow: "ellipsis",
+                        width: "400px",
+                        overflow: "hidden",
+                      }}
+                    >
+                      {s.description}
+                    </Typography>
+                  </TableCell>
                   <TableCell
                     align="right"
-                    sx={{
-                      whiteSpace: "nowrap",
-                    }}
+                    // sx={{
+                    //   whiteSpace: "nowrap",
+                    //   width: "20%",
+                    //   display: "inline-block",
+                    // }}
                   >
                     {s.lowestPrice.toLocaleString()} -{" "}
                     {s.highestPrice.toLocaleString()} VND
                   </TableCell>
                   <TableCell
-                    sx={{
-                      overflow: "hidden",
-                      whiteSpace: "nowrap",
-                    }}
+                  // sx={{
+                  //   overflow: "hidden",
+                  //   whiteSpace: "nowrap",
+                  //   display: "inline-block",
+                  //   width: "10%",
+                  // }}
                   >
                     <IconButton onClick={() => navigation(`${s.id}`)}>
                       <Edit></Edit>
@@ -273,13 +320,18 @@ const ListService: FC<ListServiceProps> = () => {
                   </TableCell>
                 </TableRow>
               ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 80 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
                   rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
                   colSpan={5}
-                  count={services.length}
+                  count={filtered.length}
                   rowsPerPage={rowsPerPage}
                   page={page}
                   slotProps={{

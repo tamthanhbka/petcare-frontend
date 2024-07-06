@@ -9,6 +9,7 @@ import {
   Paper,
   Select,
   TextField,
+  Typography,
   styled,
 } from "@mui/material";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -122,58 +123,99 @@ const ShopInfo: FC<ShopInfoProps> = () => {
             padding={"2rem"}
             flexDirection="column"
             alignItems={"center"}
-            justifyContent="center"
-            gap={2}
+            justifyContent="flex-start"
+            gap={3.5}
           >
-            <Image
-              sx={{
-                width: "100%",
-                borderRadius: ".5rem",
-                boxShadow: "0px 0px 5px -1px rgb(111, 111, 111)",
-                objectFit: "cover",
-                border: "1px solid rgba(255, 255, 255,1)",
-              }}
-              src={
-                shop?.avatar
-                  ? shop.avatar
-                  : "https://freelancervietnam.vn/wp-content/uploads/2020/07/post-thumb-dich-vu-cham-soc.jpg"
-              }
-            />
-
-            <Button
-              color="success"
-              // role={undefined}
-              variant="outlined"
-              // tabIndex={-1}
-              startIcon={<CloudUpload />}
-              sx={{ width: "45%", textTransform: "initial" }}
+            <Box
+              display={"flex"}
+              flexDirection="column"
+              alignItems={"center"}
+              justifyContent="center"
+              gap={2}
             >
-              {/* <VisuallyHiddenInput type="file" /> */}
-              <label htmlFor="avatar_input">Đổi ảnh đại diện</label>
-              <input
-                id="avatar_input"
-                type="file"
-                accept="image/*"
-                style={{ display: "none" }}
-                onChange={(e) => {
-                  const img = e.target.files?.[0];
-                  if (!img) return;
-                  setImg(img);
-                  const reader = new FileReader();
-                  reader.onload = (v) => {
-                    // setShop((prv) => ({
-                    //   ...prv,
-                    //   avatar: v.target?.result?.toString(),
-                    // }));
-                    setShop({
-                      ...shop,
-                      avatar: v.target?.result?.toString() || shop.avatar,
-                    });
-                  };
-                  reader.readAsDataURL(img);
+              <Image
+                sx={{
+                  width: "100%",
+                  borderRadius: ".5rem",
+                  boxShadow: "0px 0px 5px -1px rgb(111, 111, 111)",
+                  objectFit: "cover",
+                  border: "1px solid rgba(255, 255, 255,1)",
                 }}
+                src={
+                  shop?.avatar
+                    ? shop.avatar
+                    : "https://freelancervietnam.vn/wp-content/uploads/2020/07/post-thumb-dich-vu-cham-soc.jpg"
+                }
               />
-            </Button>
+
+              <Button
+                color="success"
+                // role={undefined}
+                variant="outlined"
+                // tabIndex={-1}
+                startIcon={<CloudUpload />}
+                sx={{ width: "45%", textTransform: "initial" }}
+              >
+                {/* <VisuallyHiddenInput type="file" /> */}
+                <label htmlFor="avatar_input">Đổi ảnh đại diện</label>
+                <input
+                  id="avatar_input"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  onChange={(e) => {
+                    const img = e.target.files?.[0];
+                    if (!img) return;
+                    setImg(img);
+                    const reader = new FileReader();
+                    reader.onload = (v) => {
+                      // setShop((prv) => ({
+                      //   ...prv,
+                      //   avatar: v.target?.result?.toString(),
+                      // }));
+                      setShop({
+                        ...shop,
+                        avatar: v.target?.result?.toString() || shop.avatar,
+                      });
+                    };
+                    reader.readAsDataURL(img);
+                  }}
+                />
+              </Button>
+            </Box>
+            <Box
+              display={"flex"}
+              flexDirection="column"
+              alignItems={"center"}
+              justifyContent="center"
+              gap={1}
+            >
+              <Typography sx={{ fontStyle: "revert" }}>
+                Số khách hàng tối đa có thể tiếp đón tại một thời điểm:
+              </Typography>
+              <FormControl sx={{ display: "flex", flexDirection: "row" }}>
+                <CssTextField
+                  label="Spa-làm đẹp"
+                  id="custom-css-outlined-input"
+                  value={1}
+                  onChange={(e) => setShop({ ...shop, name: e.target.value })}
+                />
+                <CssTextField
+                  label="Khám sức khỏe"
+                  id="custom-css-outlined-input"
+                  value={1}
+                  onChange={(e) => setShop({ ...shop, slogan: e.target.value })}
+                />
+                <CssTextField
+                  label="Khách sạn pet"
+                  id="custom-css-outlined-input"
+                  value={1}
+                  onChange={(e) =>
+                    setShop({ ...shop, hotline: e.target.value })
+                  }
+                />
+              </FormControl>
+            </Box>
           </Box>
           <Box
             flex={8}

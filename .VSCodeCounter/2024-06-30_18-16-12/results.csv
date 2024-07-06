@@ -1,0 +1,96 @@
+"filename", "language", "TypeScript", "TypeScript JSX", "CSS", "XML", "comment", "blank", "total"
+"d:\GR\GR2\Frontend\src\App.css", "CSS", 0, 0, 0, 0, 42, 1, 43
+"d:\GR\GR2\Frontend\src\App.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 4, 24
+"d:\GR\GR2\Frontend\src\api\address.ts", "TypeScript", 25, 0, 0, 0, 0, 4, 29
+"d:\GR\GR2\Frontend\src\api\admin.ts", "TypeScript", 43, 0, 0, 0, 0, 7, 50
+"d:\GR\GR2\Frontend\src\api\axios.ts", "TypeScript", 25, 0, 0, 0, 9, 1, 35
+"d:\GR\GR2\Frontend\src\api\comment.ts", "TypeScript", 13, 0, 0, 0, 0, 2, 15
+"d:\GR\GR2\Frontend\src\api\index.ts", "TypeScript", 205, 0, 0, 0, 3, 22, 230
+"d:\GR\GR2\Frontend\src\api\shop.ts", "TypeScript", 18, 0, 0, 0, 0, 2, 20
+"d:\GR\GR2\Frontend\src\api\shopService.ts", "TypeScript", 12, 0, 0, 0, 0, 2, 14
+"d:\GR\GR2\Frontend\src\assets\css\header.css", "CSS", 0, 0, 0, 0, 17, 0, 17
+"d:\GR\GR2\Frontend\src\assets\css\shopDetail.css", "CSS", 0, 0, 10, 0, 0, 2, 12
+"d:\GR\GR2\Frontend\src\assets\img\bgSpa1.svg", "XML", 0, 0, 0, 15, 0, 1, 16
+"d:\GR\GR2\Frontend\src\assets\img\bgSpa2.svg", "XML", 0, 0, 0, 15, 0, 1, 16
+"d:\GR\GR2\Frontend\src\assets\img\bgSpa3.svg", "XML", 0, 0, 0, 15, 0, 1, 16
+"d:\GR\GR2\Frontend\src\assets\img\bghotel.svg", "XML", 0, 0, 0, 9, 0, 1, 10
+"d:\GR\GR2\Frontend\src\assets\img\chat.svg", "XML", 0, 0, 0, 21, 0, 1, 22
+"d:\GR\GR2\Frontend\src\assets\img\health.svg", "XML", 0, 0, 0, 19, 0, 1, 20
+"d:\GR\GR2\Frontend\src\assets\img\home1.svg", "XML", 0, 0, 0, 15, 0, 1, 16
+"d:\GR\GR2\Frontend\src\assets\img\hotel.svg", "XML", 0, 0, 0, 20, 0, 1, 21
+"d:\GR\GR2\Frontend\src\assets\img\icon.svg", "XML", 0, 0, 0, 30, 0, 1, 31
+"d:\GR\GR2\Frontend\src\assets\img\iconpet.svg", "XML", 0, 0, 0, 9, 0, 1, 10
+"d:\GR\GR2\Frontend\src\assets\img\logo.svg", "XML", 0, 0, 0, 9, 0, 1, 10
+"d:\GR\GR2\Frontend\src\assets\img\spa.svg", "XML", 0, 0, 0, 19, 0, 1, 20
+"d:\GR\GR2\Frontend\src\components\Auth.tsx", "TypeScript JSX", 0, 81, 0, 0, 1, 2, 84
+"d:\GR\GR2\Frontend\src\components\Booking.tsx", "TypeScript JSX", 0, 121, 0, 0, 3, 8, 132
+"d:\GR\GR2\Frontend\src\components\Booking1.tsx", "TypeScript JSX", 0, 189, 0, 0, 3, 6, 198
+"d:\GR\GR2\Frontend\src\components\BoxChat.tsx", "TypeScript JSX", 0, 90, 0, 0, 1, 6, 97
+"d:\GR\GR2\Frontend\src\components\Comment.tsx", "TypeScript JSX", 0, 47, 0, 0, 0, 4, 51
+"d:\GR\GR2\Frontend\src\components\Footer.tsx", "TypeScript JSX", 0, 115, 0, 0, 4, 4, 123
+"d:\GR\GR2\Frontend\src\components\Header.tsx", "TypeScript JSX", 0, 206, 0, 0, 20, 5, 231
+"d:\GR\GR2\Frontend\src\components\HealthItem.tsx", "TypeScript JSX", 0, 66, 0, 0, 0, 4, 70
+"d:\GR\GR2\Frontend\src\components\HealthList.tsx", "TypeScript JSX", 0, 20, 0, 0, 0, 3, 23
+"d:\GR\GR2\Frontend\src\components\HotelItem.tsx", "TypeScript JSX", 0, 60, 0, 0, 0, 5, 65
+"d:\GR\GR2\Frontend\src\components\HotelList.tsx", "TypeScript JSX", 0, 26, 0, 0, 0, 3, 29
+"d:\GR\GR2\Frontend\src\components\Message.tsx", "TypeScript JSX", 0, 32, 0, 0, 1, 4, 37
+"d:\GR\GR2\Frontend\src\components\OrderForm.tsx", "TypeScript JSX", 0, 0, 0, 0, 0, 1, 1
+"d:\GR\GR2\Frontend\src\components\RequestForm.tsx", "TypeScript JSX", 0, 283, 0, 0, 9, 8, 300
+"d:\GR\GR2\Frontend\src\components\SearchItem.tsx", "TypeScript JSX", 0, 138, 0, 0, 0, 3, 141
+"d:\GR\GR2\Frontend\src\components\ServiceItem.tsx", "TypeScript JSX", 0, 65, 0, 0, 7, 5, 77
+"d:\GR\GR2\Frontend\src\components\ServiceRatingDialog.tsx", "TypeScript JSX", 0, 108, 0, 0, 0, 4, 112
+"d:\GR\GR2\Frontend\src\components\SpaList.tsx", "TypeScript JSX", 0, 28, 0, 0, 11, 3, 42
+"d:\GR\GR2\Frontend\src\components\chat\ChatBot.tsx", "TypeScript JSX", 0, 255, 0, 0, 0, 5, 260
+"d:\GR\GR2\Frontend\src\components\chat\ChatItem.tsx", "TypeScript JSX", 0, 87, 0, 0, 0, 3, 90
+"d:\GR\GR2\Frontend\src\components\chat\ChatList.tsx", "TypeScript JSX", 0, 112, 0, 0, 0, 4, 116
+"d:\GR\GR2\Frontend\src\components\chat\MessageBox.tsx", "TypeScript JSX", 0, 65, 0, 0, 0, 5, 70
+"d:\GR\GR2\Frontend\src\components\chat\MessageItem.tsx", "TypeScript JSX", 0, 39, 0, 0, 0, 4, 43
+"d:\GR\GR2\Frontend\src\components\chat\MessageList.tsx", "TypeScript JSX", 0, 29, 0, 0, 0, 4, 33
+"d:\GR\GR2\Frontend\src\components\chat\index.ts", "TypeScript", 0, 0, 0, 0, 0, 1, 1
+"d:\GR\GR2\Frontend\src\components\index.tsx", "TypeScript JSX", 0, 11, 0, 0, 0, 1, 12
+"d:\GR\GR2\Frontend\src\hook\useChat.tsx", "TypeScript JSX", 0, 127, 0, 0, 17, 4, 148
+"d:\GR\GR2\Frontend\src\hook\useShopSearch.ts", "TypeScript", 14, 0, 0, 0, 0, 3, 17
+"d:\GR\GR2\Frontend\src\hook\useStaffChat.tsx", "TypeScript JSX", 0, 123, 0, 0, 18, 2, 143
+"d:\GR\GR2\Frontend\src\index.css", "CSS", 0, 0, 29, 0, 70, 6, 105
+"d:\GR\GR2\Frontend\src\layouts\Auth.tsx", "TypeScript JSX", 0, 19, 0, 0, 0, 2, 21
+"d:\GR\GR2\Frontend\src\layouts\BookingList.tsx", "TypeScript JSX", 0, 125, 0, 0, 6, 8, 139
+"d:\GR\GR2\Frontend\src\layouts\HealthPage.tsx", "TypeScript JSX", 0, 52, 0, 0, 0, 4, 56
+"d:\GR\GR2\Frontend\src\layouts\HomeLayout.tsx", "TypeScript JSX", 0, 38, 0, 0, 0, 5, 43
+"d:\GR\GR2\Frontend\src\layouts\HotelPage.tsx", "TypeScript JSX", 0, 52, 0, 0, 0, 4, 56
+"d:\GR\GR2\Frontend\src\layouts\SearchResult.tsx", "TypeScript JSX", 0, 110, 0, 0, 4, 4, 118
+"d:\GR\GR2\Frontend\src\layouts\ShopDetail.tsx", "TypeScript JSX", 0, 497, 0, 0, 6, 11, 514
+"d:\GR\GR2\Frontend\src\layouts\SpaPage.tsx", "TypeScript JSX", 0, 52, 0, 0, 0, 4, 56
+"d:\GR\GR2\Frontend\src\layouts\SubHome.tsx", "TypeScript JSX", 0, 303, 0, 0, 7, 8, 318
+"d:\GR\GR2\Frontend\src\layouts\admin\AdminDashboard.tsx", "TypeScript JSX", 0, 320, 0, 0, 15, 9, 344
+"d:\GR\GR2\Frontend\src\layouts\admin\AdminHome.tsx", "TypeScript JSX", 0, 26, 0, 0, 2, 4, 32
+"d:\GR\GR2\Frontend\src\layouts\admin\ListCustomer.tsx", "TypeScript JSX", 0, 338, 0, 0, 38, 16, 392
+"d:\GR\GR2\Frontend\src\layouts\admin\ListRequest.tsx", "TypeScript JSX", 0, 279, 0, 0, 43, 15, 337
+"d:\GR\GR2\Frontend\src\layouts\admin\ListServive.tsx", "TypeScript JSX", 0, 333, 0, 0, 88, 14, 435
+"d:\GR\GR2\Frontend\src\layouts\admin\ListShop.tsx", "TypeScript JSX", 0, 403, 0, 0, 44, 16, 463
+"d:\GR\GR2\Frontend\src\layouts\admin\NavBar.tsx", "TypeScript JSX", 0, 180, 0, 0, 20, 7, 207
+"d:\GR\GR2\Frontend\src\layouts\admin\index.tsx", "TypeScript JSX", 0, 7, 0, 0, 0, 1, 8
+"d:\GR\GR2\Frontend\src\layouts\index.tsx", "TypeScript JSX", 0, 6, 0, 0, 0, 1, 7
+"d:\GR\GR2\Frontend\src\layouts\page\Login.tsx", "TypeScript JSX", 0, 150, 0, 0, 5, 2, 157
+"d:\GR\GR2\Frontend\src\layouts\page\Register.tsx", "TypeScript JSX", 0, 168, 0, 0, 0, 1, 169
+"d:\GR\GR2\Frontend\src\layouts\page\index.tsx", "TypeScript JSX", 0, 2, 0, 0, 0, 1, 3
+"d:\GR\GR2\Frontend\src\layouts\staff\BookingRequest.tsx", "TypeScript JSX", 0, 387, 0, 0, 23, 17, 427
+"d:\GR\GR2\Frontend\src\layouts\staff\CreateNewService.tsx", "TypeScript JSX", 0, 202, 0, 0, 27, 7, 236
+"d:\GR\GR2\Frontend\src\layouts\staff\Dashboard.tsx", "TypeScript JSX", 0, 6, 0, 0, 0, 4, 10
+"d:\GR\GR2\Frontend\src\layouts\staff\HeaderStaff.tsx", "TypeScript JSX", 0, 119, 0, 0, 6, 5, 130
+"d:\GR\GR2\Frontend\src\layouts\staff\ListCustomer.tsx", "TypeScript JSX", 0, 159, 0, 0, 9, 5, 173
+"d:\GR\GR2\Frontend\src\layouts\staff\ListMessage.tsx", "TypeScript JSX", 0, 61, 0, 0, 0, 6, 67
+"d:\GR\GR2\Frontend\src\layouts\staff\ListService.tsx", "TypeScript JSX", 0, 290, 0, 0, 12, 15, 317
+"d:\GR\GR2\Frontend\src\layouts\staff\NavBar.tsx", "TypeScript JSX", 0, 169, 0, 0, 46, 7, 222
+"d:\GR\GR2\Frontend\src\layouts\staff\ServiceItem.tsx", "TypeScript JSX", 0, 192, 0, 0, 24, 8, 224
+"d:\GR\GR2\Frontend\src\layouts\staff\ShopInfo.tsx", "TypeScript JSX", 0, 311, 0, 0, 22, 13, 346
+"d:\GR\GR2\Frontend\src\layouts\staff\StaffHome.tsx", "TypeScript JSX", 0, 35, 0, 0, 1, 4, 40
+"d:\GR\GR2\Frontend\src\layouts\staff\index.tsx", "TypeScript JSX", 0, 11, 0, 0, 0, 1, 12
+"d:\GR\GR2\Frontend\src\main.tsx", "TypeScript JSX", 0, 9, 0, 0, 0, 2, 11
+"d:\GR\GR2\Frontend\src\route\ProtectedRoute.tsx", "TypeScript JSX", 0, 16, 0, 0, 1, 2, 19
+"d:\GR\GR2\Frontend\src\route\index.tsx", "TypeScript JSX", 0, 106, 0, 0, 0, 1, 107
+"d:\GR\GR2\Frontend\src\socket\index.ts", "TypeScript", 120, 0, 0, 0, 0, 9, 129
+"d:\GR\GR2\Frontend\src\styles\Auth.css", "CSS", 0, 0, 43, 0, 0, 3, 46
+"d:\GR\GR2\Frontend\src\type\index.ts", "TypeScript", 103, 0, 0, 0, 0, 11, 114
+"d:\GR\GR2\Frontend\src\validate\index.ts", "TypeScript", 4, 0, 0, 0, 0, 1, 5
+"d:\GR\GR2\Frontend\src\vite-env.d.ts", "TypeScript", 0, 0, 0, 0, 1, 1, 2
+"Total", "-", 582, 8076, 82, 196, 686, 438, 10060

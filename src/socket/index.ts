@@ -37,6 +37,7 @@ const listenSocket = (cb?: () => void) => {
   });
   cb &&
     socket.on("authenticated", () => {
+      console.log("authenticated");
       socket.off("authenticated");
       cb();
     });

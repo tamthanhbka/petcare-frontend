@@ -71,6 +71,7 @@ button:focus-visible {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  --swiper-theme-color: #82c55b;
 }
 body {
   margin: 0;

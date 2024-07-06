@@ -11,7 +11,11 @@ import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type FC } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
-import { getShopServiceByStaff, updateShopServiceByStaff } from "../../api";
+import {
+  getShopServiceByStaff,
+  updateShopServiceByStaff,
+  uploadImg,
+} from "../../api";
 import { ServiceShopType } from "../../type";
 const Image = styled("img")({});
 
@@ -52,6 +56,7 @@ const CssTextField = styled(TextField)({
 const ReadService: FC<ReadServiceProps> = () => {
   const navigation = useNavigate();
   const { id } = useParams() as { id: string };
+  const [img, setImg] = useState<File>();
   const [shopService, setShopService] = useState<ServiceShopType>();
   const { data } = useQuery<ServiceShopType>({
     queryKey: [`service${id}`],
@@ -64,10 +69,13 @@ const ReadService: FC<ReadServiceProps> = () => {
       setShopService(data);
     }
   }, [data]);
-  const handleUpdateButton = () => {
-    updateShopServiceByStaff(id, shopService).then(() =>
-      toast.success("Cập nhật thông tin thành công!")
-    );
+  const handleUpdateButton = async () => {
+    if (shopService) {
+      const image = img ? await uploadImg(img) : shopService?.image;
+      updateShopServiceByStaff(id, { ...shopService, image }).then(() =>
+        toast.success("Cập nhật thông tin thành công!")
+      );
+    }
   };
 
   return (
@@ -100,6 +108,7 @@ const ReadService: FC<ReadServiceProps> = () => {
                 width: "100%",
                 // height: "100%",
                 borderRadius: "1rem",
+                border: "1px solid #d1d1d1",
               }}
               src={
                 shopService?.image
@@ -116,8 +125,26 @@ const ReadService: FC<ReadServiceProps> = () => {
               startIcon={<CloudUpload />}
               sx={{ width: "45%", textTransform: "initial" }}
             >
-              Đổi ảnh dịch vụ
-              {/* <VisuallyHiddenInput type="file" /> */}
+              <label htmlFor="avatar_input">Đổi ảnh đại diện</label>
+              <input
+                id="avatar_input"
+                type="file"
+                accept="image/*"
+                style={{ display: "none" }}
+                onChange={(e) => {
+                  const img = e.target.files?.[0];
+                  if (!img) return;
+                  setImg(img);
+                  const reader = new FileReader();
+                  reader.onload = (v) => {
+                    setShopService({
+                      ...shopService,
+                      image: v.target?.result?.toString() || shopService.image,
+                    });
+                  };
+                  reader.readAsDataURL(img);
+                }}
+              />
             </Button>
           </Box>
           <Box

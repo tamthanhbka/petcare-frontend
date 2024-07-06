@@ -140,9 +140,40 @@ const Header: FC<Header> = () => {
             </Avatar>
           </StyledBadge>
         ) : (
-          <Box>
-            <Button onClick={() => navigate("login")}>Đăng nhập</Button>
-            <Button onClick={() => navigate("register")}>Đăng ký</Button>
+          <Box display="flex" gap={0.5}>
+            <Button
+              onClick={() => navigate("login")}
+              sx={{
+                bgcolor: "#ED6436",
+                color: "white",
+                borderRadius: "1rem",
+                textTransform: "initial",
+                padding: "4px 12px",
+                "&:hover": {
+                  bgcolor: "#e25f34",
+                  color: "white",
+                },
+              }}
+            >
+              Đăng nhập
+            </Button>
+            <Button
+              onClick={() => navigate("register")}
+              sx={{
+                bgcolor: "#ffffff",
+                color: "black",
+                border: "2px solid #ED6436",
+                borderRadius: "1rem",
+                textTransform: "initial",
+                padding: "4px 12px",
+                "&:hover": {
+                  bgcolor: "#ED6436",
+                  color: "white",
+                },
+              }}
+            >
+              Đăng ký
+            </Button>
           </Box>
         )}
         {/* <StyledBadge
@@ -178,13 +209,25 @@ const Header: FC<Header> = () => {
                   id="composition-menu"
                   aria-labelledby="composition-button"
                 >
-                  <MenuItem onClick={() => navigate("history")}>
+                  <MenuItem
+                    onClick={() => {
+                      setOpenPoper(false);
+                      navigate("history");
+                    }}
+                  >
                     Lịch sử đặt dịch vụ
                   </MenuItem>
                   <MenuItem onClick={handleClosePoper}>
                     Thông tin cá nhân
                   </MenuItem>
-                  <MenuItem onClick={handleLogout}>Đăng xuất</MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      setOpenPoper(false);
+                      handleLogout();
+                    }}
+                  >
+                    Đăng xuất
+                  </MenuItem>
                 </MenuList>
               </ClickAwayListener>
             </Paper>

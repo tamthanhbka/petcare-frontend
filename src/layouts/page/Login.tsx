@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  TextField,
-  Typography,
-  styled,
-} from "@mui/material";
+import { Box, Button, TextField, Typography, styled } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Link as RLink, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -14,15 +6,15 @@ import { AxiosError, login as loginAPI } from "../../api";
 import { useAuth } from "../../components/Auth";
 const CssTextField = styled(TextField)({
   "& label, & label.Mui-focused": {
-    color: "black",
+    color: "#428f28",
   },
   "& .MuiInput-underline:after": {
-    borderBottomColor: "black",
+    borderBottomColor: "#51b032",
   },
   "& .MuiInput-underline": {
-    borderBottomColor: "black",
+    borderBottomColor: "#2d940a",
   },
-  "& .MuiInput-input": { color: "black" },
+  "& .MuiInput-input": { color: "#51b032" },
   "& .MuiOutlinedInput-root": {
     "& fieldset": {
       borderColor: "red",
@@ -72,16 +64,16 @@ export default function Login() {
   return (
     <div className="login-form" style={{ backgroundColor: "white" }}>
       <Typography
-        variant="h2"
-        sx={{ flex: 2, color: "#1877F2" }}
+        sx={{ flex: 2, color: "#51b032", fontSize: 40 }}
         align="center"
-        fontWeight={900}
+        fontWeight={700}
+        textTransform="uppercase"
       >
-        Login
+        Đăng nhập
       </Typography>
       <Box
         display="block"
-        sx={{ flex: 2, display: "flex", flexDirection: "column" }}
+        sx={{ flex: 3, display: "flex", flexDirection: "column", gap: 1.5 }}
       >
         <CssTextField
           label="Email"
@@ -96,7 +88,7 @@ export default function Login() {
           }}
         />
         <CssTextField
-          label="Password"
+          label="Mật khẩu"
           variant="standard"
           type="password"
           className="text-field"
@@ -107,10 +99,10 @@ export default function Login() {
             setPassword(e.target.value);
           }}
         />
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox />}
           label={<Typography sx={{ color: "black" }}>Remember me</Typography>}
-        />
+        /> */}
       </Box>
       <Box sx={{ m: 1, flex: 1 }}>
         <Button
@@ -118,16 +110,16 @@ export default function Login() {
           size="large"
           fullWidth
           sx={{
-            backgroundColor: "#4b9bfc",
+            backgroundColor: "#5ebd3e",
             backdropFilter: "blur(20px)",
             ":hover": {
               transition: "all 0.3s ease",
-              backgroundColor: "#0068e8",
+              backgroundColor: "#45a227",
             },
           }}
           onClick={handleLogin}
         >
-          Login
+          Đăng nhập
         </Button>
       </Box>
       <Box
@@ -139,9 +131,9 @@ export default function Login() {
         }}
       >
         <Typography sx={{ color: "black" }} variant="body1" align="center">
-          Don't have an account?{" "}
+          Bạn chưa có tài khoản?{" "}
           <RLink to="/register" style={{ color: "black" }}>
-            Register
+            Đăng kí ngay
           </RLink>
         </Typography>
 
