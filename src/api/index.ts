@@ -1,6 +1,7 @@
 import axios from "axios";
 import { Dayjs } from "dayjs";
 import type {
+  BookingStaffType,
   BookingType,
   ServiceShopType,
   ServiceType,
@@ -15,6 +16,22 @@ const getShopByStaff = async () => {
 
 const updateShopByStaff = async (shop?: ShopType) => {
   const response = await axiosInstance.patch<ShopType>(`/shops`, { ...shop });
+  return response.data;
+};
+
+const updateMaxCustomerByStaff = async (
+  parentServiceId: number,
+  value: number
+) => {
+  const response = await axiosInstance.patch(`/shops/updateMaxCustomer`, {
+    value: value,
+    parentServiceId: parentServiceId,
+  });
+  return response.data;
+};
+
+const getMaxCustomerByStaff = async () => {
+  const response = await axiosInstance.get(`/shops/staff/maxCustomer`);
   return response.data;
 };
 
@@ -70,7 +87,6 @@ const getListServiceByStaff = async () => {
   return response.data;
 };
 const getShopInfo = async (id: string) => {
-  console.log(id);
   const response = await axiosInstance.get(`/shops/${id}`);
   return response.data;
 };
@@ -117,7 +133,9 @@ const getListBooking = async () => {
 
 const getListBookingByStaff = async () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const response = await axiosInstance.get<any[]>("/bookings/findAllByStaff");
+  const response = await axiosInstance.get<BookingStaffType[]>(
+    "/bookings/findAllByStaff"
+  );
   return response.data;
 };
 
@@ -235,4 +253,6 @@ export {
   updateStatus,
   uploadImg,
   getShopsByParent,
+  updateMaxCustomerByStaff,
+  getMaxCustomerByStaff,
 };

@@ -15,9 +15,15 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type FC } from "react";
 import { toast } from "react-toastify";
-import { getShopByStaff, updateShopByStaff, uploadImg } from "../../api";
+import {
+  getMaxCustomerByStaff,
+  getShopByStaff,
+  updateMaxCustomerByStaff,
+  updateShopByStaff,
+  uploadImg,
+} from "../../api";
 import { getCommunes, getDistricts, getProvinces } from "../../api/address";
-import { ProvinceType, ShopType } from "../../type";
+import { MaxCustomerType, ProvinceType, ShopType } from "../../type";
 
 const Image = styled("img")({});
 interface ShopInfoProps {}
@@ -56,12 +62,21 @@ const CssTextField = styled(TextField)({
 
 const ShopInfo: FC<ShopInfoProps> = () => {
   const [shop, setShop] = useState<ShopType>();
+  const [maxCustomerSpa, setMaxCustomerSpa] = useState<MaxCustomerType>();
+  const [maxCustomerHealth, setMaxCustomerHealth] = useState<MaxCustomerType>();
+  const [maxCustomerHotel, setMaxCustomerHotel] = useState<MaxCustomerType>();
   const [img, setImg] = useState<File>();
   const { data } = useQuery<ShopType>({
     queryKey: [`shop`],
     queryFn: () => getShopByStaff(),
     refetchOnWindowFocus: false,
   });
+  const { data: recentMaxCustomer } = useQuery<MaxCustomerType[]>({
+    queryKey: [`customer`],
+    queryFn: () => getMaxCustomerByStaff(),
+    refetchOnWindowFocus: false,
+  });
+
   const { data: provinces } = useQuery<ProvinceType[]>({
     queryKey: [`provinces`],
     queryFn: () => getProvinces(),
@@ -75,6 +90,15 @@ const ShopInfo: FC<ShopInfoProps> = () => {
   const { mutate: findWards, data: wards } = useMutation({
     mutationFn: (d: string) => getCommunes(d),
   });
+
+  useEffect(() => {
+    if (recentMaxCustomer)
+      recentMaxCustomer.forEach((max) => {
+        if (max.serviceId === 1) setMaxCustomerSpa(max);
+        if (max.serviceId === 2) setMaxCustomerHealth(max);
+        if (max.serviceId === 3) setMaxCustomerHotel(max);
+      });
+  }, [recentMaxCustomer]);
 
   useEffect(() => {
     if (data) {
@@ -102,6 +126,24 @@ const ShopInfo: FC<ShopInfoProps> = () => {
 
   const handleUpdateButton = async () => {
     if (shop) {
+      if (maxCustomerSpa) {
+        updateMaxCustomerByStaff(
+          maxCustomerSpa.serviceId,
+          maxCustomerSpa.maxCustomer
+        );
+      }
+      if (maxCustomerHealth) {
+        updateMaxCustomerByStaff(
+          maxCustomerHealth.serviceId,
+          maxCustomerHealth.maxCustomer
+        );
+      }
+      if (maxCustomerHotel) {
+        updateMaxCustomerByStaff(
+          maxCustomerHotel.serviceId,
+          maxCustomerHotel.maxCustomer
+        );
+      }
       const image = img ? await uploadImg(img) : shop.avatar;
       // setShop({ ...shop, avatar: image || shop.avatar });
       updateShopByStaff({ ...shop, avatar: image }).then(() =>
@@ -194,26 +236,45 @@ const ShopInfo: FC<ShopInfoProps> = () => {
                 Số khách hàng tối đa có thể tiếp đón tại một thời điểm:
               </Typography>
               <FormControl sx={{ display: "flex", flexDirection: "row" }}>
-                <CssTextField
-                  label="Spa-làm đẹp"
-                  id="custom-css-outlined-input"
-                  value={1}
-                  onChange={(e) => setShop({ ...shop, name: e.target.value })}
-                />
-                <CssTextField
-                  label="Khám sức khỏe"
-                  id="custom-css-outlined-input"
-                  value={1}
-                  onChange={(e) => setShop({ ...shop, slogan: e.target.value })}
-                />
-                <CssTextField
-                  label="Khách sạn pet"
-                  id="custom-css-outlined-input"
-                  value={1}
-                  onChange={(e) =>
-                    setShop({ ...shop, hotline: e.target.value })
-                  }
-                />
+                {maxCustomerSpa && (
+                  <CssTextField
+                    label="Spa-làm đẹp"
+                    id="custom-css-outlined-input"
+                    value={maxCustomerSpa?.maxCustomer}
+                    onChange={(e) =>
+                      setMaxCustomerSpa({
+                        ...maxCustomerSpa,
+                        maxCustomer: +e.target.value,
+                      })
+                    }
+                  />
+                )}
+                {maxCustomerHealth && (
+                  <CssTextField
+                    label="Khám sức khỏe"
+                    id="custom-css-outlined-input"
+                    value={maxCustomerHealth?.maxCustomer}
+                    onChange={(e) =>
+                      setMaxCustomerHealth({
+                        ...maxCustomerHealth,
+                        maxCustomer: +e.target.value,
+                      })
+                    }
+                  />
+                )}
+                {maxCustomerHotel && (
+                  <CssTextField
+                    label="Khách sạn"
+                    id="custom-css-outlined-input"
+                    value={maxCustomerHotel?.maxCustomer}
+                    onChange={(e) =>
+                      setMaxCustomerHotel({
+                        ...maxCustomerHotel,
+                        maxCustomer: +e.target.value,
+                      })
+                    }
+                  />
+                )}
               </FormControl>
             </Box>
           </Box>

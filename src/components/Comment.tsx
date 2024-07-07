@@ -9,16 +9,15 @@ interface CommentItemProps extends CommentType {}
 const CommentItem: FC<CommentItemProps> = (props) => {
   const { user, content, value } = props;
   return (
-    <Box display="flex" alignItems="start">
+    <Box display="flex" alignItems="start" gap={2}>
       <Box flex={3}>
         <Avatar
           sx={{ width: 130, height: 130 }}
           alt="Travis Howard"
-          src={
-            user.avatar ??
-            "https://tropicpet.vn/wp-content/uploads/2022/05/khach-hang-linh-chi-140x140.jpg"
-          }
-        />
+          src={user.avatar}
+        >
+          {user.avatar ? null : user.fullName.at(0)?.toUpperCase()}
+        </Avatar>
       </Box>
       <Box flex={9}>
         <Typography

@@ -22,7 +22,6 @@ import { Login, Register } from "../layouts/page";
 import {
   BookingRequest,
   CreateService,
-  Dashboard,
   ListMessage,
   ListService,
   ReadService,
@@ -62,10 +61,6 @@ const router = createBrowserRouter([
     ),
     path: "/staff",
     children: [
-      {
-        path: "dashboard",
-        element: <Dashboard />,
-      },
       { path: "shop", element: <ShopInfo /> },
       {
         path: "services",

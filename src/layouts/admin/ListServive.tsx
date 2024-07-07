@@ -25,7 +25,15 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
+import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
+import {
+  deleteService,
+  getAllParentService,
+  getAllService,
+} from "../../api/admin";
+import CreateNewService from "./CreateNewService";
+import { toast } from "react-toastify";
 
 interface ListShopProps {}
 interface TablePaginationActionsProps {
@@ -108,39 +116,105 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 const ListShop: FC<ListShopProps> = () => {
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [pageParentSV, setPageParentSV] = useState(0);
+  const [rowsPerPageParentSV, setRowsPerPageParentSV] = useState(5);
+  const [pageSV, setPageSV] = useState(0);
+  const [rowsPerPageSV, setRowsPerPageSV] = useState(5);
+  const [pv, setPv] = useState("");
+  const [keyName, setKeyName] = useState("");
+  const [openCreate, setOpenCreate] = useState(false);
 
-  // const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - 2) : 0;
+  const { data: parentService } = useQuery({
+    queryKey: ["parentService"],
+    queryFn: () => getAllParentService(),
+    initialData: [],
+  });
 
-  const handleChangePage = (
+  const { data: services, refetch } = useQuery({
+    queryKey: ["services"],
+    queryFn: () => getAllService(),
+    initialData: [],
+  });
+
+  const filterServices = services.filter((sv) => {
+    return (
+      sv.parentName.includes(pv) &&
+      sv.name.toLowerCase().includes(keyName.toLowerCase())
+    );
+  });
+
+  const emptyRowsParentSV =
+    pageParentSV > 0
+      ? Math.max(
+          0,
+          (1 + pageParentSV) * rowsPerPageParentSV - parentService.length
+        )
+      : 0;
+
+  const emptyRowsSV =
+    pageSV > 0
+      ? Math.max(0, (1 + pageSV) * rowsPerPageSV - filterServices.length)
+      : 0;
+
+  const handleChangePageParentSV = (
     _: React.MouseEvent<HTMLButtonElement> | null,
     newPage: number
   ) => {
-    setPage(newPage);
+    setPageParentSV(newPage);
   };
 
-  const handleChangeRowsPerPage = (
+  const handleChangeRowsPerPageParentSV = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
+    setRowsPerPageParentSV(parseInt(event.target.value, 10));
+    setPageParentSV(0);
+  };
+
+  const handleChangePageSV = (
+    _: React.MouseEvent<HTMLButtonElement> | null,
+    newPage: number
+  ) => {
+    setPageSV(newPage);
+  };
+
+  const handleChangeRowsPerPageSV = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    setRowsPerPageSV(parseInt(event.target.value, 10));
+    setPageSV(0);
   };
 
   //   const handleChange = (event: SelectChangeEvent) => {
   //     setService(event.target.value);
   //   };
+  const handleOpenCreate = (open?: boolean) => () => setOpenCreate(!!open);
+
+  const handleDelete = (id: number) => {
+    deleteService(id)
+      .then(() => {
+        toast.success("Xóa dịch vụ thành công!");
+        refetch();
+      })
+      .catch(() => toast.error("Xóa dịch vụ thất bại!"));
+  };
   return (
-    <Box padding="2rem" display="flex" gap={4}>
-      <Paper elevation={5} sx={{ padding: "2rem", flex: 6 }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
+    <Box padding="2rem" display="flex" gap={2}>
+      <Paper elevation={3} sx={{ padding: "2rem", flex: 9 }}>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          paddingBottom="1rem"
+          gap={4}
+        >
           <Button
+            onClick={handleOpenCreate(true)}
             startIcon={<Add></Add>}
             variant="contained"
             sx={{
               bgcolor: "#F9993A",
               "&:hover": { bgcolor: "#ec8319" },
               textTransform: "initial",
+              flex: 1,
             }}
             // onClick={() => navigation(`/admin/shop/add`)}
           >
@@ -151,26 +225,32 @@ const ListShop: FC<ListShopProps> = () => {
             gap={4}
             justifyContent="center"
             alignItems="center"
+            flex={3}
           >
-            <FormControl size="small">
+            <FormControl size="small" fullWidth>
               <InputLabel id="demo-simple-select-label">
                 Loại dịch vụ
               </InputLabel>
               <Select
                 labelId="demo-simple-select-label"
                 id="demo-simple-select"
-                // value={service}
+                value={pv}
                 label="Loại dịch vụ"
-                // onChange={handleChange}
-                defaultValue="0"
+                onChange={(e) => setPv(e.target.value)}
+                defaultValue={""}
               >
-                <MenuItem value={0}>Tất cả</MenuItem>
-                <MenuItem value={10}>Tắm gội</MenuItem>
-                <MenuItem value={20}>Phẫu thuật</MenuItem>
-                <MenuItem value={30}>Cắt tạo kiểu</MenuItem>
+                <MenuItem value={""}>Tất cả</MenuItem>
+                {parentService.map((sp) => (
+                  <MenuItem key={sp.id} value={sp.name}>
+                    {sp.name}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
             <OutlinedInput
+              value={keyName}
+              onChange={(e) => setKeyName(e.target.value)}
+              fullWidth
               placeholder="Tìm kiếm dịch vụ"
               size="small"
               sx={{
@@ -241,53 +321,55 @@ const ListShop: FC<ListShopProps> = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell align="center">
-                  <Typography>Phẫu thuật</Typography>
-                </TableCell>
-                <TableCell align="center">Khám chữa bệnh</TableCell>
-                <TableCell align="center">
-                  <Typography>500</Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
-                    <DeleteOutlineOutlined></DeleteOutlineOutlined>
-                  </IconButton>
-                </TableCell>
-                {/* <TableCell align="center">
-                <IconButton>
-                  <VisibilityOutlined></VisibilityOutlined>
-                </IconButton>
-              </TableCell> */}
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">
-                  <Typography>Phẫu thuật</Typography>
-                </TableCell>
-                <TableCell align="center">Khám chữa bệnh</TableCell>
-                <TableCell align="center">
-                  <Typography>500</Typography>
-                </TableCell>
-                <TableCell align="center">
-                  <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
-                    <DeleteOutlineOutlined></DeleteOutlineOutlined>
-                  </IconButton>
-                </TableCell>
-                {/* <TableCell align="center">
-                <IconButton>
-                  <VisibilityOutlined></VisibilityOutlined>
-                </IconButton>
-              </TableCell> */}
-              </TableRow>
+              {(rowsPerPageSV > 0
+                ? filterServices.slice(
+                    pageSV * rowsPerPageSV,
+                    pageSV * rowsPerPageSV + rowsPerPageSV
+                  )
+                : filterServices
+              ).map((sv, i) => (
+                <TableRow key={i}>
+                  <TableCell align="center">
+                    <Typography>{sv.name}</Typography>
+                  </TableCell>
+                  <TableCell align="center">{sv.parentName}</TableCell>
+                  <TableCell align="center">
+                    <Typography>{sv.count}</Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <IconButton
+                      onClick={() => handleDelete(sv.id)}
+                      sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}
+                    >
+                      <DeleteOutlineOutlined></DeleteOutlineOutlined>
+                    </IconButton>
+                  </TableCell>
+                  {/* <TableCell align="center">
+            <IconButton>
+              <VisibilityOutlined></VisibilityOutlined>
+            </IconButton>
+          </TableCell> */}
+                </TableRow>
+              ))}
+              {emptyRowsSV > 0 && (
+                <TableRow style={{ height: 78 * emptyRowsSV }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                  rowsPerPageOptions={[
+                    5,
+                    10,
+                    25,
+                    { label: "Tất cả", value: -1 },
+                  ]}
                   colSpan={5}
-                  count={2}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
+                  count={filterServices.length}
+                  rowsPerPage={rowsPerPageSV}
+                  page={pageSV}
                   slotProps={{
                     select: {
                       inputProps: {
@@ -297,8 +379,8 @@ const ListShop: FC<ListShopProps> = () => {
                     },
                   }}
                   labelRowsPerPage="Số hàng mỗi trang"
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onPageChange={handleChangePageSV}
+                  onRowsPerPageChange={handleChangeRowsPerPageSV}
                   ActionsComponent={TablePaginationActions}
                 ></TablePagination>
               </TableRow>
@@ -315,8 +397,11 @@ onPageChange={handleChangePage}
 onRowsPerPageChange={handleChangeRowsPerPage}
 /> */}
       </Paper>
-      <Paper elevation={5} sx={{ padding: "2rem", flex: 4 }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
+      <Paper
+        elevation={3}
+        sx={{ padding: "2rem", flex: 6, alignSelf: "start" }}
+      >
+        <Box display="flex" justifyContent="space-between" paddingBottom="1rem">
           <Button
             startIcon={<Add></Add>}
             variant="contained"
@@ -364,42 +449,46 @@ onRowsPerPageChange={handleChangeRowsPerPage}
               </TableRow>
             </TableHead>
             <TableBody>
-              <TableRow>
-                <TableCell align="center">Khám chữa bệnh</TableCell>
-                <TableCell align="center">
-                  <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
-                    <DeleteOutlineOutlined></DeleteOutlineOutlined>
-                  </IconButton>
-                </TableCell>
-                {/* <TableCell align="center">
-                <IconButton>
-                  <VisibilityOutlined></VisibilityOutlined>
-                </IconButton>
-              </TableCell> */}
-              </TableRow>
-              <TableRow>
-                <TableCell align="center">Khám chữa bệnh</TableCell>
-
-                <TableCell align="center">
-                  <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
-                    <DeleteOutlineOutlined></DeleteOutlineOutlined>
-                  </IconButton>
-                </TableCell>
-                {/* <TableCell align="center">
-                <IconButton>
-                  <VisibilityOutlined></VisibilityOutlined>
-                </IconButton>
-              </TableCell> */}
-              </TableRow>
+              {(rowsPerPageParentSV > 0
+                ? parentService.slice(
+                    pageParentSV * rowsPerPageParentSV,
+                    pageParentSV * rowsPerPageParentSV + rowsPerPageParentSV
+                  )
+                : parentService
+              ).map((parentSV, i) => (
+                <TableRow key={i}>
+                  <TableCell align="center">{parentSV.name}</TableCell>
+                  <TableCell align="center">
+                    <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
+                      <DeleteOutlineOutlined></DeleteOutlineOutlined>
+                    </IconButton>
+                  </TableCell>
+                  {/* <TableCell align="center">
+              <IconButton>
+                <VisibilityOutlined></VisibilityOutlined>
+              </IconButton>
+            </TableCell> */}
+                </TableRow>
+              ))}
+              {emptyRowsParentSV > 0 && (
+                <TableRow style={{ height: 78 * emptyRowsParentSV }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
             </TableBody>
             <TableFooter>
               <TableRow>
                 <TablePagination
-                  rowsPerPageOptions={[5, 10, 25, { label: "All", value: -1 }]}
+                  rowsPerPageOptions={[
+                    5,
+                    10,
+                    25,
+                    { label: "Tất cả", value: -1 },
+                  ]}
                   colSpan={5}
-                  count={2}
-                  rowsPerPage={rowsPerPage}
-                  page={page}
+                  count={parentService.length}
+                  rowsPerPage={rowsPerPageParentSV}
+                  page={pageParentSV}
                   slotProps={{
                     select: {
                       inputProps: {
@@ -409,8 +498,8 @@ onRowsPerPageChange={handleChangeRowsPerPage}
                     },
                   }}
                   labelRowsPerPage="Số hàng mỗi trang"
-                  onPageChange={handleChangePage}
-                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  onPageChange={handleChangePageParentSV}
+                  onRowsPerPageChange={handleChangeRowsPerPageParentSV}
                   ActionsComponent={TablePaginationActions}
                 ></TablePagination>
               </TableRow>
@@ -427,6 +516,12 @@ onPageChange={handleChangePage}
 onRowsPerPageChange={handleChangeRowsPerPage}
 /> */}
       </Paper>
+      <CreateNewService
+        open={openCreate}
+        parentServices={parentService}
+        onClose={handleOpenCreate(false)}
+        refetch={refetch}
+      />
     </Box>
   );
 };

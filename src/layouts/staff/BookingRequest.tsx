@@ -13,9 +13,9 @@ import {
   IconButton,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Paper,
   Select,
-  SelectChangeEvent,
   Table,
   TableBody,
   TableCell,
@@ -30,6 +30,7 @@ import {
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
 import { getListBookingByStaff, updateStatus } from "../../api";
+import { toast } from "react-toastify";
 
 interface BookingRequestProps {}
 interface TablePaginationActionsProps {
@@ -113,14 +114,30 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 
 const BookingRequest: FC<BookingRequestProps> = () => {
-  const [service, setService] = useState<string>();
+  const [service, setService] = useState<string>("");
+  const [key, setKey] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
   const { data: bookings, refetch } = useQuery({
     queryKey: ["bookings"],
     queryFn: () => getListBookingByStaff(),
+    initialData: [],
   });
+
+  const services = [
+    ...new Map(
+      bookings.map((b) => [b.shop_service_id, b.serviceName])
+    ).values(),
+  ];
+
+  const filterServiceBookings = bookings.filter((b) => {
+    return (
+      b.serviceName.toLowerCase().includes(service.toLowerCase() || "") &&
+      b.fullName.toLowerCase().includes(key.toLowerCase())
+    );
+  });
+
   const { mutateAsync } = useMutation({
     mutationFn: updateStatus,
   });
@@ -143,16 +160,19 @@ const BookingRequest: FC<BookingRequestProps> = () => {
     setPage(0);
   };
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setService(event.target.value);
-  };
+  // const handleChange = (event: SelectChangeEvent) => {
+  //   setService(event.target.value);
+  // };
 
   const handleChangeStatus = (
     bookingId: number,
     status: "completed" | "accepted" | "rejected"
   ) => {
     mutateAsync({ bookingId, status })
-      .then(refetch)
+      .then(() => {
+        refetch();
+        toast.success("Cập nhật thành công!");
+      })
       .catch((e) => {
         console.error(e);
       });
@@ -160,7 +180,7 @@ const BookingRequest: FC<BookingRequestProps> = () => {
   return (
     <Box padding="2rem">
       <Paper elevation={5} sx={{ padding: "2rem" }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
+        <Box display="flex" justifyContent="space-between" paddingBottom="1rem">
           <FormControl sx={{ width: "15%" }} size="small">
             <InputLabel id="demo-simple-select-label">Dịch vụ</InputLabel>
             <Select
@@ -168,15 +188,35 @@ const BookingRequest: FC<BookingRequestProps> = () => {
               id="demo-simple-select"
               value={service}
               label="Dịch vụ"
-              onChange={handleChange}
+              onChange={(e) => setService(e.target.value)}
               defaultValue="0"
             >
-              <MenuItem value={0}>Tất cả</MenuItem>
-              <MenuItem value={10}>Tắm gội</MenuItem>
-              <MenuItem value={20}>Phẫu thuật</MenuItem>
-              <MenuItem value={30}>Cắt tạo kiểu</MenuItem>
+              {services &&
+                services.map((sv, i) => (
+                  <MenuItem key={i} value={sv}>
+                    {sv}
+                  </MenuItem>
+                ))}
             </Select>
           </FormControl>
+          <OutlinedInput
+            placeholder="Tìm kiếm khách hàng"
+            onChange={(e) => setKey(e.target.value)}
+            size="small"
+            sx={{
+              "&.MuiOutlinedInput-root": {
+                "& fieldset": {
+                  borderColor: "#c7c7c7",
+                },
+                "&:hover fieldset": {
+                  borderColor: "#adadad",
+                },
+                "&.Mui-focused fieldset": {
+                  borderColor: "#e49749",
+                },
+              },
+            }}
+          ></OutlinedInput>
         </Box>
         {bookings && (
           <TableContainer>
@@ -241,11 +281,11 @@ const BookingRequest: FC<BookingRequestProps> = () => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? bookings.slice(
+                  ? filterServiceBookings.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : bookings
+                  : filterServiceBookings
                 ).map((booking) => (
                   <TableRow>
                     <TableCell align="center">
@@ -256,9 +296,10 @@ const BookingRequest: FC<BookingRequestProps> = () => {
                             width: 45,
                             height: 45,
                           }}
-                          src={booking.fullName}
+                          src={booking.user_avatar}
                         >
-                          {booking.fullName.at(0)?.toUpperCase()}
+                          {booking.user_avatar ??
+                            booking.fullName.at(0)?.toUpperCase()}
                         </Avatar>
                         <Box
                           display="flex"
@@ -285,10 +326,20 @@ const BookingRequest: FC<BookingRequestProps> = () => {
                       <Chip
                         label={booking.status}
                         sx={{
-                          color: "#FFB503",
-                          bgcolor: "#FFF3D6",
+                          color: "white",
+                          bgcolor:
+                            booking.status === "pending"
+                              ? "#FFB503"
+                              : booking.status === "completed"
+                              ? "#6dc1f9"
+                              : booking.status === "accepted"
+                              ? "#70d970"
+                              : booking.status === "rejected"
+                              ? "#ff893a"
+                              : "#ff7171",
                           fontWeight: 600,
                         }}
+                        // "#7ac9fe"
                       ></Chip>
                     </TableCell>
 
@@ -387,7 +438,7 @@ const BookingRequest: FC<BookingRequestProps> = () => {
                       { label: "Tất cả", value: -1 },
                     ]}
                     colSpan={5}
-                    count={bookings.length}
+                    count={filterServiceBookings.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     slotProps={{

@@ -1,10 +1,11 @@
-import { ArrowBack, CloudUpload } from "@mui/icons-material";
+import { ArrowBack, CloudUpload, Pets } from "@mui/icons-material";
 import {
   Box,
   Button,
   FormControl,
   Paper,
   TextField,
+  Typography,
   styled,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
@@ -102,20 +103,41 @@ const ReadService: FC<ReadServiceProps> = () => {
             alignItems={"center"}
             justifyContent="center"
             gap={2}
+            // position="relative"
           >
             <Image
               sx={{
-                width: "100%",
-                // height: "100%",
+                width: "400px",
+                height: "260px",
                 borderRadius: "1rem",
                 border: "1px solid #d1d1d1",
+                objectFit: "cover",
               }}
               src={
                 shopService?.image
                   ? shopService.image
                   : "https://thanhcongfarm.com/wp-content/uploads/2022/10/320456_best_dog_spa_0.jpg"
               }
-            />
+            ></Image>
+            <Box
+              display="flex"
+              position="absolute"
+              bottom={"23%"}
+              left={10}
+              gap={0.3}
+              bgcolor="#fff4eb"
+              width="3.5rem"
+              height="3.5rem"
+              borderRadius="50%"
+              justifyContent="center"
+              alignItems="center"
+              border="2px solid #EF7F2D"
+            >
+              <Typography sx={{ color: "#e76609", fontWeight: "500" }}>
+                {+(shopService.rating || 0).toFixed(2)}
+              </Typography>
+              <Pets fontSize="small" sx={{ color: "#EF7F2D" }} />
+            </Box>
 
             <Button
               color="success"

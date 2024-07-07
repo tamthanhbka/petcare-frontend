@@ -3,8 +3,8 @@ import {
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
+  LockOpen,
   LockOutlined,
-  RemoveRedEyeOutlined,
 } from "@mui/icons-material";
 import {
   Avatar,
@@ -22,33 +22,13 @@ import {
   TablePagination,
   TableRow,
   Typography,
-  styled,
   useTheme,
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useState, type FC } from "react";
-import { getAllUser } from "../../api/admin";
-const ActiveChip = styled(Chip)({
-  backgroundColor: "#E4F6D6",
-  color: "#61CD10",
-  fontWeight: 600,
-});
-const InactiveChip = styled(Chip)({
-  backgroundColor: "#ECEDEE",
-  color: "#93969B",
-  fontWeight: 600,
-});
+import { blockUser, getAllUser, openUser } from "../../api/admin";
+import { toast } from "react-toastify";
 
-const UserRoleChip = styled(Chip)({
-  backgroundColor: "#EDE4FF",
-  color: "#925FFF",
-  fontWeight: 600,
-});
-const AdminRoleChip = styled(Chip)({
-  backgroundColor: "#FFF3D6",
-  color: "#FFB400",
-  fontWeight: 600,
-});
 interface ListShopProps {}
 
 interface TablePaginationActionsProps {
@@ -132,14 +112,20 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 }
 const ListShop: FC<ListShopProps> = () => {
   const [page, setPage] = useState(0);
+  const [keyName, setKeyName] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  const { data: users } = useQuery({
+  const { data: users, refetch } = useQuery({
     queryKey: ["users"],
     queryFn: () => getAllUser(),
+    initialData: [],
   });
 
+  const filterUsers = users.filter((u) =>
+    u.fullName?.toLowerCase().includes(keyName.toLowerCase())
+  );
+
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (users?.length || 0)) : 0;
+    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - filterUsers.length) : 0;
 
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement> | null,
@@ -155,13 +141,31 @@ const ListShop: FC<ListShopProps> = () => {
     setPage(0);
   };
 
-  //   const handleChange = (event: SelectChangeEvent) => {
-  //     setService(event.target.value);
-  //   };
+  const handleBlockUser = (userId: number) => {
+    blockUser(userId)
+      .then(() => {
+        refetch();
+        toast.success("Chặn tài khoản thành công!");
+      })
+      .catch(() => {
+        toast.error("Chặn tài khoản thất bại!");
+      });
+  };
+
+  const handleOpenUser = (userId: number) => {
+    openUser(userId)
+      .then(() => {
+        refetch();
+        toast.success("Kích hoạt tài khoản thành công!");
+      })
+      .catch(() => {
+        toast.error("Kích hoạt tài khoản thất bại!");
+      });
+  };
   return (
     <Box padding="2rem">
       <Paper elevation={5} sx={{ padding: "2rem" }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
+        <Box display="flex" justifyContent="space-between" paddingBottom="1rem">
           {/* <Button
             startIcon={<Add></Add>}
             variant="contained"
@@ -176,6 +180,8 @@ const ListShop: FC<ListShopProps> = () => {
           </Button> */}
 
           <OutlinedInput
+            value={keyName}
+            onChange={(e) => setKeyName(e.target.value)}
             placeholder="Tìm kiếm người dùng"
             size="small"
             sx={{
@@ -193,65 +199,65 @@ const ListShop: FC<ListShopProps> = () => {
             }}
           ></OutlinedInput>
         </Box>
-        {users && (
-          <TableContainer>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    <Typography sx={{ ml: 8 }}>Khách hàng</Typography>
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    Số điện thoại
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    Ngày sinh
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    Trạng thái
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    Vai trò
-                  </TableCell>
-                  <TableCell
-                    align="center"
-                    sx={{
-                      textTransform: "uppercase",
-                      color: "#696969",
-                    }}
-                  >
-                    Thao tác
-                  </TableCell>
-                  {/* <TableCell
+
+        <TableContainer>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  <Typography sx={{ ml: 8 }}>Khách hàng</Typography>
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  Số điện thoại
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  Ngày sinh
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  Trạng thái
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  Vai trò
+                </TableCell>
+                <TableCell
+                  align="center"
+                  sx={{
+                    textTransform: "uppercase",
+                    color: "#696969",
+                  }}
+                >
+                  Thao tác
+                </TableCell>
+                {/* <TableCell
                 align="center"
                 sx={{
                   textTransform: "uppercase",
@@ -260,119 +266,152 @@ const ListShop: FC<ListShopProps> = () => {
               >
                 Chi tiết
               </TableCell> */}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {(rowsPerPage > 0
-                  ? users.slice(
-                      page * rowsPerPage,
-                      page * rowsPerPage + rowsPerPage
-                    )
-                  : users
-                ).map((user, key) => (
-                  <TableRow key={key} sx={{ height: 78 }}>
-                    <TableCell align="center">
-                      <Box display="flex" gap={2}>
-                        <Avatar
-                          sx={{
-                            border: "1px solid #757575",
-                            width: 45,
-                            height: 45,
-                          }}
-                          src={user.avatar}
-                        >
-                          {user.avatar
-                            ? null
-                            : user.fullName.at(0)?.toUpperCase()}
-                        </Avatar>
-                        <Box
-                          display="flex"
-                          flexDirection="column"
-                          alignItems="flex-start"
-                        >
-                          <Typography>{user.fullName}</Typography>
-                          <Typography fontSize={14} sx={{ color: "#8b8b8b" }}>
-                            {user.email}
-                          </Typography>
-                        </Box>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {(rowsPerPage > 0
+                ? filterUsers.slice(
+                    page * rowsPerPage,
+                    page * rowsPerPage + rowsPerPage
+                  )
+                : filterUsers
+              ).map((user, index) => (
+                <TableRow key={index} sx={{ height: 78 }}>
+                  <TableCell align="center">
+                    <Box display="flex" gap={2}>
+                      <Avatar
+                        sx={{
+                          border: "1px solid #757575",
+                          width: 45,
+                          height: 45,
+                        }}
+                        src={user.avatar}
+                      >
+                        {user.avatar
+                          ? null
+                          : user.fullName
+                          ? user.fullName.at(0)?.toUpperCase()
+                          : ""}
+                      </Avatar>
+                      <Box
+                        display="flex"
+                        flexDirection="column"
+                        alignItems="flex-start"
+                      >
+                        <Typography>{user.fullName}</Typography>
+                        <Typography fontSize={13} sx={{ color: "#8b8b8b" }}>
+                          {user.email}
+                        </Typography>
                       </Box>
-                    </TableCell>
-                    <TableCell align="center">{user.phone}</TableCell>
-                    <TableCell align="center">
-                      <Typography fontSize={14}>
-                        {new Date(user.dateOfBirth).toLocaleDateString("vi-VN")}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      {user.isActive ? (
-                        <ActiveChip label={"Active"}></ActiveChip>
-                      ) : (
-                        <InactiveChip label={"Inactive"}></InactiveChip>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      {user.role == "user" && (
-                        <UserRoleChip label="User"></UserRoleChip>
-                      )}
-                      {user.role == "admin" && (
-                        <AdminRoleChip label="Admin"></AdminRoleChip>
-                      )}
-                      {user.role == "staff" && (
-                        <ActiveChip label="Staff"></ActiveChip>
-                      )}
-                    </TableCell>
-                    <TableCell align="center">
-                      <IconButton sx={{ "&:hover": { bgcolor: "#DAF2FF" } }}>
+                    </Box>
+                  </TableCell>
+                  <TableCell align="center">{user.phone}</TableCell>
+                  <TableCell align="center">
+                    <Typography fontSize={14}>
+                      {new Date(user.dateOfBirth).toLocaleDateString("vi-VN")}
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={user.isActive ? "Được kích hoạt" : "Bị chặn"}
+                      sx={{
+                        backgroundColor: user.isActive ? "#f1fbe9" : "#ECEDEE",
+                        color: user.isActive ? " #61CD10" : "#93969B",
+                        fontWeight: 600,
+                        fontSize: 12,
+                      }}
+                    ></Chip>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Chip
+                      label={
+                        user.role == "user"
+                          ? "Người dùng"
+                          : user.role == "staff"
+                          ? "Nhân viên"
+                          : "Quản trị viên"
+                      }
+                      sx={{
+                        backgroundColor:
+                          user.role == "user"
+                            ? "#f1fbe9"
+                            : user.role == "staff"
+                            ? "#f5f0ff"
+                            : "#fff8e8",
+                        color:
+                          user.role == "user"
+                            ? " #61CD10"
+                            : user.role == "staff"
+                            ? "#925FFF"
+                            : "#FFB400",
+                        fontWeight: 600,
+                        fontSize: 12,
+                      }}
+                    ></Chip>
+                  </TableCell>
+                  <TableCell align="center">
+                    {/* <IconButton sx={{ "&:hover": { bgcolor: "#DAF2FF" } }}>
                         <RemoveRedEyeOutlined></RemoveRedEyeOutlined>
-                      </IconButton>
-                      <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
+                      </IconButton> */}
+                    {user.isActive ? (
+                      <IconButton
+                        onClick={() => handleBlockUser(user.id)}
+                        sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}
+                      >
                         <LockOutlined></LockOutlined>
                       </IconButton>
-                    </TableCell>
-                    {/* <TableCell align="center">
+                    ) : (
+                      <IconButton
+                        onClick={() => handleOpenUser(user.id)}
+                        sx={{ "&:hover": { bgcolor: "#f1fbe9" } }}
+                      >
+                        <LockOpen></LockOpen>
+                      </IconButton>
+                    )}
+                  </TableCell>
+                  {/* <TableCell align="center">
                 <IconButton>
                   <VisibilityOutlined></VisibilityOutlined>
                 </IconButton>
               </TableCell> */}
-                  </TableRow>
-                ))}
-                {emptyRows > 0 && (
-                  <TableRow style={{ height: 78 * emptyRows }}>
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                )}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: "Tất cả", value: -1 },
-                    ]}
-                    colSpan={6}
-                    count={users.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    slotProps={{
-                      select: {
-                        inputProps: {
-                          "aria-label": "",
-                        },
-                        native: true,
-                      },
-                    }}
-                    labelRowsPerPage="Số hàng mỗi trang"
-                    onPageChange={handleChangePage}
-                    onRowsPerPageChange={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                  ></TablePagination>
                 </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        )}
+              ))}
+              {emptyRows > 0 && (
+                <TableRow style={{ height: 78 * emptyRows }}>
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
+            <TableFooter>
+              <TableRow>
+                <TablePagination
+                  rowsPerPageOptions={[
+                    5,
+                    10,
+                    25,
+                    { label: "Tất cả", value: -1 },
+                  ]}
+                  colSpan={6}
+                  count={filterUsers.length}
+                  rowsPerPage={rowsPerPage}
+                  page={page}
+                  slotProps={{
+                    select: {
+                      inputProps: {
+                        "aria-label": "",
+                      },
+                      native: true,
+                    },
+                  }}
+                  labelRowsPerPage="Số hàng mỗi trang"
+                  onPageChange={handleChangePage}
+                  onRowsPerPageChange={handleChangeRowsPerPage}
+                  ActionsComponent={TablePaginationActions}
+                ></TablePagination>
+              </TableRow>
+            </TableFooter>
+          </Table>
+        </TableContainer>
 
         {/* <TablePagination
 rowsPerPageOptions={[5, 10, 25]}

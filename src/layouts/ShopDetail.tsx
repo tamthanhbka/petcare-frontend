@@ -2,7 +2,6 @@ import {
   ArrowBackIosNewOutlined,
   ArrowForwardIos,
   Pets,
-  PetsOutlined,
 } from "@mui/icons-material";
 import {
   Backdrop,
@@ -17,7 +16,6 @@ import {
   Rating,
   Select,
   SelectChangeEvent,
-  TextField,
   Typography,
   styled,
 } from "@mui/material";
@@ -138,6 +136,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
             >
               {shop?.slogan}
             </Typography>
+
             <Button
               onClick={handleOpenChat}
               sx={{
@@ -248,18 +247,20 @@ const ShopDetail: FC<ShopDetailProps> = () => {
         >
           {shop && (
             <Carousel
+              infinite
               useArrowKeys={true}
               dynamic={true}
               className="slider"
-              show={3.5}
+              show={3}
               slide={1}
-              transition={0.3}
+              transition={0.5}
               swiping={true}
               leftArrow={
                 <IconButton
                   sx={{
                     color: "#7AC143",
                     "&:hover": { bgcolor: "#7AC143", color: "white" },
+                    mr: "1.3rem",
                   }}
                 >
                   <ArrowBackIosNewOutlined />
@@ -270,7 +271,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                   sx={{
                     color: "#7AC143",
                     "&:hover": { bgcolor: "#7AC143", color: "white" },
-                    ml: "0.7rem",
+                    // ml: "3.5rem",
                   }}
                 >
                   <ArrowForwardIos />
@@ -284,6 +285,9 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                     name={s.service.name}
                     description={s.description}
                     image={s.image}
+                    lowestPrice={s.lowestPrice}
+                    highestPrice={s.highestPrice}
+                    rating={s.rating}
                   />
                 );
               })}
@@ -294,30 +298,49 @@ const ShopDetail: FC<ShopDetailProps> = () => {
 
       {/* Nhan xet cua khach hang */}
       <Box height={500} alignItems="center" display="flex">
-        <Box width={800}>
-          {comments && (
-            <Carousel
-              className="slider"
-              show={1}
-              slide={1}
-              transition={0.5}
-              swiping={true}
-              leftArrow={
-                <IconButton>
-                  <ArrowBackIosNewOutlined />
-                </IconButton>
-              }
-              rightArrow={
-                <IconButton>
-                  <ArrowForwardIos />
-                </IconButton>
-              }
-            >
-              {comments.map((c) => (
-                <CommentItem key={c.id} {...c} />
-              ))}
-            </Carousel>
-          )}
+        <Box
+          ml="5px"
+          width={800}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Box width="85%">
+            {comments && (
+              <Carousel
+                className="slider"
+                show={1}
+                slide={1}
+                transition={0.5}
+                swiping={true}
+                leftArrow={
+                  <IconButton
+                    sx={{
+                      color: "#7AC143",
+                      "&:hover": { bgcolor: "#7AC143", color: "white" },
+                      mr: "2rem",
+                    }}
+                  >
+                    <ArrowBackIosNewOutlined />
+                  </IconButton>
+                }
+                rightArrow={
+                  <IconButton
+                    sx={{
+                      color: "#7AC143",
+                      "&:hover": { bgcolor: "#7AC143", color: "white" },
+                    }}
+                  >
+                    <ArrowForwardIos />
+                  </IconButton>
+                }
+              >
+                {comments.map((c) => (
+                  <CommentItem key={c.id} {...c} />
+                ))}
+              </Carousel>
+            )}
+          </Box>
         </Box>
         <Box
           sx={{
@@ -333,10 +356,11 @@ const ShopDetail: FC<ShopDetailProps> = () => {
           }}
         >
           <Typography
-            width={400}
-            fontSize={45}
+            width={320}
+            fontSize={40}
             fontWeight={600}
             color="#fcfcfc"
+            justifySelf="end"
           >
             Khách hàng nói gì về chúng tôi
           </Typography>
@@ -359,15 +383,15 @@ const ShopDetail: FC<ShopDetailProps> = () => {
           }}
         >
           <Typography
-            width={200}
-            fontSize={45}
+            width={250}
+            fontSize={35}
             fontWeight={600}
             color="#ffffff"
             position="absolute"
             left="5%"
             top="35%"
           >
-            Đánh giá dịch vụ
+            Thông tin về chúng tôi
           </Typography>
         </Box>
         <Box
@@ -377,9 +401,9 @@ const ShopDetail: FC<ShopDetailProps> = () => {
           flexDirection="column"
           alignItems="center"
           gap={2}
-          padding={20}
+          padding={16}
         >
-          <Typography fontSize={20}>
+          {/* <Typography fontSize={20}>
             "Mọi ý kiến của khách hàng luôn được chúng tôi ghi nhận và trân
             trọng để từ đó ngày càng hoàn thiện hơn."
           </Typography>
@@ -419,7 +443,62 @@ const ShopDetail: FC<ShopDetailProps> = () => {
             }}
           >
             Đánh giá
-          </Button>
+          </Button> */}
+          <Typography
+            sx={{
+              color: "#ED6436",
+              fontSize: 45,
+              fontWeight: 700,
+              // textAlign: "center",
+            }}
+          >
+            {shop?.name}
+          </Typography>
+          <Box>
+            <Typography
+              sx={{
+                fontSize: 20,
+                // textAlign: "center",
+                width: "100%",
+                lineHeight: "2.5rem",
+              }}
+            >
+              Slogan: {shop?.slogan}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 20,
+                // textAlign: "center",
+                width: "100%",
+                lineHeight: "2.5rem",
+              }}
+            >
+              Hotline: {shop?.hotline}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 20,
+                width: "100%",
+                lineHeight: "2.5rem",
+              }}
+            >
+              Địa chỉ: {shop && shop.address.detail},
+              {shop && shop.address.district},{shop && shop.address.province}
+            </Typography>
+            <Typography
+              sx={{
+                fontSize: 20,
+                width: "100%",
+                lineHeight: "2.5rem",
+                display: "flex",
+                alignItems: "center",
+                gap: 1,
+              }}
+            >
+              Đánh giá: {shop?.rating}{" "}
+              <Pets sx={{ color: "#82C55B", lineHeight: "2rem" }}></Pets>
+            </Typography>
+          </Box>
         </Box>
       </Box>
       {/* Form order */}

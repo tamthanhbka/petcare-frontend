@@ -17,14 +17,26 @@ const MessageList: FC<MessageListProps> = (props) => {
     boxRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
   return (
-    <Box ref={boxRef} sx={{ padding: "1rem", flex: 1, overflow: "auto" }}>
-      {messages.map((message) => (
-        <MessageItem
-          key={message.id}
-          content={message.content}
-          isMe={isUser ? message.isFromUser : !message.isFromUser}
-        />
-      ))}
+    <Box
+      ref={boxRef}
+      sx={{
+        padding: "1rem",
+        flex: 1,
+        overflow: "auto",
+        display: "flex",
+        flexDirection: "column-reverse",
+      }}
+    >
+      {messages
+        .slice()
+        .reverse()
+        .map((message) => (
+          <MessageItem
+            key={message.id}
+            content={message.content}
+            isMe={isUser ? message.isFromUser : !message.isFromUser}
+          />
+        ))}
     </Box>
   );
 };

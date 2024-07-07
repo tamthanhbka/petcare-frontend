@@ -1,17 +1,16 @@
 import {
-  Add,
   FirstPage,
   KeyboardArrowLeft,
   KeyboardArrowRight,
   LastPage,
+  LockOpen,
   LockOutlined,
-  RemoveRedEyeOutlined,
   Star,
 } from "@mui/icons-material";
 import {
   Avatar,
   Box,
-  Button,
+  Chip,
   FormControl,
   IconButton,
   MenuItem,
@@ -31,9 +30,9 @@ import {
 } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState, type FC } from "react";
-import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import { getProvinces } from "../../api/address";
-import { findAllShops } from "../../api/admin";
+import { blockShop, findAllShops, openShop } from "../../api/admin";
 import { ProvinceType, ShopType } from "../../type";
 
 interface ListShopProps {}
@@ -127,12 +126,13 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
   );
 }
 const ListShop: FC<ListShopProps> = () => {
-  const navigation = useNavigate();
+  // const navigation = useNavigate();
   const [province, setProvince] = useState("");
+  const [keyName, setKeyName] = useState("");
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [shops, setShops] = useState<ShopType[]>();
-  const { data: result } = useQuery({
+  const { data: result, refetch } = useQuery({
     queryKey: ["listShop"],
     queryFn: () => findAllShops(),
   });
@@ -148,8 +148,18 @@ const ListShop: FC<ListShopProps> = () => {
       setShops(result[0]);
     }
   }, [result]);
+  const filterShops =
+    shops &&
+    shops.filter((s) => {
+      return (
+        s.address.province.includes(province || "") &&
+        s.name.toLowerCase().includes(keyName.toLowerCase())
+      );
+    });
   const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - (shops?.length || 0)) : 0;
+    page > 0
+      ? Math.max(0, (1 + page) * rowsPerPage - (filterShops?.length || 0))
+      : 0;
 
   const handleChangePage = (
     _: React.MouseEvent<HTMLButtonElement> | null,
@@ -164,14 +174,36 @@ const ListShop: FC<ListShopProps> = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  const handleBlockShop = (shopId: number) => {
+    blockShop(shopId)
+      .then(() => {
+        refetch();
+        toast.success("Chặn trung tâm thú y thành công!");
+      })
+      .catch(() => {
+        toast.error("Chặn trung tâm thú y thất bại!");
+      });
+  };
+
+  const handleOpenShop = (shopId: number) => {
+    openShop(shopId)
+      .then(() => {
+        refetch();
+        toast.success("Kích hoạt trung tâm thú y thành công!");
+      })
+      .catch(() => {
+        toast.error("Kích hoạt trung tâm thú y thất bại!");
+      });
+  };
   //   const handleChange = (event: SelectChangeEvent) => {
   //     setService(event.target.value);
   //   };
   return (
     <Box padding="2rem">
       <Paper elevation={5} sx={{ padding: "2rem" }}>
-        <Box display="flex" justifyContent="space-between" paddingBottom="2rem">
-          <Button
+        <Box display="flex" justifyContent="space-between" paddingBottom="1rem">
+          {/* <Button
             startIcon={<Add></Add>}
             variant="contained"
             sx={{
@@ -182,7 +214,7 @@ const ListShop: FC<ListShopProps> = () => {
             onClick={() => navigation(`/admin/shop/add`)}
           >
             Tạo trung tâm thú y mới
-          </Button>
+          </Button> */}
           <Box
             display="flex"
             gap={4}
@@ -218,6 +250,10 @@ const ListShop: FC<ListShopProps> = () => {
               </Select>
             </FormControl>
             <OutlinedInput
+              value={keyName}
+              onChange={(e) => {
+                setKeyName(e.target.value);
+              }}
               placeholder="Tìm kiếm trung tâm thú y"
               size="small"
               sx={{
@@ -237,7 +273,7 @@ const ListShop: FC<ListShopProps> = () => {
             ></OutlinedInput>
           </Box>
         </Box>
-        {shops && (
+        {filterShops && (
           <TableContainer>
             <Table>
               <TableHead>
@@ -287,6 +323,16 @@ const ListShop: FC<ListShopProps> = () => {
                     sx={{
                       textTransform: "uppercase",
                       color: "#696969",
+                      width: "130px",
+                    }}
+                  >
+                    Trạng thái
+                  </TableCell>
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
                       width: "120px",
                     }}
                   >
@@ -305,11 +351,11 @@ const ListShop: FC<ListShopProps> = () => {
               </TableHead>
               <TableBody>
                 {(rowsPerPage > 0
-                  ? shops.slice(
+                  ? filterShops.slice(
                       page * rowsPerPage,
                       page * rowsPerPage + rowsPerPage
                     )
-                  : shops
+                  : filterShops
                 ).map((shop, key) => (
                   <TableRow key={key} sx={{ height: 78 }}>
                     <TableCell align="center" sx={{ maxWidth: "300px" }}>
@@ -334,7 +380,7 @@ const ListShop: FC<ListShopProps> = () => {
                         >
                           <Typography>{shop.name}</Typography>
                           <Typography
-                            fontSize={14}
+                            fontSize={12}
                             sx={{
                               color: "#8b8b8b",
                               // overflow: "hidden",
@@ -363,14 +409,14 @@ const ListShop: FC<ListShopProps> = () => {
                           overflow: "hidden",
                           whiteSpace: "nowrap",
                           width: "100%",
-                          // fontSize: "14px",
+                          fontSize: "14px",
                         }}
                       >
                         {shop.slogan}
                       </Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography fontSize={16}>{shop.hotline}</Typography>
+                      <Typography fontSize={14}>{shop.hotline}</Typography>
                     </TableCell>
                     <TableCell align="center">
                       <Box
@@ -384,20 +430,44 @@ const ListShop: FC<ListShopProps> = () => {
                         gap={0.5}
                         m="auto"
                       >
-                        <Typography>
+                        <Typography fontSize={14}>
                           {Number(shop.rating?.toFixed(2) || 0)}
                         </Typography>
                         <Star fontSize="small" sx={{ color: "#FFB400" }}></Star>
                       </Box>
                     </TableCell>
-
                     <TableCell align="center">
-                      <IconButton sx={{ "&:hover": { bgcolor: "#ffebd7" } }}>
+                      <Chip
+                        label={shop.isActive ? "Được kích hoạt" : "Bị chặn"}
+                        sx={{
+                          backgroundColor: shop.isActive
+                            ? "#f1fbe9"
+                            : "#ECEDEE",
+                          color: shop.isActive ? " #61CD10" : "#93969B",
+                          fontWeight: 600,
+                          fontSize: 12,
+                        }}
+                      ></Chip>
+                    </TableCell>
+                    <TableCell align="center">
+                      {/* <IconButton sx={{ "&:hover": { bgcolor: "#ffebd7" } }}>
                         <RemoveRedEyeOutlined></RemoveRedEyeOutlined>
-                      </IconButton>
-                      <IconButton sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}>
-                        <LockOutlined></LockOutlined>
-                      </IconButton>
+                      </IconButton> */}
+                      {shop.isActive ? (
+                        <IconButton
+                          onClick={() => handleBlockShop(shop.id)}
+                          sx={{ "&:hover": { bgcolor: "#ffe2e2" } }}
+                        >
+                          <LockOutlined></LockOutlined>
+                        </IconButton>
+                      ) : (
+                        <IconButton
+                          onClick={() => handleOpenShop(shop.id)}
+                          sx={{ "&:hover": { bgcolor: "#f1fbe9" } }}
+                        >
+                          <LockOpen></LockOpen>
+                        </IconButton>
+                      )}
                     </TableCell>
                     {/* <TableCell align="center">
                 <IconButton>
@@ -423,7 +493,7 @@ const ListShop: FC<ListShopProps> = () => {
                       { label: "Tất cả", value: -1 },
                     ]}
                     colSpan={5}
-                    count={shops.length}
+                    count={filterShops.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     slotProps={{

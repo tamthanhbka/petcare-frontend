@@ -2,7 +2,6 @@ import { Search } from "@mui/icons-material";
 import {
   Autocomplete,
   Box,
-  Button,
   IconButton,
   TextField,
   Typography,
@@ -17,9 +16,9 @@ import iconPet from "../assets/img/iconpet.svg";
 import spa from "../assets/img/spa.svg";
 import { SpaList } from "../components";
 import HealthList from "../components/HealthList";
+import HotelList from "../components/HotelList";
 import useShopSearch from "../hook/useShopSearch";
 import { ServiceType } from "../type";
-import HotelList from "../components/HotelList";
 
 export interface SubHomeProps {}
 
@@ -170,7 +169,7 @@ const SubHome = () => {
                 Chúng tôi cung cấp các dịch vụ tốt nhất dành cho thú cưng của
                 bạn.
               </Typography>
-              <Button
+              {/* <Button
                 sx={{
                   marginTop: 4,
                   width: "40%",
@@ -183,7 +182,7 @@ const SubHome = () => {
                 }}
               >
                 Đặt lịch ngay
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Box>
@@ -198,8 +197,14 @@ const SubHome = () => {
         padding="40px 0"
       >
         <Box display="flex">
-          <Box flex={6}>
+          <Box
+            flex={6}
+            display="flex"
+            // alignItems="center"
+            justifyContent="center"
+          >
             <Box
+              width="80%"
               display="flex"
               alignItems="center"
               flexDirection="column"
@@ -214,7 +219,7 @@ const SubHome = () => {
                   marginBottom: 2,
                 }}
               >
-                Nơi chăm sóc thú cưng tốt nhất!
+                Boss đến là khỏe mạnh!
               </Typography>
               <Typography
                 sx={{
@@ -227,7 +232,7 @@ const SubHome = () => {
                 Chúng tôi cung cấp các dịch vụ tốt nhất dành cho thú cưng của
                 bạn.
               </Typography>
-              <Button
+              {/* <Button
                 sx={{
                   marginTop: 4,
                   width: "35%",
@@ -241,7 +246,7 @@ const SubHome = () => {
                 <Typography color="black" fontSize={30}>
                   Đặt lịch ngay
                 </Typography>
-              </Button>
+              </Button> */}
             </Box>
           </Box>
           <Box flex={6} display="flex" justifyContent="flex-end">
@@ -264,6 +269,7 @@ const SubHome = () => {
           </Box>
           <Box flex={6}>
             <Box
+              width="80%"
               display="flex"
               alignItems="center"
               flexDirection="column"
@@ -278,7 +284,7 @@ const SubHome = () => {
                   marginBottom: 2,
                 }}
               >
-                Chạm dừng chân cho thú cưng!
+                Chạm dừng chân của boss!
               </Typography>
               <Typography
                 sx={{
@@ -291,7 +297,7 @@ const SubHome = () => {
                 Chúng tôi cung cấp các dịch vụ tốt nhất dành cho thú cưng của
                 bạn.
               </Typography>
-              <Button
+              {/* <Button
                 sx={{
                   marginTop: 4,
                   width: "35%",
@@ -304,7 +310,7 @@ const SubHome = () => {
                 <Typography color="black" fontSize={30}>
                   Đặt lịch ngay
                 </Typography>
-              </Button>
+              </Button> */}
             </Box>
           </Box>
         </Box>

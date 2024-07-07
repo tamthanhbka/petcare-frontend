@@ -1,4 +1,4 @@
-import { ShopType, UserType } from "../type";
+import { ServiceAdminType, ServiceType, ShopType, UserType } from "../type";
 import { axiosInstance } from "./axios";
 
 const findAllShops = async () => {
@@ -38,6 +38,55 @@ const acceptedRequestCooperation = async (id: number) => {
   );
   return response.data;
 };
+
+const blockShop = async (shopId: number) => {
+  const response = await axiosInstance.patch(`shops/blockShop`, {
+    shopId,
+  });
+  return response.data;
+};
+
+const openShop = async (shopId: number) => {
+  const response = await axiosInstance.patch(`shops/openShop`, {
+    shopId,
+  });
+  return response.data;
+};
+
+const blockUser = async (userId: number) => {
+  const response = await axiosInstance.patch(`users/blockUser`, {
+    userId,
+  });
+  return response.data;
+};
+
+const openUser = async (userId: number) => {
+  const response = await axiosInstance.patch(`users/openUser`, {
+    userId,
+  });
+  return response.data;
+};
+
+const getAllParentService = async () => {
+  const response = await axiosInstance.get<ServiceType[]>(`services/parent`);
+  return response.data;
+};
+
+const getAllService = async () => {
+  const response = await axiosInstance.get<ServiceAdminType[]>(`services/`);
+  return response.data;
+};
+
+const createService = async (name: string, parentId: number) => {
+  const response = await axiosInstance.post("services", { name, parentId });
+  return response.data;
+};
+
+const deleteService = async (id: number) => {
+  const response = await axiosInstance.delete(`services/${id}`);
+  return response.data;
+};
+
 export {
   acceptedRequestCooperation,
   findAllCustomer,
@@ -46,4 +95,12 @@ export {
   getAllRequestCooperation,
   getAllUser,
   getTopShop,
+  blockShop,
+  blockUser,
+  openShop,
+  openUser,
+  getAllParentService,
+  getAllService,
+  createService,
+  deleteService,
 };

@@ -17,6 +17,10 @@ const ChatList: FC<ListChatProps> = () => {
     selectChatShop,
     createChat,
   } = useChat({ onNewChat: () => setShow(true) });
+  const [keySearch, setKeySearch] = useState("");
+  const filteredRecentChats = recentChats.filter((c) =>
+    c.shop.name.toLocaleLowerCase().includes(keySearch)
+  );
   return (
     <>
       <Fab
@@ -73,6 +77,10 @@ const ChatList: FC<ListChatProps> = () => {
               size="small"
               sx={{ mb: "1rem" }}
               placeholder="Tìm kiếm"
+              defaultValue={""}
+              onChange={(e) => {
+                setKeySearch(e.target.value);
+              }}
               startAdornment={
                 <Search sx={{ color: "#aaa", marginRight: "0.5rem" }}></Search>
               }
@@ -84,7 +92,7 @@ const ChatList: FC<ListChatProps> = () => {
               height="100%"
               overflow="auto"
             >
-              {recentChats.map((chat) => (
+              {filteredRecentChats.map((chat) => (
                 <ChatItem
                   key={chat.id}
                   name={chat.shop.name}

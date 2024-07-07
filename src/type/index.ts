@@ -9,6 +9,7 @@ export type ShopType = {
   rating: number | null;
   address: AddressType;
   services: ServiceShopType[];
+  isActive: boolean;
 };
 
 export type AddressType = {
@@ -22,8 +23,13 @@ export type AddressType = {
 export type ServiceType = {
   id: number;
   name: string;
-  parentId: number;
-  parent: ServiceType;
+  parentId?: number;
+  parent?: ServiceType;
+};
+
+export type ServiceAdminType = ServiceType & {
+  count: string;
+  parentName: string;
 };
 
 export type ServiceShopType = {
@@ -110,4 +116,26 @@ export interface ShopServiceType {
   rating: number;
   shop: ShopType;
   service: ServiceType;
+}
+
+export interface MaxCustomerType {
+  id: number;
+  shopId: number;
+  serviceId: number;
+  maxCustomer: number;
+  shop: ShopType;
+  service: ServiceType;
+}
+
+export interface BookingStaffType {
+  id: number;
+  user_id: number;
+  shop_service_id: number;
+  time: string;
+  status: string;
+  createdAt: string;
+  fullName: string;
+  email: string;
+  serviceName: string;
+  user_avatar: string;
 }

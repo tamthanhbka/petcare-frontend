@@ -41,7 +41,7 @@ export default function Login() {
       else navigate("/");
       return;
     }
-    if (user.role === "staff") return navigate("/staff/dashboard");
+    if (user.role === "staff") return navigate("/staff/shop");
     if (user.role === "admin") return navigate("/admin/dashboard");
   }, [login, navigate, searchParam, user]);
   useEffect(() => {

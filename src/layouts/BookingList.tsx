@@ -88,14 +88,16 @@ const BookingList: FC<BookingListProps> = () => {
     ).values(),
   ];
 
-  const filterServiceBookings = bookingList.filter(
-    (b) =>
+  const filterServiceBookings = bookingList.filter((b) => {
+    const address = b.shopService.shop.address;
+    return (
       b.shopService.service.name
         .toLowerCase()
         .includes(service?.name.toLowerCase() || "") &&
-      b.shopService.shop.address.province.includes(province || "") &&
-      b.shopService.shop.address.province.includes(district || "")
-  );
+      address.province.includes(province || "") &&
+      address.district.includes(district || "")
+    );
+  });
 
   return (
     <Box

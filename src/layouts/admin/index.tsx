@@ -5,3 +5,4 @@ export { default as AdminListShop } from "./ListShop";
 export { default as AdminListCustomer } from "./ListCustomer";
 export { default as AdminListService } from "./ListServive";
 export { default as AdminListRequest } from "./ListRequest";
+export { default as CreateNewService } from "./CreateNewService";
