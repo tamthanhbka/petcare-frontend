@@ -24,7 +24,7 @@ export type ServiceType = {
   id: number;
   name: string;
   parentId?: number;
-  parent?: ServiceType;
+  parent: ServiceType;
 };
 
 export type ServiceAdminType = ServiceType & {

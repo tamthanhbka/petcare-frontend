@@ -184,7 +184,7 @@ const ReadService: FC<ReadServiceProps> = () => {
               <CssTextField
                 label="Tên dịch vụ"
                 id="custom-css-outlined-input"
-                value={shopService?.service.name}
+                value={shopService.service.name}
                 InputProps={{
                   readOnly: true,
                 }}
@@ -195,7 +195,7 @@ const ReadService: FC<ReadServiceProps> = () => {
               <CssTextField
                 label="Loại dịch vụ"
                 id="custom-css-outlined-input"
-                value={shopService?.service.parent.name}
+                value={shopService.service.parent?.name}
                 InputProps={{
                   readOnly: true,
                 }}
