@@ -217,9 +217,9 @@ const Header: FC<Header> = () => {
                   >
                     Lịch sử đặt dịch vụ
                   </MenuItem>
-                  <MenuItem onClick={handleClosePoper}>
+                  {/* <MenuItem onClick={handleClosePoper}>
                     Thông tin cá nhân
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem
                     onClick={() => {
                       setOpenPoper(false);

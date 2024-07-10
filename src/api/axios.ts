@@ -12,7 +12,10 @@ const onRequest = (config: InternalAxiosRequestConfig) => {
   return config;
 };
 const onResponse = (response: AxiosResponse) => {
-  if (response.config.url === "/auth/login") {
+  if (
+    response.config.url === "/auth/login" ||
+    response.config.url === "/auth/register"
+  ) {
     const token = response.data;
     localStorage.setItem("token", token);
   }

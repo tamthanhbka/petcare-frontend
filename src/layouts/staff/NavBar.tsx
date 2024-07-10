@@ -21,6 +21,9 @@ import { type FC } from "react";
 import { NavLink } from "react-router-dom";
 import logo from "../../assets/img/logo.png";
 import { useAuth } from "../../components/Auth";
+import { useQuery } from "@tanstack/react-query";
+import { getShopByStaff } from "../../api";
+import { ShopType } from "../../type";
 interface NavBarProps {}
 
 const NavBar: FC<NavBarProps> = () => {
@@ -29,6 +32,12 @@ const NavBar: FC<NavBarProps> = () => {
   const handleLogout = () => {
     action.logout();
   };
+
+  const { data: shop } = useQuery<ShopType>({
+    queryKey: [`shop`],
+    queryFn: () => getShopByStaff(),
+    refetchOnWindowFocus: false,
+  });
   // const handleToggleSettings = (e: any) => {
   //   if (e) {
   //     setAnchorElUser((prv) => (prv ? null : e.currentTarget));
@@ -59,7 +68,7 @@ const NavBar: FC<NavBarProps> = () => {
           marginBottom={"1rem"}
           fontWeight={700}
         >
-          Hệ thống thú y Tropicpet
+          {shop?.name}
         </Typography>
       </Box>
 

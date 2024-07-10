@@ -1,4 +1,10 @@
-import { ServiceAdminType, ServiceType, ShopType, UserType } from "../type";
+import {
+  ServiceAdminType,
+  ServiceType,
+  ShopType,
+  TopServiceAdminType,
+  UserType,
+} from "../type";
 import { axiosInstance } from "./axios";
 
 const findAllShops = async () => {
@@ -35,6 +41,13 @@ const getAllUser = async () => {
 const acceptedRequestCooperation = async (id: number) => {
   const response = await axiosInstance.patch(
     `request-cooperation/${id}/accept`
+  );
+  return response.data;
+};
+
+const rejectedRequestCooperation = async (id: number) => {
+  const response = await axiosInstance.patch(
+    `request-cooperation/${id}/reject`
   );
   return response.data;
 };
@@ -87,6 +100,13 @@ const deleteService = async (id: number) => {
   return response.data;
 };
 
+const getTopServiceByBooking = async () => {
+  const response = await axiosInstance.get<TopServiceAdminType[]>(
+    "shop-service/getTopByBooking"
+  );
+  return response.data;
+};
+
 export {
   acceptedRequestCooperation,
   findAllCustomer,
@@ -103,4 +123,6 @@ export {
   getAllService,
   createService,
   deleteService,
+  getTopServiceByBooking,
+  rejectedRequestCooperation,
 };

@@ -139,3 +139,11 @@ export interface BookingStaffType {
   serviceName: string;
   user_avatar: string;
 }
+
+export interface TopServiceAdminType {
+  id: number;
+  shopAvatar: string;
+  serviceName: string;
+  shopName: string;
+  count: string;
+}

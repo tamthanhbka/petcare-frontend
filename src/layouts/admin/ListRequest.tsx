@@ -7,6 +7,7 @@ import {
 import {
   Box,
   Button,
+  Chip,
   IconButton,
   Paper,
   Table,
@@ -26,6 +27,7 @@ import { toast } from "react-toastify";
 import {
   acceptedRequestCooperation,
   getAllRequestCooperation,
+  rejectedRequestCooperation,
 } from "../../api/admin";
 import { RequestCooperationType } from "../../type";
 
@@ -113,7 +115,7 @@ const ListShop: FC<ListShopProps> = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  const { data: request } = useQuery<RequestCooperationType[]>({
+  const { data: request, refetch } = useQuery<RequestCooperationType[]>({
     queryKey: ["list-request"],
     queryFn: () => getAllRequestCooperation(),
     initialData: [],
@@ -141,15 +143,24 @@ const ListShop: FC<ListShopProps> = () => {
 
   const handleAcceptedRequestCooperation = async (id: number) => {
     try {
-      acceptedRequestCooperation(id);
+      await acceptedRequestCooperation(id);
+      refetch();
       toast.success("Chấp nhận yêu cầu hợp tác thành công!");
     } catch (error) {
       toast.success("Chấp nhận yêu cầu hợp tác thất bại!");
     }
   };
-  //   const handleChange = (event: SelectChangeEvent) => {
-  //     setService(event.target.value);
-  //   };
+
+  const handleRejectedRequestCooperation = async (id: number) => {
+    try {
+      await rejectedRequestCooperation(id);
+      refetch();
+      toast.success("Từ chối yêu cầu hợp tác thành công!");
+    } catch (error) {
+      toast.success("Từ chối yêu cầu hợp tác thất bại!");
+    }
+  };
+
   return (
     <Box padding="2rem">
       <Paper elevation={5} sx={{ padding: "2rem" }}>
@@ -165,7 +176,7 @@ const ListShop: FC<ListShopProps> = () => {
                       color: "#696969",
                     }}
                   >
-                    <Typography>Trung tâm thú y</Typography>
+                    <Typography>Tên trung tâm</Typography>
                   </TableCell>
                   <TableCell
                     align="center"
@@ -192,17 +203,17 @@ const ListShop: FC<ListShopProps> = () => {
                       color: "#696969",
                     }}
                   >
-                    Số điện thoại
+                    Điện thoại
                   </TableCell>
-                  {/* <TableCell
-                  align="center"
-                  sx={{
-                    textTransform: "uppercase",
-                    color: "#696969",
-                  }}
-                >
-                  Trạng thái
-                </TableCell> */}
+                  <TableCell
+                    align="center"
+                    sx={{
+                      textTransform: "uppercase",
+                      color: "#696969",
+                    }}
+                  >
+                    Trạng thái
+                  </TableCell>
                   <TableCell
                     align="center"
                     sx={{
@@ -239,40 +250,121 @@ const ListShop: FC<ListShopProps> = () => {
                         // justifyContent={"end"}
                       >
                         <Typography>{r.shopName}</Typography>
-                        <Typography fontSize={14} sx={{ color: "#777777" }}>
+                        <Typography fontSize={13} sx={{ color: "#777777" }}>
                           {r.detail}
                         </Typography>
                       </Box>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography>{r.email}</Typography>
+                      <Typography fontSize={14}>{r.email}</Typography>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography>{r.slogan}</Typography>
-                    </TableCell>
-                    <TableCell align="center">
-                      <Typography>{r.phone}</Typography>
-                    </TableCell>
-                    {/* <TableCell align="center">
-                  <Chip
-                    sx={{ bgcolor: "#FFF3D6" }}
-                    label="Đang chờ duyệt"
-                  ></Chip>
-                </TableCell> */}
-                    <TableCell align="center">
-                      <Button
+                      <Typography
+                        fontSize={14}
                         sx={{
-                          borderRadius: 8,
-                          bgcolor: "#FBA442",
-                          color: "white",
-                          p: "6px 16px",
-                          textTransform: "initial",
-                          "&:hover": { bgcolor: "#ef9631" },
+                          overflow: "hidden",
+                          whiteSpace: "nowrap",
+                          width: "200px",
+                          textOverflow: "ellipsis",
                         }}
-                        onClick={() => handleAcceptedRequestCooperation(r.id)}
                       >
-                        Duyệt yêu cầu
-                      </Button>
+                        {r.slogan}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography fontSize={14}>{r.phone}</Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Chip
+                        sx={{
+                          bgcolor:
+                            r.status == "pending"
+                              ? "#FFF3D6"
+                              : r.status == "accepted"
+                              ? "#e7ffd0"
+                              : "",
+                          fontSize: 12,
+                        }}
+                        label={
+                          r.status == "pending"
+                            ? "Đang chờ duyệt"
+                            : r.status == "accepted"
+                            ? "Đã duyệt"
+                            : "Đã từ chối"
+                        }
+                      ></Chip>
+                    </TableCell>
+                    <TableCell align="center">
+                      {r.status == "pending" ? (
+                        <Box display={"flex"} gap={1}>
+                          <Button
+                            size="small"
+                            sx={{
+                              fontSize: 12,
+                              borderRadius: 2,
+                              bgcolor: "#88C656",
+                              color: "white",
+                              p: "6px 16px",
+                              textTransform: "initial",
+                              "&:hover": { bgcolor: "#7bc042" },
+                            }}
+                            onClick={() =>
+                              handleAcceptedRequestCooperation(r.id)
+                            }
+                          >
+                            Duyệt
+                          </Button>
+                          <Button
+                            size="small"
+                            sx={{
+                              fontSize: 12,
+                              borderRadius: 2,
+                              bgcolor: "#FBA442",
+                              color: "white",
+                              p: "6px 16px",
+                              textTransform: "initial",
+                              "&:hover": { bgcolor: "#ef9631" },
+                            }}
+                            onClick={() =>
+                              handleRejectedRequestCooperation(r.id)
+                            }
+                          >
+                            Từ chối
+                          </Button>
+                        </Box>
+                      ) : r.status == "accepted" ? (
+                        <Button
+                          disabled
+                          size="small"
+                          sx={{
+                            fontSize: 12,
+                            borderRadius: 2,
+                            bgcolor: "#eaeaea",
+                            color: "white",
+                            p: "6px 16px",
+                            textTransform: "initial",
+                            "&:hover": { bgcolor: "#ef9631" },
+                          }}
+                        >
+                          Đã duyệt
+                        </Button>
+                      ) : (
+                        <Button
+                          disabled
+                          size="small"
+                          sx={{
+                            fontSize: 12,
+                            borderRadius: 2,
+                            bgcolor: "#eaeaea",
+                            color: "white",
+                            p: "6px 16px",
+                            textTransform: "initial",
+                            "&:hover": { bgcolor: "#ef9631" },
+                          }}
+                        >
+                          Đã từ chối
+                        </Button>
+                      )}
                     </TableCell>
                     {/* <TableCell align="center">
                 <IconButton>
@@ -296,7 +388,7 @@ const ListShop: FC<ListShopProps> = () => {
                       25,
                       { label: "Tất cả", value: -1 },
                     ]}
-                    colSpan={5}
+                    colSpan={6}
                     count={request.length}
                     rowsPerPage={rowsPerPage}
                     page={page}

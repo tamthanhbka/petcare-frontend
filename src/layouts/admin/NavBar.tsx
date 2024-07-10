@@ -93,7 +93,7 @@ const NavBar: FC<NavBarProps> = () => {
             <ListItemIcon>
               <HomeRepairService fontSize="medium" sx={{ color: "#6ab62c" }} />
             </ListItemIcon>
-            <ListItemText>Quản lý khách hàng</ListItemText>
+            <ListItemText>Quản trị người dùng</ListItemText>
           </MenuItem>
         </NavLink>
         <NavLink to="services">

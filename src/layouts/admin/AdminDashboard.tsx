@@ -18,6 +18,7 @@ import {
   findAllCustomer,
   findAllShops,
   findCommentWithValueOf5,
+  getTopServiceByBooking,
   getTopShop,
 } from "../../api/admin";
 import { ShopType } from "../../type";
@@ -35,6 +36,12 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
   const { data: topShops } = useQuery<ShopType[]>({
     queryKey: ["top-shops"],
     queryFn: () => getTopShop(),
+  });
+
+  const { data: topServices } = useQuery({
+    queryKey: ["top-services"],
+    queryFn: () => getTopServiceByBooking(),
+    initialData: [],
   });
 
   const { data: resultGetCustomer } = useQuery({
@@ -154,116 +161,40 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
           </Box>
           <Table>
             <TableBody>
-              <TableRow>
-                <TableCell
-                  align="right"
-                  sx={{
-                    borderBottom: "none",
-                    padding: "8px",
-                    width: "5%",
-                  }}
-                >
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
-                </TableCell>
-                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
-                  <Typography fontWeight={550}>Tắm gội spa</Typography>
-                  <Typography fontSize={14} color="#7E7988">
-                    Hệ thống thú y tropicpet
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
-                >
-                  <Typography fontWeight={550}>210</Typography>
-                  <Typography color="#ADAAB3" fontSize={14}>
-                    Lượt sử dụng
-                  </Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  align="right"
-                  sx={{
-                    borderBottom: "none",
-                    padding: "8px",
-                    width: "5%",
-                  }}
-                >
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
-                </TableCell>
-                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
-                  <Typography fontWeight={550}>Khách sạn thú cưng</Typography>
-                  <Typography fontSize={14} color="#7E7988">
-                    Hạnh Phúc Lông Xù
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
-                >
-                  <Typography fontWeight={550}>200</Typography>
-                  <Typography color="#ADAAB3" fontSize={14}>
-                    Lượt đặt lịch
-                  </Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  align="right"
-                  sx={{
-                    borderBottom: "none",
-                    padding: "8px",
-                    width: "5%",
-                  }}
-                >
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
-                </TableCell>
-                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
-                  <Typography fontWeight={550}>Đỡ đẻ - Hộ sinh</Typography>
-                  <Typography fontSize={14} color="#7E7988">
-                    PetCare Center
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
-                >
-                  <Typography fontWeight={550}>150</Typography>
-                  <Typography color="#ADAAB3" fontSize={14}>
-                    Lượt đặt lịch
-                  </Typography>
-                </TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  align="right"
-                  sx={{
-                    borderBottom: "none",
-                    padding: "8px",
-                    width: "5%",
-                  }}
-                >
-                  <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
-                </TableCell>
-                <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
-                  <Typography fontWeight={550}>
-                    Chẩn đoán và điều trị bệnh
-                  </Typography>
-                  <Typography fontSize={14} color="#7E7988">
-                    Hạnh Phúc Lông Xù
-                  </Typography>
-                </TableCell>
-                <TableCell
-                  align="right"
-                  sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
-                >
-                  <Typography fontWeight={550}>127</Typography>
-                  <Typography color="#ADAAB3" fontSize={14}>
-                    Lượt đặt lịch
-                  </Typography>
-                </TableCell>
-              </TableRow>
+              {topServices.map((sv) => (
+                <TableRow key={sv.id}>
+                  <TableCell
+                    align="right"
+                    sx={{
+                      borderBottom: "none",
+                      padding: "8px",
+                      width: "5%",
+                    }}
+                  >
+                    <Avatar
+                      src={
+                        sv.shopAvatar ??
+                        "https://cdn-icons-png.freepik.com/512/147/147142.png"
+                      }
+                    ></Avatar>
+                  </TableCell>
+                  <TableCell sx={{ padding: "8px", borderBottom: "none" }}>
+                    <Typography fontWeight={550}>{sv.serviceName}</Typography>
+                    <Typography fontSize={14} color="#7E7988">
+                      {sv.shopName}
+                    </Typography>
+                  </TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ borderBottom: "none", padding: "8px", width: "25%" }}
+                  >
+                    <Typography fontWeight={550}>{sv.count}</Typography>
+                    <Typography color="#ADAAB3" fontSize={14}>
+                      Lượt sử dụng
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Paper>
@@ -300,7 +231,12 @@ const AdminDashBoard: FC<AdminDashBoardProps> = () => {
                 {topShops.map((topShop, key) => (
                   <TableRow key={key}>
                     <TableCell sx={{ display: "flex", gap: 2, p: "10px" }}>
-                      <Avatar src="https://cdn-icons-png.freepik.com/512/147/147142.png"></Avatar>
+                      <Avatar
+                        src={
+                          topShop.avatar ??
+                          "https://cdn-icons-png.freepik.com/512/147/147142.png"
+                        }
+                      ></Avatar>
                       <Box>
                         <Typography fontWeight={550}>{topShop.name}</Typography>
                         <Typography fontSize={14} color="#7E7988">

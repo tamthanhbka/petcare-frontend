@@ -6,6 +6,7 @@ import type {
   ServiceShopType,
   ServiceType,
   ShopType,
+  UserType,
 } from "../type";
 import { AxiosError, axiosInstance } from "./axios";
 
@@ -97,7 +98,7 @@ const getServicesOfShop = async (id: string) => {
 };
 
 const getMe = () => {
-  return axiosInstance.get("/auth").then((res) => res.data);
+  return axiosInstance.get<UserType>("/auth").then((res) => res.data);
 };
 const searchShop = async (meta: {
   key: string;
@@ -217,16 +218,16 @@ const signup = async (
   email: string,
   phone: string,
   password: string,
-  username: string
+  fullName: string
 ) => {
-  await axiosInstance.post("/auth/signup", {
+  await axiosInstance.post<string>("/auth/register", {
     email,
-    phone,
     password,
-    username,
+    fullName,
+    phone,
   });
-  const response = await axiosInstance.get("/me");
-  return response.data.data;
+
+  return getMe();
 };
 
 export {

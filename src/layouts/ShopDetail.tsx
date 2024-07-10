@@ -57,10 +57,15 @@ const ShopDetail: FC<ShopDetailProps> = () => {
   const [dayBooking, setDayBooking] = useState<Dayjs | null>(null);
   const [open, setOpen] = useState(false);
 
-  const { data: shop } = useQuery<ShopType>({
+  const {
+    data: shop,
+    error,
+    isLoading,
+  } = useQuery<ShopType>({
     queryKey: [`shop${id}`],
     queryFn: () => getShopInfo(id),
     refetchOnWindowFocus: false,
+    retry: false,
   });
 
   const { data: comments } = useQuery({
@@ -68,7 +73,20 @@ const ShopDetail: FC<ShopDetailProps> = () => {
     queryKey: ["allComments", id],
     refetchOnWindowFocus: false,
   });
-
+  if (isLoading) return null;
+  if (error)
+    return (
+      <h1
+        style={{
+          height: "40vh",
+          color: "#F8612D",
+          marginTop: "1rem",
+          marginLeft: "30%",
+        }}
+      >
+        Trung tâm này không tồn tại trong hệ thống của chúng tôi!
+      </h1>
+    );
   const handleOpenChat = () => {
     if (shop) startChatByUSer(shop.id);
   };
