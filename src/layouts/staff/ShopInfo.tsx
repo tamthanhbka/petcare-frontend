@@ -24,6 +24,7 @@ import {
 } from "../../api";
 import { getCommunes, getDistricts, getProvinces } from "../../api/address";
 import { MaxCustomerType, ProvinceType, ShopType } from "../../type";
+import { useNavigate } from "react-router-dom";
 
 const Image = styled("img")({});
 interface ShopInfoProps {}
@@ -61,6 +62,7 @@ const CssTextField = styled(TextField)({
 });
 
 const ShopInfo: FC<ShopInfoProps> = () => {
+  const navigate = useNavigate();
   const [shop, setShop] = useState<ShopType>();
   const [maxCustomerSpa, setMaxCustomerSpa] = useState<MaxCustomerType>();
   const [maxCustomerHealth, setMaxCustomerHealth] = useState<MaxCustomerType>();
@@ -177,7 +179,8 @@ const ShopInfo: FC<ShopInfoProps> = () => {
             >
               <Image
                 sx={{
-                  width: "100%",
+                  width: "400px",
+                  height: "260px",
                   borderRadius: ".5rem",
                   boxShadow: "0px 0px 5px -1px rgb(111, 111, 111)",
                   objectFit: "cover",
@@ -426,6 +429,13 @@ const ShopInfo: FC<ShopInfoProps> = () => {
                 onClick={handleUpdateButton}
               >
                 Lưu thay đổi
+              </Button>
+              <Button
+                variant="contained"
+                sx={{ bgcolor: "#F88C31", "&:hover": { bgcolor: "#e2771f" } }}
+                onClick={() => navigate(`/shop/${shop.id}`)}
+              >
+                Xem trước
               </Button>
               {/* <Button
                 variant="outlined"

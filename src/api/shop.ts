@@ -8,7 +8,7 @@ export interface TopShopType {
   rating: number;
   rate: number;
 }
-const getTopShop = async (parentServiceId: 1 | 2 | 3, limit = 6) => {
+const getTopShop = async (parentServiceId: 1 | 2 | 3, limit = 4) => {
   const res = await axiosInstance.get<TopShopType[]>("shops/top", {
     params: { parentServiceId, limit },
   });

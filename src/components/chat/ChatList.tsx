@@ -4,10 +4,12 @@ import { useState, type FC } from "react";
 import useChat from "../../hook/useChat";
 import ChatItem from "./ChatItem";
 import MessageBox from "./MessageBox";
+import { useAuth } from "../Auth";
 
 interface ListChatProps {}
 
 const ChatList: FC<ListChatProps> = () => {
+  const { user } = useAuth();
   const [show, setShow] = useState(false);
   const {
     chats,
@@ -24,6 +26,7 @@ const ChatList: FC<ListChatProps> = () => {
   return (
     <>
       <Fab
+        disabled={user?.role == "user" ? false : true}
         sx={{
           position: "fixed",
           bottom: 100,

@@ -51,7 +51,7 @@ export const StyledRating = styled(Rating)({
 
 const ShopDetail: FC<ShopDetailProps> = () => {
   const { id } = useParams() as { id: string };
-  const { login } = useAuth();
+  const { login, user } = useAuth();
   const navigate = useNavigate();
   const [service, setService] = useState<string>();
   const [dayBooking, setDayBooking] = useState<Dayjs | null>(null);
@@ -156,6 +156,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
             </Typography>
 
             <Button
+              disabled={user?.role == "user" ? false : true}
               onClick={handleOpenChat}
               sx={{
                 marginTop: 4,
@@ -239,6 +240,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 bạn.
               </Typography>
               <Button
+                disabled={user?.role == "user" ? false : true}
                 onClick={handleOpen}
                 sx={{
                   marginTop: 4,

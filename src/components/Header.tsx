@@ -103,7 +103,7 @@ const Header: FC<Header> = () => {
       <Box flex={3} sx={{ cursor: "pointer" }} maxWidth={"250px"}>
         <Box
           sx={{ border: "solid 2px #ED6436", borderRadius: "0 20px 20px 20px" }}
-          display="flex"
+          display={user?.role == "user" ? "flex" : "none"}
           width="90%"
           justifyContent="space-between"
           alignItems="center"
@@ -210,6 +210,7 @@ const Header: FC<Header> = () => {
                   aria-labelledby="composition-button"
                 >
                   <MenuItem
+                    disabled={user?.role == "user" ? false : true}
                     onClick={() => {
                       setOpenPoper(false);
                       navigate("history");
