@@ -88,6 +88,7 @@ const ShopDetail: FC<ShopDetailProps> = () => {
       </h1>
     );
   const handleOpenChat = () => {
+    if (!(user?.role === "user")) return navigate("/login?required=true");
     if (shop) startChatByUSer(shop.id);
   };
   const handleOpen = () => {
@@ -156,7 +157,13 @@ const ShopDetail: FC<ShopDetailProps> = () => {
             </Typography>
 
             <Button
-              disabled={user?.role == "user" ? false : true}
+              disabled={
+                user?.role == "staff"
+                  ? true
+                  : user?.role == "admin"
+                  ? true
+                  : false
+              }
               onClick={handleOpenChat}
               sx={{
                 marginTop: 4,
@@ -240,7 +247,13 @@ const ShopDetail: FC<ShopDetailProps> = () => {
                 bạn.
               </Typography>
               <Button
-                disabled={user?.role == "user" ? false : true}
+                disabled={
+                  user?.role == "staff"
+                    ? true
+                    : user?.role == "admin"
+                    ? true
+                    : false
+                }
                 onClick={handleOpen}
                 sx={{
                   marginTop: 4,
